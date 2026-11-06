@@ -587,7 +587,7 @@ function currentCd() {
 function seedPeriods() {
   if (state.periods.length) return;
   const lp = state.profile.lastPeriod;
-  if (!lp && hasWearable()) return;
+  if (!lp) return;
   if (lp) { const len = Number(state.profile.cycleLen) || 29; state.periods = [2, 1, 0].map((k) => addDays(lp, -k * len)); }
   else state.periods = LOGGED_PERIODS.length ? LOGGED_PERIODS.filter((d) => d <= TODAY) : SEED.filter((d) => d.cd === 1).map((d) => d.day);
 }
@@ -814,7 +814,7 @@ function renderOnboarding() {
       <div class="stack rise"><span class="eyebrow">Bloom</span><h1>Walk into your next appointment with your whole story.</h1></div>
       <p class="muted rise">Doctors see you for 15 minutes. Bloom keeps the record of everything in between: sleep, food, movement, mood, and your cycle. Then it helps you build habits that fit your body this week.</p>
       <div class="stack rise">
-        <button class="btn block" data-go="account">Create my account</button>
+        <button class="btn block" data-action="start-signup">Create my account</button>
         <button class="btn ghost block" data-go="login">Sign in to a demo profile</button>
       </div>`,
     login: () => `
@@ -829,11 +829,13 @@ function renderOnboarding() {
         </button>`; }).join("")}</div>
       <button class="link rise" data-go="welcome">Back</button>`,
     account: () => `${progress()}
-      <div class="stack rise"><h1>Let's set you up</h1><p class="muted">Your record belongs to you. We'll ask only what changes your plan.</p></div>
+      <div class="stack rise"><h1>Create your account</h1><p class="muted">Your record belongs to you. We'll ask only what changes your plan.</p></div>
       <div class="field rise"><label for="f-name">First name</label><input class="input" id="f-name" data-bind="name" value="${esc(p.name)}" placeholder="Maya" autocomplete="given-name"></div>
       <div class="field rise"><label for="f-email">Email</label><input class="input" id="f-email" data-bind="email" value="${esc(p.email)}" placeholder="maya@example.com" type="email" autocomplete="email"></div>
       <div class="field rise"><label for="f-age">Age</label><input class="input" id="f-age" data-bind="age" value="${esc(p.age)}" placeholder="32" inputmode="numeric">${p.age ? `<span class="muted" style="font-size:12px">We tailor your plan for ages ${ageBand().label}: ${ageBand().focus.join(", ").toLowerCase()}.</span>` : ""}</div>
-      <button class="btn block rise" data-go="about">Continue</button>`,
+      <div class="field rise"><label for="f-pass">Password</label><input class="input" id="f-pass" type="password" autocomplete="new-password" placeholder="At least 8 characters"><span class="muted" style="font-size:12px">Demo build: the password is not stored or sent anywhere.</span></div>
+      <button class="btn block rise" data-action="create-account">Create account</button>
+      <button class="link rise" data-go="login">Already exploring? Use a demo profile</button>`,
     about: () => `${progress()}
       <div class="stack rise"><h1>A little about you</h1><p class="muted">This shapes your workouts, recipes, and what we watch for.</p></div>
       <div class="field rise"><label>Where do you work out?</label>
@@ -865,10 +867,12 @@ function renderOnboarding() {
       </div>
       <button class="btn block rise" data-go="connect">I agree, continue</button>`,
     connect: () => `${progress()}
-      <div class="stack rise"><h1>Connect your signals</h1><p class="muted">Passive data means less logging for you.</p></div>
+      <div class="stack rise"><h1>Connect your signals</h1><p class="muted">Passive data means less logging. Skip either one and Ritmo runs on your check-ins and voice notes instead.</p></div>
       ${connectCard("oura", "O", "Oura Ring", "Sleep, HRV, readiness, temperature, activity", "90 nights synced")}
       ${calendarConnectCard()}
-      <button class="btn block rise" data-go="goals">${state.connected.oura ? "Continue" : "Skip for now"}</button>`,
+      <div class="card flat rise" style="padding:12px"><span class="eyebrow">What loads</span>
+        <p style="font-size:13px">${state.connected.oura ? "Oura: 90 nights of sleep, HRV, readiness, temperature" : "No ring: a 10 second morning check-in"} · ${state.connected.calendar ? `${dayType().label} calendar, ${dayType().events.length} events today` : "No calendar: Ritmo plans around your own bookings"}</p></div>
+      <button class="btn block rise" data-go="goals">${state.connected.oura || state.connected.calendar ? "Continue" : "Skip for now"}</button>`,
     goals: () => `${progress()}
       <div class="stack rise"><h1>Pick two goals</h1><p class="muted">Your whole life, not just your cycle. Claude will turn them into three small habits you can actually keep.</p></div>
       <div class="grid2 rise">${GOALS.map((g) => `<button class="goal ${state.goals.includes(g.id) ? "on" : ""}" data-goal="${g.id}"><b>${g.title}</b><small>${g.sub}</small></button>`).join("")}</div>
@@ -888,6 +892,8 @@ function calendarConnectCard() {
   return `<div class="card rise"><div class="connect"><div class="logo">C</div><div><h3>${on ? provider : "Calendar"}</h3><p class="muted" style="font-size:13px">${on ? `<span style="color:var(--good)">Connected, ${dayType().events.length} events today</span>` : syncing ? esc(ui.syncStep || "Connecting") : "We find gaps for workouts and spot heavy days."}</p></div>
     ${on ? `<button class="btn small soft" disabled>Done</button>` : ""}
     ${syncing ? `<div class="sync-bar"><i id="sync-calendar"></i></div>` : ""}</div>
+    ${syncing ? "" : `<div class="stack" style="gap:6px"><span class="eyebrow">Demo calendar: what are your days like?</span>
+      <div class="chips">${Object.entries(DAY_TYPES).map(([k, t]) => `<button class="chip ${state.profile.dayType === k || (!state.profile.dayType && k === "working") ? "on" : ""}" data-daytype="${k}">${t.label}</button>`).join("")}</div></div>`}
     ${on || syncing ? "" : `<div class="row" style="flex-wrap:wrap">${CAL_PROVIDERS.map(([k, l]) => `<button class="btn small ghost" data-connect="calendar" data-provider="${k}">${l}</button>`).join("")}</div>`}</div>`;
 }
 function connectCard(id, letter, name, desc, done) {
@@ -1722,7 +1728,7 @@ document.addEventListener("click", (e) => {
     else seedPeriods();
     makeHabits(); return;
   }
-  if (d.daytype) { state.profile.dayType = d.daytype; set({}); return; }
+  if (d.daytype) { state.profile.dayType = d.daytype; if (state.connected.calendar) toast(`Calendar switched to ${DAY_TYPES[d.daytype].label.toLowerCase()} demo`); set({}); return; }
   if (d.stage) { state.profile.lifeStage = d.stage; set({}); return; }
   if (d.toggle) { const list = state.profile[d.toggle]; const i = list.indexOf(d.val); i >= 0 ? list.splice(i, 1) : list.push(d.val); set({}); return; }
   if (d.goal) { const g = state.goals; const i = g.indexOf(d.goal); if (i >= 0) g.splice(i, 1); else { g.push(d.goal); if (g.length > 2) g.shift(); } set({}); return; }
@@ -1746,7 +1752,7 @@ document.addEventListener("click", (e) => {
     const ouraSteps = ["Opening Oura", "Authorizing Ritmo", "Syncing 90 nights", "Reading HRV and temperature"];
     const iv = setInterval(() => { pct += 4; const bar = document.getElementById("sync-" + d.connect); if (bar) bar.style.width = Math.min(100, pct) + "%";
       if (d.connect === "oura") { const step = ouraSteps[Math.min(3, Math.floor(pct / 26))]; const label = document.getElementById("sync-step-oura"); if (label) label.textContent = step; }
-      if (pct >= 100) { clearInterval(iv); real.then((r) => { ui.syncing = null; state.connected[d.connect] = true; if (r) state.connected.ouraMode = r.mode; set({}); toast(r ? r.note : "Calendar connected"); }); } }, 70);
+      if (pct >= 100) { clearInterval(iv); real.then((r) => { ui.syncing = null; state.connected[d.connect] = true; if (r) state.connected.ouraMode = r.mode; applyDataSource(); set({}); toast(r ? r.note : "Calendar connected"); }); } }, 70);
     return;
   }
   if (d.check) {
@@ -1783,7 +1789,14 @@ document.addEventListener("click", (e) => {
     case "make-habits": makeHabits(); break;
     case "new-habits": makeHabits().then(() => set({ step: "app", tab: "habits" })); break;
     case "skip-ai": skipAi = true; break;
-    case "finish": seedPeriods(); set({ step: "app", tab: "today" }); scheduleMood(25000); break;
+    case "start-signup": state = { ...defaultState(), step: "account" }; applyDataSource(); save(); render(); break;
+    case "create-account": {
+      const p = state.profile;
+      if (!p.name.trim() || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(p.email)) { toast("Add your first name and a valid email to continue"); break; }
+      Object.assign(state, { persona: null, periods: [], checkins: {}, habits: [], checks: {}, logs: [], moods: [], booked: [], connected: { oura: false, calendar: false }, calendarProvider: null });
+      set({ step: "about" }); toast(`Welcome, ${p.name.trim()}`); break;
+    }
+    case "finish": applyDataSource(); seedPeriods(); set({ step: "app", tab: "today" }); scheduleMood(25000); break;
     case "switch": ui.moodOpen = false; set({ step: "login" }); break;
     case "reset": try { localStorage.removeItem(STORE_KEY); } catch (err) {} remoteDoc?.delete?.().catch(() => {}); state = defaultState(); ui = { ...ui, sorted: null, draft: "", moodOpen: false }; render(); break;
     case "ai-plan": aiPlan(); break;
