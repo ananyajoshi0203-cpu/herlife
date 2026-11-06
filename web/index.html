@@ -1132,7 +1132,7 @@ function renderApp(ctx) {
   const phase = phaseOf(ctx.cd);
   return `
     <div class="topbar"><div class="brand">${brandMark}HerLife</div>
-      <div class="row">${!cycleLens() ? `<span class="pill accent mono">Ready ${ctx.row.ready ?? "--"}</span>` : periodStarts().length ? `<button class="pill accent phase-chip" data-tab="cycle" title="Cycle day ${ctx.cd} of ${CYCLE_LEN}"><span class="dot"></span>${PHASES[phase].label} · ${phaseChipText(ctx.cd)}</button>${infoBtn("cycleday")}` : `<button class="pill accent" data-tab="cycle">Log your period</button>`}<button class="pill" data-action="switch" title="Sign in as someone else">Switch</button></div></div>
+      <div class="row">${!cycleLens() ? `<span class="pill accent mono">Ready ${ctx.row.ready ?? "--"}</span>` : periodStarts().length ? `<button class="pill accent phase-chip" data-tab="cycle" title="Cycle day ${ctx.cd} of ${CYCLE_LEN}"><span class="dot"></span>${PHASES[phase].label} · ${phaseChipText(ctx.cd)}</button>${infoBtn("cycleday")}` : `<button class="pill accent" data-tab="cycle">Log your period</button>`}<button class="pill" data-action="switch" title="Back to the first page: create an account or pick a demo profile">Switch</button></div></div>
     <div class="scroll"><div class="screen">${tabs[state.tab](ctx)}</div></div>
     <nav class="tabbar" style="grid-template-columns:repeat(${tabList.length},1fr)">${tabList.map(([k, l]) => `<button class="${state.tab === k ? "on" : ""}" data-tab="${k}">${icon[k]}${l}</button>`).join("")}</nav>
     ${ui.note ? `<div class="toast" role="status">${esc(ui.note)}</div>` : ""}`;
@@ -2477,7 +2477,7 @@ document.addEventListener("click", (e) => {
       if (pr?.checkinDemo) { toast("One week in. Here is Dana's check-in."); (state.lifeGoals || []).forEach(interpretGoal); }
       break;
     }
-    case "switch": ui.moodOpen = false; set({ step: "login" }); break;
+    case "switch": ui.moodOpen = false; ui.infoOpen = null; set({ step: "welcome" }); break;
     case "reset": try { localStorage.removeItem(STORE_KEY); } catch (err) {} remoteDoc?.delete?.().catch(() => {}); state = defaultState(); ui = { ...ui, sorted: null, draft: "", moodOpen: false }; render(); break;
     case "ai-plan": aiPlan(); break;
     case "book":
@@ -2565,7 +2565,6 @@ function scheduleMood(ms) {
 }
 const requestedProfile = new URLSearchParams(location.search).get("profile");
 if (requestedProfile && PERSONAS[requestedProfile]) { quickStart(requestedProfile); history.replaceState(null, "", location.pathname); }
-else if (state.step === "welcome" && !state.updatedAt) quickStart("priya");
 if (state.step === "app") seedPeriods();
 applyDataSource();
 render();

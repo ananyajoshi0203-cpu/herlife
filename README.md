@@ -3,7 +3,7 @@
 <p align="center"><b>Health that fits into her life.</b><br>
 An AI health coordinator for busy women: it plans small, realistic health actions around her calendar, adapts to her body and cycle, learns what works for her, and turns it all into a record her doctor can use.</p>
 
-<p align="center"><a href="https://herlife-six.vercel.app/?profile=priya"><b>Try the live app: herlife-six.vercel.app</b></a><br>
+<p align="center"><a href="https://herlife-six.vercel.app"><b>Try the live app: herlife-six.vercel.app</b></a><br>
 <a href="https://github.com/ananyajoshi0203-cpu/herlife/actions/workflows/tests.yml"><img src="https://github.com/ananyajoshi0203-cpu/herlife/actions/workflows/tests.yml/badge.svg" alt="tests"></a></p>
 
 ---
@@ -51,11 +51,16 @@ Small actions done daily compound into better sleep, steadier energy, and fewer 
 
 ## Try it (3 minute demo)
 
-Open **https://herlife-six.vercel.app**. It opens straight into **Priya's** Today screen. Tap **Switch** to sign in as anyone else, or open a profile directly with `?profile=maya` (or `dana`, `hana`, `ines`, `sofia`, `ava`, `lena`):
+Open **https://herlife-six.vercel.app**. The first page offers two ways in:
+
+1. **Create my account**: answer the onboarding questions yourself (life stage, cycle, the shape of your days, conditions, goals), connect a simulated Oura ring and calendar, and swipe to pick your habits.
+2. **Sign in to a demo profile**: pick one of the women below. Each still walks through onboarding with her answers prefilled and a banner explaining who she is.
+
+**To test another profile, tap Switch** (top right of every screen in the app). It returns to this first page without deleting anything, so you can create an account or pick a different demo profile.
 
 | Persona | Shows |
 |---|---|
-| **Maya, 32**, busy working woman, migraines | Full onboarding with her answers prefilled, cycle map and prediction, Today's plan, Book it, voice log, doctor summary |
+| **Maya, 32**, busy working woman, migraines | Full onboarding, cycle map and prediction, Today's plan, Book it, voice log, doctor summary |
 | **Dana, 41**, one week in, "lose 10 pounds", "high energy all day" | Weekly check-in: consistency hill with flags, what moved, what HerLife learned, next move |
 | **Hana, 27**, student, endometriosis and anemia | Period day 2, heavy flow, ease-off plan |
 | **Ines, 30**, freelancer, PCOS | Longer cycles, strength goals |
@@ -64,7 +69,9 @@ Open **https://herlife-six.vercel.app**. It opens straight into **Priya's** Toda
 | **Lena, 48**, working, perimenopause | Menopause transition signal and a question for her doctor |
 | **Priya, 29**, night-shift nurse, no wearable, no calendar | Everything from a morning check-in and voice notes |
 
-Or tap **Create my account** and answer the questions yourself. Oura and calendar connections are simulated in this build; real sign in is implemented and turns on once the providers approve the app.
+Shortcut for presenters: `https://herlife-six.vercel.app/?profile=dana` (or `maya`, `priya`, `hana`, `ines`, `sofia`, `ava`, `lena`) skips onboarding and opens that profile's app directly.
+
+A browser that has used HerLife before reopens where it left off; tap **Switch** to get back to the first page. Oura and calendar connections are simulated in this build; real sign in is implemented and turns on once the providers approve the app.
 
 ## How it is built
 
