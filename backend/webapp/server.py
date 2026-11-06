@@ -32,6 +32,19 @@ from backend.webapp import google_calendar as gcal
 from backend.webapp import store
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+def load_dotenv(path: Path) -> None:
+    """Read KEY=value lines from a local .env (git-ignored). Real environment variables win."""
+    if not path.exists():
+        return
+    for line in path.read_text().splitlines():
+        key, sep, value = line.strip().partition("=")
+        if sep and key and not key.startswith("#"):
+            os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
+
+
+load_dotenv(ROOT / ".env")
 PAGE = ROOT / "web" / "index.html"
 STATIC = Path(__file__).resolve().parent / "static"
 PERSON_COOKIE = "bloom_person"
