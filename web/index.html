@@ -206,6 +206,20 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
 .cyc-dot { position: absolute; top: -8px; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%; background: var(--ph-men); }
 .cyc-dot.next { background: transparent; border: 3px solid var(--ph-men); animation: breathe 2.4s ease-in-out infinite; }
 .cyc-today { position: absolute; top: -12px; width: 2px; height: 22px; background: var(--ink); }
+.stellar { width: 120px; height: 120px; --sp-1: color-mix(in oklab, var(--ph-lut) 45%, var(--surface)); --sp-2: color-mix(in oklab, var(--ph-fol) 45%, var(--surface)); --sp-3: color-mix(in oklab, var(--nourish, var(--ph-fol)) 45%, var(--surface)); --sp-4: color-mix(in oklab, var(--ph-men) 40%, var(--surface)); --sp-5: color-mix(in oklab, var(--ph-ovu) 50%, var(--surface)); }
+.stellar svg { width: 100%; height: 100%; overflow: visible; }
+.stellar .orbit { fill: none; stroke: color-mix(in oklab, var(--ph-lut) 22%, var(--surface)); stroke-width: 1; stroke-dasharray: 2 5; }
+.stellar .star { transform-origin: 60px 60px; animation: starspin 4.8s cubic-bezier(.45,.05,.55,.95) infinite; }
+.stellar .star path { fill: color-mix(in oklab, var(--ph-ovu) 55%, var(--surface)); filter: drop-shadow(0 0 6px color-mix(in oklab, var(--ph-ovu) 50%, transparent)); }
+.stellar .planets { transform-origin: 60px 60px; }
+.stellar .outer { animation: orbit 9s linear infinite; }
+.stellar .inner { animation: orbit 5.5s linear infinite reverse; }
+@keyframes starspin { 0% { transform: rotate(0) scale(.92); } 50% { transform: rotate(180deg) scale(1.08); } 100% { transform: rotate(360deg) scale(.92); } }
+@keyframes orbit { to { transform: rotate(360deg); } }
+.info { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid currentColor; background: transparent; color: var(--muted); font: italic 700 12px/1 Georgia, serif; display: inline-grid; place-items: center; padding: 0; margin-left: 6px; vertical-align: middle; opacity: .75; }
+.info:hover { opacity: 1; color: var(--accent); }
+.with-info { display: flex; align-items: center; }
+.phase-chip { border: 0; cursor: pointer; }
 .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(56px, 1fr)); gap: 6px; }
 .pillar { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 600; color: var(--muted); }
 .ring-wrap.sm { width: 56px; height: 56px; }
@@ -332,7 +346,7 @@ td:first-child { font-family: var(--f-body); font-weight: 600; font-size: 13px; 
 .pillar-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(54px, 1fr)); gap: 6px; margin-top: -8px; }
 .pillar-row .pillar b { font-family: var(--f-data); font-size: 13px; color: var(--ink); }
 .ring-wrap .val.ic svg { transform: none; width: 20px; height: 20px; }
-.lede { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lede { font-size: 14px; line-height: 1.4; text-wrap: pretty; overflow-wrap: anywhere; }
 details.more summary { font-size: 13px; font-weight: 700; color: var(--accent); cursor: pointer; list-style: none; }
 details.more summary::-webkit-details-marker { display: none; }
 details.more[open] > :not(summary) { margin-top: 8px; }
@@ -410,10 +424,10 @@ let CYCLE_LEN = 29;
 const STORE_KEY = "bloom.v2";
 
 const PHASES = {
-  menstrual: { label: "Menstrual", short: "Period", token: "--ph-men", energy: "Lowest energy of the month. Iron and warmth help.", body: "Estrogen and progesterone are at their lowest. Cramps, fatigue, and lighter sleep are common in the first two days.", move: "Gentle movement, walks, restorative yoga.", eat: "Iron and vitamin C together: lentils, leafy greens, citrus." },
-  follicular: { label: "Follicular", short: "Rising", token: "--ph-fol", energy: "Energy and mood climb as estrogen rises.", body: "Estrogen rises steadily. Many women feel stronger and bounce back faster, so this is a great window for harder training.", move: "Strength and new skills. Push progressive load.", eat: "Fresh, fermented, and protein forward meals." },
-  ovulatory: { label: "Ovulatory", short: "Peak", token: "--ph-ovu", energy: "Peak energy, confidence, and social drive.", body: "Estrogen peaks and LH surges. Some women notice a small temperature rise and a dip in sleep right after.", move: "Intervals and your hardest session of the cycle.", eat: "Fiber-rich meals and plenty of veggies keep energy steady." },
-  luteal: { label: "Luteal", short: "Winding down", token: "--ph-lut", energy: "Energy tapers. Cravings and sleep disruption can show up late.", body: "Progesterone rises, body temperature runs about half a degree warmer, and resting heart rate climbs. Late luteal is when PMS shows up.", move: "Steady cardio, pilates, and lower intensity strength.", eat: "Complex carbs and magnesium: sweet potato, oats, pumpkin seeds, dark chocolate." },
+  menstrual: { label: "Menstrual", short: "Period", token: "--ph-men", energy: "Lowest energy of the month. Rest, iron, and warmth help.", body: "Estrogen and progesterone are at their lowest. Cramps, fatigue, and lighter sleep are common in the first two days.", move: "Gentle movement, walks, restorative yoga.", eat: "Iron and vitamin C together: lentils, leafy greens, citrus." },
+  follicular: { label: "Follicular", short: "Rising", token: "--ph-fol", energy: "Energy and mood are climbing.", body: "Estrogen rises steadily. Many women feel stronger and bounce back faster, so this is a great window for harder training.", move: "Strength and new skills. Push progressive load.", eat: "Fresh, fermented, and protein forward meals." },
+  ovulatory: { label: "Ovulatory", short: "Peak", token: "--ph-ovu", energy: "Peak energy and confidence.", body: "Estrogen peaks and LH surges. Some women notice a small temperature rise and a dip in sleep right after.", move: "Intervals and your hardest session of the cycle.", eat: "Fiber-rich meals and plenty of veggies keep energy steady." },
+  luteal: { label: "Luteal", short: "Winding down", token: "--ph-lut", energy: "Energy tapers. Expect cravings and lighter sleep.", body: "Progesterone rises, body temperature runs about half a degree warmer, and resting heart rate climbs. Late luteal is when PMS shows up.", move: "Steady cardio, pilates, and lower intensity strength.", eat: "Complex carbs and magnesium: sweet potato, oats, pumpkin seeds, dark chocolate." },
 };
 const GOALS = [
   { id: "sleep", title: "Sleep deeper", sub: "Fall asleep easier, wake rested" },
@@ -889,7 +903,7 @@ function render() {
   ui.lastKey = key;
 
   const body = state.step === "app" ? renderApp(ctx) : renderOnboarding();
-  app.innerHTML = `<div class="glow"></div>${body}${ui.moodOpen ? renderMood() : ""}`;
+  app.innerHTML = `<div class="glow"></div>${body}${ui.moodOpen ? renderMood() : ""}${ui.infoOpen ? renderInfo() : ""}`;
   const s = app.querySelector(".scroll");
   if (s) s.scrollTop = keepScroll;
   if (state.step === "welcome") startPetals();
@@ -917,6 +931,41 @@ function cyclePlan() {
   const next = addDays(TODAY, len - cd + 1);
   const t0 = new Date(starts[0]).getTime(), span = new Date(next).getTime() - t0;
   return { mode, len, starts, cd, next, pos: (d) => Math.round(100 * (new Date(d).getTime() - t0) / span) };
+}
+const INFO = {
+  cycleday: ["Where you are in your cycle", "Day 1 is the first day of your period. HerLife counts from your last logged start and predicts the next one from your usual cycle length. The phase tells you what your hormones are likely doing and what tends to help."],
+  weather: ["Body weather", "One number for how ready you are today, blending readiness, sleep recovery, and your mood check-in. Above 75 is a good day to push; below 55 is a day to go gentle."],
+  readiness: ["Readiness", "Oura's score for how recovered you are, from resting heart rate, HRV, temperature, and recent sleep and activity. Compare it with your own usual, not other people's."],
+  hrv: ["HRV (heart rate variability)", "The variation between heartbeats while you sleep. Higher than your usual means your nervous system recovered well. It dips with stress, illness, alcohol, and in the days before your period."],
+  temp: ["Temperature vs normal", "Your skin temperature compared with your own baseline. It rises about half a degree after ovulation and drops before your period, which is how HerLife confirms your phases."],
+  sleep: ["Last night", "Deep sleep restores the body; REM sleep processes emotions and memory. Typical adults spend about 13 to 23% in deep and 20 to 25% in REM. The forecast compares last night with your own average."],
+  recharge: ["Emotional recharge", "Based on your REM share. A strong REM night tends to mean a steadier mood the next day; a short one can leave you more reactive."],
+  recovery: ["Physical recovery", "Based on your deep sleep share. More deep sleep means your body repaired more, so harder training is a better idea."],
+  mind: ["Mind and energy", "Energy blends readiness, sleep, and how you said you feel. Stress is minutes your body showed a stress response. REM is the sleep stage tied to emotional processing."],
+  pillars: ["Your 5 pillars", "Sleep, movement, nourishment, mind, and cycle. Each ring scores today from your ring data and logs, so you can see which part of your life needs care first."],
+  plan: ["Today's plan", "A workout and a meal chosen for today's readiness, your cycle phase, your workout access, and your food preferences. Book it drops the session into a free slot in your calendar."],
+  habits: ["Habits", "Three small habits tied to your goals. Streaks show consistency; impact compares your outcomes on days you did the habit versus days you did not."],
+  weekly: ["Weekly check-in", "For each goal, HerLife tracks a few daily signals and measures a few weekly outcomes. The flag says whether outcomes moved the right way since you set the goal. The wave shows how consistent you were each day."],
+  consistency: ["Weekly consistency", "The share of your habits you completed each week. Consistency predicts results better than intensity."],
+  ease: ["Ease off today", "Shows when several signals line up: low readiness, short sleep, a heavy calendar, high stress, or the days around your period. Rest days are part of the plan."],
+  day: ["Your day", "Your calendar with free slots HerLife can use for movement. The bars show how many busy hours each day of your week has."],
+  tuned: ["Tuned for you", "Extra guidance for the conditions you told us about, alongside your care team's plan, never instead of it."],
+  temptrail: ["Temperature trail", "60 nights of skin temperature. The warm stretches are your luteal phase; the drop marks your period. Shaded bars are logged periods."],
+  record: ["Your record", "The story your doctor rarely gets: 90 days of sleep, stress, movement, mood, and cycle in one place, ready to share at your appointment."],
+};
+const info = (key) => INFO[key] ? `<button class="info" type="button" data-info="${key}" aria-label="What is ${esc(INFO[key][0])}?">i</button>` : "";
+function renderInfo() {
+  const [title, body] = INFO[ui.infoOpen] || [];
+  if (!title) return "";
+  return `<div class="sheet-back" data-action="info-close"><div class="sheet" data-stop><span class="eyebrow">What this tells you</span><h2>${esc(title)}</h2><p style="font-size:15px">${esc(body)}</p><button class="btn block" data-action="info-close">Got it</button></div></div>`;
+}
+function phaseChipText(cd) {
+  const toPeriod = CYCLE_LEN - cd + 1, ov = CYCLE_LEN - 14;
+  if (cd <= 5) return `period day ${cd}`;
+  if (toPeriod <= 7) return `period in ~${toPeriod} day${toPeriod === 1 ? "" : "s"}`;
+  if (cd >= ov - 1 && cd <= ov + 1) return "fertile window";
+  if (cd < ov - 1) return `ovulation in ~${ov - cd} days`;
+  return `day ${cd} of ${CYCLE_LEN}`;
 }
 function personaBanner() {
   const pr = PERSONAS[state.persona]; if (!pr) return "";
@@ -1013,7 +1062,7 @@ function renderOnboarding() {
       <div class="grid2 rise">${GOALS.map((g) => `<button class="goal ${state.goals.includes(g.id) ? "on" : ""}" data-goal="${g.id}"><b>${g.title}</b><small>${g.sub}</small></button>`).join("")}</div>
       <button class="btn block rise" data-action="make-habits" ${state.goals.length === 2 ? "" : "disabled"}>${state.goals.length === 2 ? "Build my habits" : `Choose ${2 - state.goals.length} more`}</button>`,
     habits: () => `${progress()}
-      ${ui.thinking ? `<div class="thinking"><div class="orb"></div><h2>Reading your goals and your data</h2><p class="muted">Claude is picking three habits that fit ${esc(p.name || "you")}.</p><button class="link" data-action="skip-ai">Use HerLife's picks instead</button></div>` : `
+      ${ui.thinking ? `<div class="thinking"><div class="stellar" aria-hidden="true"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="44" class="orbit"/><circle cx="60" cy="60" r="30" class="orbit"/><g class="star"><path d="M60 38 C62 54 66 58 82 60 C66 62 62 66 60 82 C58 66 54 62 38 60 C54 58 58 54 60 38Z"/></g><g class="planets outer"><circle cx="60" cy="16" r="6" fill="var(--sp-1)"/><circle cx="98" cy="82" r="5" fill="var(--sp-2)"/><circle cx="22" cy="82" r="5.5" fill="var(--sp-3)"/></g><g class="planets inner"><circle cx="60" cy="30" r="4.5" fill="var(--sp-4)"/><circle cx="60" cy="90" r="4" fill="var(--sp-5)"/></g></svg></div><h2>Reading your goals and your data</h2><p class="muted">Claude is picking three habits that fit ${esc(p.name || "you")}.</p><button class="link" data-action="skip-ai">Use HerLife's picks instead</button></div>` : `
       ${candidateDeck()}      <button class="link rise" data-action="make-habits">Suggest different habits</button>`}`,
   };
   const banner = ["welcome", "login", "account"].includes(state.step) ? "" : personaBanner();
@@ -1044,7 +1093,7 @@ function renderApp(ctx) {
   const phase = phaseOf(ctx.cd);
   return `
     <div class="topbar"><div class="brand">${brandMark}HerLife</div>
-      <div class="row">${!cycleLens() ? `<span class="pill accent mono">Ready ${ctx.row.ready ?? "--"}</span>` : periodStarts().length ? `<span class="pill accent"><span class="dot"></span>${PHASES[phase].label} · day ${ctx.cd}</span>` : `<button class="pill accent" data-tab="cycle">Log your period</button>`}<button class="pill" data-action="switch" title="Sign in as someone else">Switch</button></div></div>
+      <div class="row">${!cycleLens() ? `<span class="pill accent mono">Ready ${ctx.row.ready ?? "--"}</span>` : periodStarts().length ? `<button class="pill accent phase-chip" data-tab="cycle" title="Cycle day ${ctx.cd} of ${CYCLE_LEN}"><span class="dot"></span>${PHASES[phase].label} · ${phaseChipText(ctx.cd)}</button>${info("cycleday")}` : `<button class="pill accent" data-tab="cycle">Log your period</button>`}<button class="pill" data-action="switch" title="Sign in as someone else">Switch</button></div></div>
     <div class="scroll"><div class="screen">${tabs[state.tab](ctx)}</div></div>
     <nav class="tabbar" style="grid-template-columns:repeat(${tabList.length},1fr)">${tabList.map(([k, l]) => `<button class="${state.tab === k ? "on" : ""}" data-tab="${k}">${icon[k]}${l}</button>`).join("")}</nav>
     ${ui.note ? `<div class="toast" role="status">${esc(ui.note)}</div>` : ""}`;
@@ -1097,7 +1146,7 @@ function bodyWeather(ctx) {
   const score = energyOf(ctx.row, ctx.row.day || TODAY) ?? ctx.row.ready ?? 70;
   return `<div class="weather rise" style="--score:${score}" role="img" aria-label="Body weather: energy ${score}, ${weatherLabel(score)}">
       <div class="orb-hero" aria-hidden="true"><i></i><i></i><i></i></div>
-      <div class="weather-val"><span class="eyebrow">Body weather</span><b class="mono">${score}</b><strong>${weatherLabel(score)}</strong></div></div>
+      <div class="weather-val"><span class="eyebrow">Body weather ${info("weather")}</span><b class="mono">${score}</b><strong>${weatherLabel(score)}</strong></div></div>
     <div class="pillar-row rise">${pillars(ctx).map((pl) => `<div class="pillar"><div class="ring-wrap sm">${ring(pl.score, 100, 56, 6, pl.token)}<div class="val ic" style="color:var(${pl.token})">${glyph(PILLAR_GLYPH[pl.label])}</div></div><b>${pl.score}</b><span>${pl.label}</span></div>`).join("")}</div>`;
 }
 const WORKOUT_ART = '<svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="48" cy="14" r="6" fill="currentColor" opacity=".25"/><circle cx="48" cy="14" r="6"/><path d="M28 70l10-20 10 10v12M18 40l10-14 16 4 6 12 10 4"/><path d="M8 74h64" opacity=".35"/></svg>';
@@ -1202,12 +1251,12 @@ function sleepForecast(row) {
 function sleepCard(row) {
   const f = sleepForecast(row); if (!f) return "";
   const light = Math.max(0, 100 - f.rem - f.deep);
-  return `<div class="card rise"><div class="row between"><h2>Last night</h2><span class="eyebrow mono">${hm(row.sleepMin)}</span></div>
+  return `<div class="card rise"><div class="row between"><h2 class="with-info">Last night${info("sleep")}</h2><span class="eyebrow mono">${hm(row.sleepMin)}</span></div>
     ${hypnogram(row)}
     <div class="row between muted" style="font-size:12px"><span><span class="dot" style="color:var(--ph-fol)"></span> Deep ${f.deep}%</span><span><span class="dot" style="color:var(--ph-lut)"></span> REM ${f.rem}%</span><span>Light ${light}%</span></div>
     <div class="gauges">
-      ${gauge(rechargeScore(row), "--ph-lut", "Emotional recharge", `REM ${f.rem}% · usual ${f.remBase}%`)}
-      ${gauge(recoveryScore(row), "--ph-fol", "Physical recovery", `Deep ${f.deep}% · usual ${f.deepBase}%`)}
+      ${gauge(rechargeScore(row), "--ph-lut", "Emotional recharge" + info("recharge"), `REM ${f.rem}% · usual ${f.remBase}%`)}
+      ${gauge(recoveryScore(row), "--ph-fol", "Physical recovery" + info("recovery"), `Deep ${f.deep}% · usual ${f.deepBase}%`)}
     </div>
     <details class="more"><summary>What this means today</summary>
       <div class="insight"><i style="background:var(--ph-lut)"></i><p style="font-size:14px"><b>Mood:</b> ${f.mood}</p></div>
@@ -1242,7 +1291,7 @@ function mindCard(ctx) {
   const note = remPct !== null && remPct < remUsual - 2 ? `REM was ${remPct}% of your sleep, under your usual ${remUsual}%. REM sleep helps the brain process emotions, so a tense day can feel bigger after a short REM night.`
     : avg(stress.slice(-3)) > avg(stress) + 15 ? "Your stress minutes have climbed the last few days. Short breaks between meetings help your nervous system reset."
     : "Your stress and energy look balanced this week.";
-  return `<div class="card rise"><div class="row between"><h2>Mind and energy</h2><span class="eyebrow">14 days</span></div>
+  return `<div class="card rise"><div class="row between"><h2 class="with-info">Mind and energy${info("mind")}</h2><span class="eyebrow">14 days</span></div>
     ${weekMoods()}
     <div class="mind-rows">
       <div class="mrow"><div><span class="eyebrow">Energy</span><b class="mono">${num(energyOf(row, ctx.row.day || TODAY))}</b></div>${areaSpark(energy, "--ph-ovu")}</div>
@@ -1266,7 +1315,7 @@ function checkinCard() {
 }
 function tuningCard() {
   const list = tunings(); if (!list.length) return "";
-  return `<div class="card rise"><div class="row between"><h2>Tuned for you</h2><span class="eyebrow">${list.length} condition${list.length > 1 ? "s" : ""}</span></div>
+  return `<div class="card rise"><div class="row between"><h2 class="with-info">Tuned for you${info("tuned")}</h2><span class="eyebrow">${list.length} condition${list.length > 1 ? "s" : ""}</span></div>
     ${list.map(([name, t]) => `<div class="stack" style="gap:6px"><div class="row"><span class="pill accent">${name}</span><small class="muted">${t.lever}</small></div>
       <ul style="margin:0;padding-left:18px;font-size:14px;display:flex;flex-direction:column;gap:3px">${t.recs.map((r) => `<li>${esc(r)}</li>`).join("")}</ul></div>`).join("")}
     <p class="muted" style="font-size:11px">Lifestyle support alongside your care team's plan, never a replacement for it.</p></div>`;
@@ -1626,7 +1675,7 @@ function weeklyCheckin() {
   const rows = rowsByDay(), week = addDays(TODAY, -6), done = state.weekly?.[TODAY];
   const goals = state.lifeGoals || [];
   const weightGoal = goals.some((g) => g.outcomes.includes("weight") || g.signals.includes("weight"));
-  return `<div class="card rise weekly"><div class="row between"><div><span class="eyebrow">Weekly check-in · ${fmtDay(week, { month: "short", day: "numeric" })} to ${fmtDay(TODAY, { month: "short", day: "numeric" })}</span><h2>How your goals moved</h2></div></div>
+  return `<div class="card rise weekly"><div class="row between"><div><span class="eyebrow">Weekly check-in · ${fmtDay(week, { month: "short", day: "numeric" })} to ${fmtDay(TODAY, { month: "short", day: "numeric" })}</span><h2 class="with-info">How your goals moved${info("weekly")}</h2></div></div>
     ${goals.map((g) => { const prog = goalProgress(g, rows), [flagLabel, flagTok] = FLAGS[prog.flag], weeksIn = Math.max(1, Math.round((new Date(TODAY) - new Date(g.since)) / 6048e5)); return `
       <div class="goalblock">
         <div class="row between"><div><b class="goal-title">${esc(g.label)}</b><small class="muted"> · "${esc(g.text)}" · week ${weeksIn}</small></div><span class="flag" style="--flag:var(${flagTok})">${flagLabel}</span></div>
@@ -1673,7 +1722,7 @@ function renderHabits() {
     ${weeklyCheckin()}
     ${state.habits.length ? renderChanged(impacts, changed) : ""}
     ${swipeDeck()}
-    <div class="card rise"><h2>Weekly consistency</h2>
+    <div class="card rise"><h2 class="with-info">Weekly consistency${info("consistency")}</h2>
       <div class="weeks">${weeks.map((w) => `<div class="wk"><div class="bar"><i style="height:${Math.max(4, w.pct)}%"></i></div><b class="mono">${w.pct}%</b><span>${w.label}</span></div>`).join("")}</div>
       <p class="muted" style="font-size:13px">${weeks[3].pct >= weeks[2].pct ? `Up ${weeks[3].pct - weeks[2].pct} points on last week. Keep it going.` : `A softer week. That happens; one check today restarts the climb.`}</p></div>
     ${state.habits.map((h, i) => { const done = !!state.checks[`${h.id}|${TODAY}`]; return `
@@ -1715,19 +1764,19 @@ function renderToday(ctx) {
       <div class="ring-wrap">${ring(row.ready || 0, 100)}<div class="val"><div><b>${row.ready ?? "--"}</b><span class="eyebrow">Readiness</span></div></div></div>
       <div class="grid2">
         <div class="metric"><b>${hm(row.sleepMin || 0)}</b><span>Sleep ${row.sleepMin < base.sleepMin - 15 ? "· short" : ""}</span></div>
-        <div class="metric"><b>${num(row.hrv)} ms</b><span>HRV · base ${Math.round(base.hrv)}</span></div>
-        <div class="metric"><b>${row.temp > 0 ? "+" : ""}${(row.temp ?? 0).toFixed(2)}°</b><span>Temp vs normal</span></div>
+        <div class="metric"><b>${num(row.hrv)} ms</b><span>HRV · base ${Math.round(base.hrv)} ${info("hrv")}</span></div>
+        <div class="metric"><b>${row.temp > 0 ? "+" : ""}${(row.temp ?? 0).toFixed(2)}°</b><span>Temp vs normal ${info("temp")}</span></div>
         <div class="metric"><b>${(row.steps || 0).toLocaleString()}</b><span>Steps yesterday</span></div>
       </div></div>
       <div class="row between"><span class="eyebrow">${state.connected.ouraMode === "live" ? "Live from your Oura Ring" : "Oura Ring · demo data"}</span><button class="link" data-action="oura-sync" style="font-size:13px">${ui.ouraBusy ? "Syncing..." : "Sync Oura"}</button></div>
     </div>` : ""}
 
-    <div class="card rise"><div class="row between"><h2>Your habits today</h2><button class="link" data-tab="habits">${weekPct}% this week</button></div>
+    <div class="card rise"><div class="row between"><h2 class="with-info">Your habits today${info("habits")}</h2><button class="link" data-tab="habits">${weekPct}% this week</button></div>
       ${state.habits.map((h) => { const done = !!state.checks[`${h.id}|${TODAY}`]; return `<div class="habit"><div><div class="habit-title">${esc(h.title)}</div><small class="muted">${esc(h.cue)} · ${streak(h)} day streak</small></div>
         <button class="check ${done ? "on" : ""}" data-check="${h.id}" aria-pressed="${done}" aria-label="Mark ${esc(h.title)} done today">${icon.check}</button></div>`; }).join("")}
     </div>
 
-    ${ease ? `<div class="card ease rise"><span class="eyebrow">Your body is asking</span><h2>Ease off today.</h2>
+    ${ease ? `<div class="card ease rise"><span class="eyebrow">Your body is asking</span><h2 class="with-info">Ease off today.${info("ease")}</h2>
       <div class="breath" aria-hidden="true"><i></i><i></i><span>Breathe</span></div>
       <div class="reason-chips">${reasons.map((r) => `<span>${esc(r)}</span>`).join("")}</div>
       <p style="font-size:14px;position:relative;z-index:1">A walk instead of a workout, and bed a little earlier.</p></div>` : ""}
@@ -1737,7 +1786,7 @@ function renderToday(ctx) {
     <div class="card rise"><div class="win"><div class="star">${icon.star}</div><div><span class="eyebrow">One small win</span><h3>${esc(plan.smallWin)}</h3></div></div></div>
 
     <div class="card rise">
-      <div class="row between"><h2>Today's plan</h2>${plan.source === "claude" ? `<span class="ai-badge">${icon.spark} Claude</span>` : ""}</div>
+      <div class="row between"><h2 class="with-info">Today's plan${info("plan")}</h2>${plan.source === "claude" ? `<span class="ai-badge">${icon.spark} Claude</span>` : ""}</div>
       <div class="plan-tiles">
         <div class="ptile" style="--tint:var(${ease ? "--ph-lut" : info.token})"><div class="art-lg">${WORKOUT_ART}</div>
           <span class="eyebrow">Move</span><h3>${esc(plan.workout.name)}</h3>
@@ -1752,7 +1801,7 @@ function renderToday(ctx) {
       <button class="btn soft block" data-action="ai-plan" ${ui.planning ? "disabled" : ""}>${icon.spark} ${ui.planning ? "Claude is planning your day..." : plan.source === "claude" ? "Try another plan" : "Personalize with Claude"}</button>
     </div>
 
-    <div class="card rise"><div class="row between"><h2>Your day</h2><span class="eyebrow">${ui.calendarLive ? "Live from Google Calendar" : state.connected.calendar ? `${CAL_PROVIDERS.find(([k]) => k === state.calendarProvider)?.[1] || "Calendar"} · demo` : "Not connected"}</span></div>
+    <div class="card rise"><div class="row between"><h2 class="with-info">Your day${info("day")}</h2><span class="eyebrow">${ui.calendarLive ? "Live from Google Calendar" : state.connected.calendar ? `${CAL_PROVIDERS.find(([k]) => k === state.calendarProvider)?.[1] || "Calendar"} · demo` : "Not connected"}</span></div>
       ${state.connected.calendar ? `<div class="busyweek">${dayType().week.map((h, i) => `<div><i style="height:${Math.max(4, h / 12 * 100)}%;background:var(${h >= 7 ? "--warn" : "--accent"})"></i><span>${"MTWTFSS"[i]}</span></div>`).join("")}</div>
         <p class="muted" style="font-size:12px">${dayType().label} · ${dayType().week.reduce((a, b) => a + b, 0)} busy hours this week</p>` : ""}
       ${state.connected.calendar ? (window.claude?.hosted && !ui.calendarLive ? `<button class="link" data-action="calendar-connect">Connect Google Calendar for your real day</button>` : "") : `<p class="muted" style="font-size:13px">Connect a calendar and HerLife will find free time for workouts and warn you about heavy days. Until then, booked sessions show here.</p>${window.claude?.hosted ? `<button class="link" data-action="calendar-connect">Connect Google Calendar</button>` : ""}`}
@@ -1782,7 +1831,7 @@ function renderLog() {
       <div class="chips">${SAMPLE_RAMBLES.map((_, i) => `<button class="chip" data-ramble="${i}">Try sample ${i + 1}</button>`).join("")}</div>
       <button class="btn block" data-action="sort" ${ui.thinking ? "disabled" : ""}>${ui.thinking ? "Sorting..." : `${icon.spark} Sort my log`}</button>
     </div>
-    ${ui.thinking ? `<div class="thinking"><div class="orb"></div><p class="muted">Pulling apart sleep, food, movement, and feelings</p></div>` : ""}
+    ${ui.thinking ? `<div class="thinking"><div class="stellar" aria-hidden="true"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="44" class="orbit"/><circle cx="60" cy="60" r="30" class="orbit"/><g class="star"><path d="M60 38 C62 54 66 58 82 60 C66 62 62 66 60 82 C58 66 54 62 38 60 C54 58 58 54 60 38Z"/></g><g class="planets outer"><circle cx="60" cy="16" r="6" fill="var(--sp-1)"/><circle cx="98" cy="82" r="5" fill="var(--sp-2)"/><circle cx="22" cy="82" r="5.5" fill="var(--sp-3)"/></g><g class="planets inner"><circle cx="60" cy="30" r="4.5" fill="var(--sp-4)"/><circle cx="60" cy="90" r="4" fill="var(--sp-5)"/></g></svg></div><p class="muted">Pulling apart sleep, food, movement, and feelings</p></div>` : ""}
     ${sorted ? `<div class="stack rise"><div class="row between"><h2>Sorted</h2>${sorted.source === "claude" ? `<span class="ai-badge">${icon.spark} Claude</span>` : ""}</div>
       ${renderBuckets(sorted.entries)}
       <button class="btn block" data-action="save-log">Add ${sorted.entries.length} entries to my record</button></div>` : ""}
@@ -1838,7 +1887,7 @@ function renderCycle(ctx) {
       <div class="insight"><i style="background:var(--ph-fol)"></i><div><b>Move</b><p class="muted">${esc(info.move)}</p></div></div>
       <div class="insight"><i style="background:var(--nourish)"></i><div><b>Eat</b><p class="muted">${esc(info.eat)}</p></div></div>
     </div>
-    ${hasWearable() ? `<div class="card rise"><div class="row between"><h2>Temperature trail</h2><span class="eyebrow">Oura confirms</span></div>
+    ${hasWearable() ? `<div class="card rise"><div class="row between"><h2 class="with-info">Temperature trail${info("temptrail")}</h2><span class="eyebrow">Oura confirms</span></div>
       ${tempChart()}
       <p class="muted" style="font-size:13px">Your temperature rises after ovulation and drops right before your period. HerLife uses that shift to confirm ovulation and flag a cycle that looks different from your log.</p></div>` : ""}
     <div class="card rise"><h2>How do you feel today?</h2>
@@ -2220,6 +2269,7 @@ document.addEventListener("click", (e) => {
   }
   if (d.goalSuggest) { addLifeGoal(d.goalSuggest); return; }
   if (d.weekFeel) { ui.weekFeel = Number(d.weekFeel); render(); return; }
+  if (d.info) { ui.infoOpen = d.info; render(); return; }
   if (d.ramble != null) { ui.draft = SAMPLE_RAMBLES[+d.ramble]; render(); return; }
   if (d.symptom) {
     const i = state.logs.findIndex((l) => l.day === TODAY && l.symptom === d.symptom);
@@ -2282,6 +2332,7 @@ document.addEventListener("click", (e) => {
     case "period-today": state.periods.push(TODAY); state.previewCd = null; save(); toast("Period logged. Predictions updated."); break;
     case "period-undo": state.periods = state.periods.filter((d) => d !== TODAY); set({}); break;
     case "mood": ui.moodOpen = true; render(); break;
+    case "info-close": if (e.target.closest("[data-stop]") && !t.matches("button")) return; ui.infoOpen = null; render(); break;
     case "mood-close": if (e.target.closest("[data-stop]") && !t.matches("button")) return; ui.moodOpen = false; render(); break;
     case "mic": toggleMic(); break;
     case "sort": sortLog(); break;
