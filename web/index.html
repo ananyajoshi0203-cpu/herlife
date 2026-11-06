@@ -167,6 +167,9 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
 .mind > div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .mind b { font-size: 18px; }
 .mind svg { max-width: 100%; }
+.persona { display: grid; grid-template-columns: 44px 1fr; gap: 12px; align-items: center; text-align: left; background: var(--surface); border: 1.5px solid var(--line); border-radius: var(--r-md); padding: 12px; transition: border-color .15s, transform .15s; }
+.persona:hover { border-color: var(--accent); transform: translateY(-1px); }
+.avatar { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; color: var(--surface); font-family: var(--f-display); font-weight: 800; font-size: 18px; }
 .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(56px, 1fr)); gap: 6px; }
 .pillar { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 600; color: var(--muted); }
 .ring-wrap.sm { width: 56px; height: 56px; }
@@ -340,11 +343,24 @@ const AGE_BANDS = [
 ];
 const ageBand = () => { const a = Number(state.profile.age) || 32; return AGE_BANDS.find((b) => a <= b.max); };
 const PERSONAS = {
-  maya: { profile: { name: "Maya", email: "maya@example.com", age: "32", gym: "gym", diet: ["Vegetarian"], conditions: ["Migraines"], lastPeriod: "", cycleLen: 29, lifeStage: "cycling" }, goals: ["pms", "sleep"], gaps: null, blurb: "32, migraines, regular cycles" },
-  ava: { profile: { name: "Ava", email: "ava@example.com", age: "24", gym: "gym", diet: [], conditions: [], lastPeriod: "", cycleLen: 29, lifeStage: "irregular" }, goals: ["stress", "energy"], gaps: [29, 30, 41, 52], blurb: "24, training hard, cycles stretching" },
-  priya: { profile: { name: "Priya", email: "priya@example.com", age: "29", gym: "none", diet: ["Halal"], conditions: [], lastPeriod: "", cycleLen: 30, lifeStage: "cycling" }, goals: ["stress", "energy"], gaps: [30, 31, 29], blurb: "29, no wearable, logs by voice", noWearable: true },
-  lena: { profile: { name: "Lena", email: "lena@example.com", age: "48", gym: "home", diet: ["Dairy free"], conditions: [], lastPeriod: "", cycleLen: 28, lifeStage: "irregular" }, goals: ["sleep", "heart"], gaps: [27, 36, 23, 64], blurb: "48, night sweats, cycles changing" },
+  maya: { profile: { name: "Maya", email: "maya@example.com", age: "32", gym: "gym", diet: ["Vegetarian"], conditions: ["Migraines"], lifeStage: "cycling" }, goals: ["pms", "sleep"], cd: 12, len: 29, blurb: "Migraines that cluster before her period" },
+  hana: { profile: { name: "Hana", email: "hana@example.com", age: "27", gym: "home", diet: ["Gluten free"], conditions: ["Endometriosis", "Anemia"], lifeStage: "cycling" }, goals: ["pms", "energy"], cd: 2, len: 28, blurb: "Painful, heavy periods and low iron" },
+  ines: { profile: { name: "Ines", email: "ines@example.com", age: "30", gym: "gym", diet: [], conditions: ["PCOS"], lifeStage: "irregular" }, goals: ["pcos", "strength"], cd: 19, len: 33, blurb: "PCOS, longer cycles, building strength" },
+  sofia: { profile: { name: "Sofia", email: "sofia@example.com", age: "35", gym: "gym", diet: ["Dairy free"], conditions: ["PMDD"], lifeStage: "cycling" }, goals: ["stress", "pms"], cd: 25, len: 28, blurb: "Mood dips hard in the week before her period" },
+  ava: { profile: { name: "Ava", email: "ava@example.com", age: "24", gym: "gym", diet: [], conditions: [], lifeStage: "irregular" }, goals: ["stress", "energy"], gaps: [29, 30, 41, 52], blurb: "Training hard, cycles stretching" },
+  lena: { profile: { name: "Lena", email: "lena@example.com", age: "48", gym: "home", diet: ["Dairy free"], conditions: ["Perimenopause"], lifeStage: "perimenopause_menopause" }, goals: ["sleep", "heart"], gaps: [27, 36, 23, 64], blurb: "Night sweats, cycles changing" },
+  priya: { profile: { name: "Priya", email: "priya@example.com", age: "29", gym: "none", diet: ["Halal"], conditions: ["Thyroid"], lifeStage: "cycling" }, goals: ["stress", "energy"], cd: 8, len: 30, blurb: "No wearable, no calendar, logs by voice", noWearable: true, noCalendar: true },
 };
+const CONDITION_TUNING = {
+  Migraines: { lever: "Steady sleep and hydration", recs: ["Keep bed and wake times within 30 minutes, weekends too", "Log every headache. Bloom checks whether they cluster before your period."], ease: (cd, len) => cd >= len - 4 && "Migraine window: the days before your period are your highest risk" },
+  Endometriosis: { lever: "Pain-aware movement", recs: ["Heat and gentle movement on pain days", "Anti-inflammatory meals: oily fish, leafy greens, olive oil", "Rate pain 0 to 10 in your log so your doctor sees the pattern"], ease: (cd) => cd <= 3 && "Endometriosis pain days: gentle movement only" },
+  Anemia: { lever: "Iron in, energy up", recs: ["Pair iron foods with vitamin C, and keep coffee away from iron-rich meals", "Log heavy flow days and fatigue for your doctor"], ease: (cd) => cd <= 2 && "Heavy flow and low iron: expect lower energy" },
+  PCOS: { lever: "Blood sugar and muscle", recs: ["10 minute walk after meals", "Strength training 2 to 3 times a week", "Longer or irregular cycles are common with PCOS, so Bloom predicts from your own history"] },
+  PMDD: { lever: "Protect the late luteal week", recs: ["Plan lighter commitments for the 7 days before your period", "Mood check-ins twice a day that week, so patterns are clear for your doctor"], ease: (cd, len) => cd >= len - 7 && "PMDD week: lighter plan, more recovery" },
+  Thyroid: { lever: "Rhythm and energy tracking", recs: ["Same wake time every day", "Track energy, feeling cold, and weight changes to share with your doctor"] },
+  Perimenopause: { lever: "Sleep, strength, and heat", recs: ["Strength training for bone and muscle", "Log night sweats. Bloom shows how they change your sleep.", "Cool, dark bedroom and a steady wake time"] },
+};
+const tunings = () => conditions().filter((c) => CONDITION_TUNING[c]).map((c) => [c, CONDITION_TUNING[c]]);
 const SEASONS = {
   winter: { label: "Winter and peak flu season", months: [11, 0, 1], recs: [
     { title: "Get your flu shot if you haven't", body: "The CDC recommends a yearly flu vaccine for everyone 6 months and older.", src: "CDC, Seasonal Flu Vaccines", habit: null },
@@ -638,17 +654,18 @@ function easeReasons(ctx) {
   const { row, cd } = ctx, base = baseline(), reasons = [];
   if (cycleLens() && cd <= 2) reasons.push(`Day ${cd} of your period, when energy is lowest`);
   if (cycleLens() && cd >= CYCLE_LEN - 4) reasons.push("Late luteal: progesterone is dropping, PMS window");
+  for (const [, t] of tunings()) { const why = cycleLens() && t.ease?.(cd, CYCLE_LEN); if (why) reasons.push(why); }
   if (row.stress > row.recovery + 45) reasons.push(`${Math.round(row.stress)} high-stress minutes yesterday`);
   if (Number.isFinite(row.ready) && row.ready < 72) reasons.push(`Readiness is ${row.ready}, below your usual ${Math.round(base.ready)}`);
   if (Number.isFinite(row.hrv) && row.hrv < base.hrv * 0.9) reasons.push(`HRV ${Math.round(row.hrv)} ms, ${Math.round(100 - (100 * row.hrv) / base.hrv)}% under baseline`);
-  const meetingMin = CALENDAR.reduce((sum, e) => sum + toMin(e.end) - toMin(e.start), 0);
+  const meetingMin = (state.connected.calendar ? CALENDAR : []).reduce((sum, e) => sum + toMin(e.end) - toMin(e.start), 0);
   if (reasons.length && meetingMin >= 300) reasons.push(`${hm(meetingMin)} of meetings on your calendar`);
   return reasons;
 }
 const toMin = (t) => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
 const toTime = (m) => `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
 function freeSlot(duration) {
-  const busy = [...CALENDAR, ...state.booked].map((e) => [toMin(e.start), toMin(e.end)]).sort((a, b) => a[0] - b[0]);
+  const busy = [...(state.connected.calendar ? CALENDAR : []), ...state.booked].map((e) => [toMin(e.start), toMin(e.end)]).sort((a, b) => a[0] - b[0]);
   let cursor = toMin("07:00");
   for (const [s, e] of busy) { if (s - cursor >= duration + 10) return toTime(cursor + 5); cursor = Math.max(cursor, e); }
   return toTime(Math.max(cursor + 5, toMin("17:00")));
@@ -699,7 +716,7 @@ function render() {
   const app = document.getElementById("app");
   CYCLE_LEN = cycleLength();
   const ctx = dayContext();
-  app.dataset.phase = state.step === "app" ? (cycleLens() ? phaseOf(ctx.cd) : "follicular") : ["welcome", "account"].includes(state.step) ? "luteal" : "menstrual";
+  app.dataset.phase = state.step === "app" ? (cycleLens() ? phaseOf(ctx.cd) : "follicular") : ["welcome", "account", "login"].includes(state.step) ? "luteal" : "menstrual";
   const key = state.step + ":" + state.tab;
   const scroller = app.querySelector(".scroll");
   const keepScroll = key === ui.lastKey && scroller ? scroller.scrollTop : 0;
@@ -729,9 +746,19 @@ function renderOnboarding() {
       <p class="muted rise">Doctors see you for 15 minutes. Bloom keeps the record of everything in between: sleep, food, movement, mood, and your cycle. Then it helps you build habits that fit your body this week.</p>
       <div class="stack rise">
         <button class="btn block" data-go="account">Create my account</button>
-        <span class="eyebrow" style="margin-top:6px">Or explore a demo profile</span>
-        <div class="stack">${Object.entries(PERSONAS).map(([k, pr]) => `<button class="btn ghost block" data-persona="${k}" style="justify-content:space-between"><b>${pr.profile.name}</b><span class="muted" style="font-weight:500;font-size:13px">${pr.blurb}</span></button>`).join("")}</div>
+        <button class="btn ghost block" data-go="login">Sign in to a demo profile</button>
       </div>`,
+    login: () => `
+      <div class="stack rise"><span class="eyebrow">Demo sign in</span><h1>Who are you today?</h1><p class="muted">Each profile has her own conditions, cycle phase, and connections. Watch the plan change.</p></div>
+      <div class="stack">${Object.entries(PERSONAS).map(([k, pr]) => { const ph = pr.cd ? phaseOf(pr.cd, pr.len) : null; return `
+        <button class="persona rise" data-persona="${k}">
+          <span class="avatar" style="background:var(${ph ? PHASES[ph].token : pr.profile.lifeStage === "perimenopause_menopause" ? "--warn" : "--ph-lut"})">${pr.profile.name[0]}</span>
+          <span class="stack" style="gap:3px;min-width:0"><b>${pr.profile.name}, ${pr.profile.age}</b><small class="muted">${pr.blurb}</small>
+            <span class="chips" style="gap:4px">${ph ? `<span class="pill accent" style="--accent:var(${PHASES[ph].token})">${PHASES[ph].label} · day ${pr.cd}</span>` : `<span class="pill">${pr.gaps ? "Irregular cycles" : ""}</span>`}
+              ${pr.profile.conditions.map((c) => `<span class="pill">${c}</span>`).join("")}
+              <span class="pill">${pr.noWearable ? "No Oura" : "Oura"}</span><span class="pill">${pr.noCalendar ? "No calendar" : "Calendar"}</span></span></span>
+        </button>`; }).join("")}</div>
+      <button class="link rise" data-go="welcome">Back</button>`,
     account: () => `${progress()}
       <div class="stack rise"><h1>Let's set you up</h1><p class="muted">Your record belongs to you. We'll ask only what changes your plan.</p></div>
       <div class="field rise"><label for="f-name">First name</label><input class="input" id="f-name" data-bind="name" value="${esc(p.name)}" placeholder="Maya" autocomplete="given-name"></div>
@@ -799,7 +826,7 @@ function renderApp(ctx) {
   const phase = phaseOf(ctx.cd);
   return `
     <div class="topbar"><div class="brand">${brandMark}Bloom</div>
-      <div class="row">${!cycleLens() ? `<span class="pill accent mono">Ready ${ctx.row.ready ?? "--"}</span>` : periodStarts().length ? `<span class="pill accent"><span class="dot"></span>${PHASES[phase].label} · day ${ctx.cd}</span>` : `<button class="pill accent" data-tab="cycle">Log your period</button>`}<button class="pill" data-action="reset" title="Restart onboarding">Restart</button></div></div>
+      <div class="row">${!cycleLens() ? `<span class="pill accent mono">Ready ${ctx.row.ready ?? "--"}</span>` : periodStarts().length ? `<span class="pill accent"><span class="dot"></span>${PHASES[phase].label} · day ${ctx.cd}</span>` : `<button class="pill accent" data-tab="cycle">Log your period</button>`}<button class="pill" data-action="switch" title="Sign in as someone else">Switch</button></div></div>
     <div class="scroll"><div class="screen">${tabs[state.tab](ctx)}</div></div>
     <nav class="tabbar" style="grid-template-columns:repeat(${tabList.length},1fr)">${tabList.map(([k, l]) => `<button class="${state.tab === k ? "on" : ""}" data-tab="${k}">${icon[k]}${l}</button>`).join("")}</nav>
     ${ui.note ? `<div class="toast" role="status">${esc(ui.note)}</div>` : ""}`;
@@ -856,6 +883,13 @@ function checkinCard() {
     <input type="range" id="ci-sleep" min="3" max="11" step="0.5" value="${draft.sleepH}" data-ci="sleepH">
     ${[["energy", "Energy"], ["stress", "Stress"]].map(([k, l]) => `<div class="row between"><span>${l}</span><div class="seg" style="width:62%">${[1, 2, 3, 4, 5].map((n) => `<button class="${draft[k] === n ? "on" : ""}" data-ci-set="${k}" data-val="${n}">${n}</button>`).join("")}</div></div>`).join("")}
     <button class="btn block" data-action="save-checkin">Save check-in</button></div>`;
+}
+function tuningCard() {
+  const list = tunings(); if (!list.length) return "";
+  return `<div class="card rise"><div class="row between"><h2>Tuned for you</h2><span class="eyebrow">${list.length} condition${list.length > 1 ? "s" : ""}</span></div>
+    ${list.map(([name, t]) => `<div class="stack" style="gap:6px"><div class="row"><span class="pill accent">${name}</span><small class="muted">${t.lever}</small></div>
+      <ul style="margin:0;padding-left:18px;font-size:14px;display:flex;flex-direction:column;gap:3px">${t.recs.map((r) => `<li>${esc(r)}</li>`).join("")}</ul></div>`).join("")}
+    <p class="muted" style="font-size:11px">Lifestyle support alongside your care team's plan, never a replacement for it.</p></div>`;
 }
 function seasonCard() {
   const found = seasonNow(); if (!found) return "";
@@ -961,7 +995,7 @@ function renderToday(ctx) {
   const slot = freeSlot(plan.workout.minutes);
   const name = state.profile.name || "there";
   const hour = 8;
-  const items = [...CALENDAR.map((e) => ({ ...e, kind: "cal" })), ...state.booked.map((e) => ({ ...e, kind: "plan" }))].sort((a, b) => toMin(a.start) - toMin(b.start));
+  const items = [...(state.connected.calendar ? CALENDAR : []).map((e) => ({ ...e, kind: "cal" })), ...state.booked.map((e) => ({ ...e, kind: "plan" }))].sort((a, b) => toMin(a.start) - toMin(b.start));
   const booked = state.booked.some((b) => b.title === plan.workout.name);
   const weekPct = state.habits.length ? Math.round(100 * state.habits.flatMap(habitWeek).filter(Boolean).length / (state.habits.length * 7)) : 0;
   return `
@@ -972,6 +1006,7 @@ function renderToday(ctx) {
       <div class="pillars">${pillars(ctx).map((pl) => `<div class="pillar"><div class="ring-wrap sm">${ring(pl.score, 100, 56, 6, pl.token)}<div class="val"><b>${pl.score}</b></div></div><span>${pl.label}</span></div>`).join("")}</div></div>
 
     ${hasWearable() ? "" : checkinCard()}
+    ${tuningCard()}
     ${mindCard(ctx)}
     ${seasonCard()}
 
@@ -1015,7 +1050,8 @@ function renderToday(ctx) {
       <button class="btn soft block" data-action="ai-plan" ${ui.planning ? "disabled" : ""}>${icon.spark} ${ui.planning ? "Claude is planning your day..." : plan.source === "claude" ? "Try another plan" : "Personalize with Claude"}</button>
     </div>
 
-    <div class="card rise"><div class="row between"><h2>Your day</h2><span class="eyebrow">Calendar</span></div>
+    <div class="card rise"><div class="row between"><h2>Your day</h2><span class="eyebrow">${state.connected.calendar ? "Calendar" : "Not connected"}</span></div>
+      ${state.connected.calendar ? "" : `<p class="muted" style="font-size:13px">Connect a calendar and Bloom will find free time for workouts and warn you about heavy days. Until then, booked sessions show here.</p>`}
       <div class="timeline">${items.map((e, i) => `<div class="tl ${e.kind}"><span class="t">${e.start}</span><span class="rail"><i></i>${i < items.length - 1 ? "<s></s>" : ""}</span><div class="what"><b>${esc(e.title)}</b><small>${e.start} to ${e.end}${e.kind === "plan" ? " · added by Bloom" : ""}</small></div></div>`).join("")}</div>
     </div>
 
@@ -1226,7 +1262,7 @@ function signalCard() {
 }
 function renderMood() {
   return `<div class="sheet-back" data-action="mood-close"><div class="sheet" data-stop>
-    <div class="stack"><span class="eyebrow">Quick check-in</span><h2>How's your heart today, ${esc(state.profile.name || "friend")}?</h2><p class="muted">One tap. It goes into your record next to your sleep and cycle.</p></div>
+    <div class="stack"><span class="eyebrow">Quick check-in</span><h2>How's your mood today, ${esc(state.profile.name || "friend")}?</h2><p class="muted">One tap. It goes into your record next to your sleep and cycle.</p></div>
     <div class="moods">${MOODS.map((m, i) => `<button class="mood" data-mood="${m.id}"><div class="blob" style="background:var(${m.token})">${face(i)}</div>${m.label}</button>`).join("")}</div>
     <button class="link" data-action="mood-close">Not now</button></div></div>`;
 }
@@ -1400,9 +1436,10 @@ document.addEventListener("click", (e) => {
   if (d.gym) { state.profile.gym = d.gym; set({}); return; }
   if (d.persona) {
     const pr = PERSONAS[d.persona];
-    Object.assign(state, { profile: { ...pr.profile }, connected: { oura: !pr.noWearable, calendar: !pr.noWearable }, goals: [...pr.goals], periods: [], checkins: pr.noWearable ? demoCheckins() : {} });
+    Object.assign(state, { profile: { ...defaultState().profile, ...pr.profile, cycleLen: pr.len || 29 }, connected: { oura: !pr.noWearable, calendar: !pr.noCalendar }, goals: [...pr.goals], periods: [], checkins: pr.noWearable ? demoCheckins() : {}, persona: d.persona, booked: [], aiPlan: null, summary: null, previewCd: null });
     applyDataSource();
-    if (pr.gaps) { let day = addDays(TODAY, -(pr.gaps.reduce((a, b) => a + b, 0) + 6)); state.periods = [day]; for (const g of pr.gaps) { day = addDays(day, g); state.periods.push(day); } }
+    if (pr.cd) { const last = addDays(TODAY, -(pr.cd - 1)); state.periods = [2, 1, 0].map((k) => addDays(last, -k * pr.len)); }
+    else if (pr.gaps) { let day = addDays(TODAY, -(pr.gaps.reduce((a, b) => a + b, 0) + 6)); state.periods = [day]; for (const g of pr.gaps) { day = addDays(day, g); state.periods.push(day); } }
     else seedPeriods();
     makeHabits(); return;
   }
@@ -1451,6 +1488,7 @@ document.addEventListener("click", (e) => {
     case "new-habits": makeHabits().then(() => set({ step: "app", tab: "habits" })); break;
     case "skip-ai": skipAi = true; break;
     case "finish": seedPeriods(); set({ step: "app", tab: "today" }); scheduleMood(25000); break;
+    case "switch": ui.moodOpen = false; set({ step: "login" }); break;
     case "reset": try { localStorage.removeItem(STORE_KEY); } catch (err) {} remoteDoc?.delete?.().catch(() => {}); state = defaultState(); ui = { ...ui, sorted: null, draft: "", moodOpen: false }; render(); break;
     case "ai-plan": aiPlan(); break;
     case "book": state.booked.push({ start: d.slot, end: toTime(toMin(d.slot) + Number(d.min)), title: d.title }); save(); toast(`Booked ${d.slot} on your calendar`); break;
