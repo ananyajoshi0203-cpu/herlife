@@ -188,6 +188,18 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
 .busyweek { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; height: 54px; align-items: end; }
 .busyweek div { display: flex; flex-direction: column; align-items: center; gap: 3px; height: 100%; justify-content: flex-end; font-size: 10px; color: var(--muted); }
 .busyweek i { width: 100%; border-radius: 5px; display: block; animation: barUp .6s both; transform-origin: bottom; }
+.weekly { gap: 14px; }
+.goalblock { display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: var(--r-md); background: var(--surface-2); }
+.goal-title { font-family: var(--f-display); font-size: 17px; }
+.flag { font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 99px; color: var(--flag); background: color-mix(in oklab, var(--flag) 16%, var(--surface)); white-space: nowrap; }
+.mountain { width: 100%; height: auto; display: block; }
+.mountain path { animation: fade .8s ease-out both; }
+.moved { display: grid; grid-template-columns: repeat(auto-fit, minmax(92px, 1fr)); gap: 8px; }
+.mv { background: var(--surface); border-radius: 12px; padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.mv span { font-size: 11px; color: var(--muted); }
+.mv b { font-family: var(--f-data); font-size: 15px; }
+.mv small { font-size: 10.5px; color: var(--muted); }
+.mv.good b { color: var(--good); } .mv.bad b { color: var(--warn); }
 .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(56px, 1fr)); gap: 6px; }
 .pillar { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 600; color: var(--muted); }
 .ring-wrap.sm { width: 56px; height: 56px; }
@@ -442,6 +454,7 @@ const PERSONAS = {
   sofia: { dayType: "home", profile: { name: "Sofia", email: "sofia@example.com", age: "35", gym: "gym", diet: ["Dairy free"], conditions: ["PMDD"], lifeStage: "cycling" }, goals: ["stress", "pms"], cd: 25, len: 28, blurb: "Mood dips hard in the week before her period" },
   ava: { dayType: "student", profile: { name: "Ava", email: "ava@example.com", age: "24", gym: "gym", diet: [], conditions: [], lifeStage: "irregular" }, goals: ["stress", "energy"], gaps: [29, 30, 41, 52], blurb: "Training hard, cycles stretching" },
   lena: { dayType: "working", profile: { name: "Lena", email: "lena@example.com", age: "48", gym: "home", diet: ["Dairy free"], conditions: ["Perimenopause"], lifeStage: "perimenopause_menopause" }, goals: ["sleep", "heart"], gaps: [27, 36, 23, 64], blurb: "Night sweats, cycles changing" },
+  dana: { dayType: "working", checkinDemo: true, profile: { name: "Dana", email: "dana@example.com", age: "41", gym: "gym", diet: [], conditions: [], lifeStage: "cycling" }, goals: ["energy", "move"], cd: 9, len: 28, blurb: "One week in: lose 10 pounds, high energy", lifeGoals: ["Lose 10 pounds", "Have high energy all day"] },
   priya: { dayType: "shift", profile: { name: "Priya", email: "priya@example.com", age: "29", gym: "none", diet: ["Halal"], conditions: ["Thyroid"], lifeStage: "cycling" }, goals: ["stress", "energy"], cd: 8, len: 30, blurb: "Night-shift nurse, no wearable or calendar", noWearable: true, noCalendar: true },
 };
 const CONDITION_TUNING = {
@@ -1399,6 +1412,155 @@ function habitInsight() {
   return `Habit check-ins${demoHistory() ? " (demo history)" : ""}, on days she did each one versus days she didn't: ${parts.join("; ")}. Associations only, not causes.`;
 }
 
+/* ---------- Weekly check-in: open-form goals -> daily signals -> weekly outcomes ---------- */
+const SIGNALS = {
+  sleepMin: { label: "Sleep", unit: "min", better: 1, notable: 10, fmt: (v) => hm(v) },
+  deep: { label: "Deep sleep", unit: "min", better: 1, notable: 5, fmt: (v) => Math.round(v) + "m" },
+  rem: { label: "REM sleep", unit: "min", better: 1, notable: 5, fmt: (v) => Math.round(v) + "m" },
+  hrv: { label: "HRV", unit: "ms", better: 1, notable: 3, fmt: (v) => Math.round(v) + " ms" },
+  ready: { label: "Readiness", unit: "", better: 1, notable: 3, fmt: (v) => Math.round(v) },
+  energy: { label: "Energy", unit: "", better: 1, notable: 4, fmt: (v) => Math.round(v) },
+  steps: { label: "Steps", unit: "", better: 1, notable: 800, fmt: (v) => Math.round(v).toLocaleString() },
+  kcal: { label: "Active calories", unit: "kcal", better: 1, notable: 40, fmt: (v) => Math.round(v) + " kcal" },
+  stress: { label: "Stress", unit: "min", better: -1, notable: 15, fmt: (v) => Math.round(v) + "m" },
+  weight: { label: "Weight", unit: "lb", better: -1, notable: 1, fmt: (v) => v.toFixed(1) + " lb" },
+  symptoms: { label: "Symptom days", unit: "", better: -1, notable: 0.15, fmt: (v) => Math.round(v * 7) + "/wk" },
+  predictErr: { label: "Period forecast error", unit: "days", better: -1, notable: 1, fmt: (v) => "±" + Math.round(v) + " d" },
+};
+const GOAL_TEMPLATES = [
+  { match: /pound|lbs?\b|weight|lose|kg|slim/i, label: "Lose weight", signals: ["steps", "kcal", "sleepMin"], outcomes: ["weight", "steps", "energy"] },
+  { match: /predict|forecast|know (when|what)|ahead/i, label: "Be predictive", signals: ["sleepMin", "hrv", "symptoms"], outcomes: ["predictErr", "symptoms", "energy"] },
+  { match: /cycle|period|pms|hormon|pcos/i, label: "Manage my cycles", signals: ["sleepMin", "stress", "symptoms"], outcomes: ["symptoms", "sleepMin", "hrv"] },
+  { match: /energy|energi|tired|fatigue|focus/i, label: "Have high energy", signals: ["sleepMin", "steps", "stress"], outcomes: ["energy", "ready", "hrv"] },
+  { match: /sleep|rest|insomnia|wake/i, label: "Sleep better", signals: ["sleepMin", "deep", "rem"], outcomes: ["sleepMin", "deep", "ready"] },
+  { match: /stress|calm|anxi|burn/i, label: "Calm my stress", signals: ["stress", "hrv", "sleepMin"], outcomes: ["stress", "hrv", "energy"] },
+];
+const GOAL_SUGGESTIONS = ["Sleep better", "Manage my cycles", "Lose 10 pounds", "Have high energy", "Be predictive about my body"];
+const templateFor = (text) => GOAL_TEMPLATES.find((t) => t.match.test(text)) || { label: text, signals: ["sleepMin", "steps", "stress"], outcomes: ["energy", "ready", "sleepMin"] };
+function newLifeGoal(text, since) {
+  const t = templateFor(text);
+  return { id: "g" + hashStr(text + since).toString(36), text, since, label: t.label, signals: t.signals, outcomes: t.outcomes, why: "", source: "rules" };
+}
+function ensureLifeGoals() {
+  if (state.lifeGoals?.length || state.step !== "app") return;
+  const titles = state.goals.map((g) => GOALS.find((x) => x.id === g)?.title).filter(Boolean);
+  state.lifeGoals = titles.map((t) => newLifeGoal(t, addDays(TODAY, -28)));
+}
+async function interpretGoal(goal) {
+  const keys = Object.keys(SIGNALS).join(", ");
+  const ai = await askClaude(`A woman wrote this health goal in her own words: """${goal.text}"""
+Choose what HerLife should track. Allowed keys: ${keys}.
+signals = 3 keys to track daily as leading indicators. outcomes = 3 keys to measure weekly as results. Prefer wearable keys; use weight only for weight goals, predictErr only for prediction goals, symptoms for cycle or symptom goals.
+Return JSON only: {"label":"goal restated in max 5 words","signals":["..."],"outcomes":["..."],"why":"one sentence, max 22 words, plain American English, no em dashes"}`, "quick");
+  const ok = (xs) => Array.isArray(xs) && xs.filter((k) => SIGNALS[k]).length >= 2;
+  if (!ai || !ok(ai.signals) || !ok(ai.outcomes)) return;
+  Object.assign(goal, { label: clean(ai.label) || goal.label, signals: ai.signals.filter((k) => SIGNALS[k]).slice(0, 3), outcomes: ai.outcomes.filter((k) => SIGNALS[k]).slice(0, 3), why: clean(ai.why), source: "claude" });
+  save(); render();
+}
+function demoWeights(since) {
+  const rng = mulberry(hashStr(state.profile.name + "w")), out = {}; let w = 171.8;
+  for (let i = 42; i >= 0; i--) { const day = addDays(TODAY, -i); w += day >= since ? -0.22 + (rng() - 0.5) * 0.5 : (rng() - 0.5) * 0.4; out[day] = Math.round(w * 10) / 10; }
+  return out;
+}
+function signalOn(key, day, rows) {
+  const r = rows.get(day) || {};
+  if (key === "energy") return energyOf(r, day);
+  if (key === "weight") return state.weights?.[day] ?? null;
+  if (key === "symptoms") return allSymptoms().some((x) => x.day === day) ? 1 : 0;
+  if (key === "predictErr") return null;
+  const v = r[key]; return Number.isFinite(v) ? v : null;
+}
+function predictionError() {
+  const starts = [...periodStarts()].sort();
+  if (starts.length < 3) return null;
+  const errs = starts.slice(2).map((d, i) => { const gap = (new Date(starts[i + 1]) - new Date(starts[i])) / 864e5; return Math.abs((new Date(d) - new Date(starts[i + 1])) / 864e5 - gap); });
+  return avg(errs);
+}
+const windowAvg = (key, from, to, rows) => { if (key === "predictErr") return predictionError(); const vals = []; for (let d = from; d <= to; d = addDays(d, 1)) vals.push(signalOn(key, d, rows)); return avg(vals.filter((v) => v !== null)) || null; };
+function goalProgress(goal, rows) {
+  const since = goal.since, weekAgo = addDays(TODAY, -6);
+  const moved = goal.outcomes.map((key) => {
+    const before = windowAvg(key, addDays(since, -14), addDays(since, -1), rows), now = windowAvg(key, weekAgo, TODAY, rows), sig = SIGNALS[key];
+    if (key === "predictErr") return { key, before: null, now, delta: 0, good: now !== null && now <= 2, notable: now !== null };
+    if (before === null || now === null) return { key, before, now, delta: null, good: null, notable: false };
+    const delta = now - before;
+    return { key, before, now, delta, good: delta * sig.better > 0, notable: Math.abs(delta) >= sig.notable };
+  });
+  const better = moved.filter((m) => m.notable && m.good).length, worse = moved.filter((m) => m.notable && m.good === false).length;
+  const flag = better && !worse ? "on" : worse > better ? "off" : better || worse ? "mixed" : "steady";
+  const linked = state.habits.filter((h) => leverFor(h).outcomes.some((o) => goal.signals.includes(o) || goal.outcomes.includes(o)));
+  const habits = linked.length ? linked : state.habits;
+  const from = addDays(since, -14), days = [];
+  for (let d = from; d <= TODAY; d = addDays(d, 1)) days.push({ day: d, done: habits.length ? habits.filter((h) => state.checks[`${h.id}|${d}`]).length / habits.length : 0 });
+  const sinceDays = days.filter((x) => x.day >= since), consistent = sinceDays.filter((x) => x.done >= 0.5).length;
+  return { moved, flag, habits, days, consistent, total: sinceDays.length };
+}
+function wavePath(pts, w, h, close) {
+  if (pts.length < 2) return "";
+  const P = pts.map(([x, y]) => [x * w, h - y * h]);
+  let d = `M${P[0][0].toFixed(1)} ${P[0][1].toFixed(1)}`;
+  for (let i = 0; i < P.length - 1; i++) {
+    const p0 = P[i - 1] || P[i], p1 = P[i], p2 = P[i + 1], p3 = P[i + 2] || p2;
+    d += ` C${(p1[0] + (p2[0] - p0[0]) / 6).toFixed(1)} ${(p1[1] + (p2[1] - p0[1]) / 6).toFixed(1)}, ${(p2[0] - (p3[0] - p1[0]) / 6).toFixed(1)} ${(p2[1] - (p3[1] - p1[1]) / 6).toFixed(1)}, ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`;
+  }
+  return close ? `${d} L${w} ${h} L0 ${h} Z` : d;
+}
+function mountain(prog, since) {
+  const W = 320, H = 86, n = prog.days.length;
+  const smooth = prog.days.map((_, i) => avg(prog.days.slice(Math.max(0, i - 2), i + 3).map((x) => x.done)));
+  const pts = smooth.map((v, i) => [i / (n - 1), 0.08 + v * 0.84]);
+  const startX = (prog.days.findIndex((x) => x.day >= since) / (n - 1)) * W;
+  const id = "mt" + hashStr(since + n);
+  return `<svg class="mountain" viewBox="0 0 ${W} ${H + 16}" role="img" aria-label="Habit consistency, ${prog.consistent} of ${prog.total} days since you started">
+    <defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--accent)" stop-opacity=".55"/><stop offset="1" stop-color="var(--accent)" stop-opacity=".05"/></linearGradient></defs>
+    <path d="${wavePath(pts.map(([x, y]) => [x, y * 0.55]), W, H, true)}" fill="var(--accent)" opacity=".12"/>
+    <path d="${wavePath(pts, W, H, true)}" fill="url(#${id})"/>
+    <path d="${wavePath(pts, W, H, false)}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="${startX}" x2="${startX}" y1="4" y2="${H}" stroke="var(--ink)" stroke-dasharray="3 4" opacity=".5"/>
+    <circle cx="${startX}" cy="6" r="4" fill="var(--ink)"/>
+    <text x="${Math.min(W - 70, startX + 6)}" y="12" font-size="10" fill="var(--muted)">Goal set</text>
+    <text x="0" y="${H + 13}" font-size="10" fill="var(--muted)">${fmtDay(prog.days[0].day, { month: "short", day: "numeric" })}</text><text x="${W - 30}" y="${H + 13}" font-size="10" fill="var(--muted)">Today</text></svg>`;
+}
+const FLAGS = { on: ["On track", "--good"], mixed: ["Mixed", "--ph-ovu"], off: ["Needs attention", "--warn"], steady: ["Holding steady", "--muted"] };
+function weeklyCheckin() {
+  ensureLifeGoals();
+  const rows = rowsByDay(), week = addDays(TODAY, -6), done = state.weekly?.[TODAY];
+  const goals = state.lifeGoals || [];
+  const weightGoal = goals.some((g) => g.outcomes.includes("weight") || g.signals.includes("weight"));
+  return `<div class="card rise weekly"><div class="row between"><div><span class="eyebrow">Weekly check-in · ${fmtDay(week, { month: "short", day: "numeric" })} to ${fmtDay(TODAY, { month: "short", day: "numeric" })}</span><h2>How your goals moved</h2></div></div>
+    ${goals.map((g) => { const prog = goalProgress(g, rows), [flagLabel, flagTok] = FLAGS[prog.flag], weeksIn = Math.max(1, Math.round((new Date(TODAY) - new Date(g.since)) / 6048e5)); return `
+      <div class="goalblock">
+        <div class="row between"><div><b class="goal-title">${esc(g.label)}</b><small class="muted"> · "${esc(g.text)}" · week ${weeksIn}</small></div><span class="flag" style="--flag:var(${flagTok})">${flagLabel}</span></div>
+        ${g.why ? `<p class="muted" style="font-size:13px">${esc(g.why)}</p>` : ""}
+        <div class="row" style="flex-wrap:wrap;gap:6px"><span class="eyebrow">Tracking daily</span>${g.signals.map((k) => `<span class="pill">${SIGNALS[k].label}</span>`).join("")}${g.source === "claude" ? `<span class="ai-badge">${icon.spark} Claude</span>` : ""}</div>
+        ${mountain(prog, g.since)}
+        <p style="font-size:13px"><b class="mono">${prog.consistent} of ${prog.total}</b> days consistent since you set this goal${prog.habits.length ? ` · ${prog.habits.map((h) => esc(h.title)).join(", ")}` : ""}</p>
+        <span class="eyebrow">What moved since ${fmtDay(g.since, { month: "short", day: "numeric" })}</span>
+        <div class="moved">${prog.moved.map((m) => { const sig = SIGNALS[m.key]; if (m.now === null) return `<div class="mv"><span>${sig.label}</span><b class="muted">Not enough data</b></div>`;
+          if (m.key === "predictErr") return `<div class="mv good"><span>${sig.label}</span><b>${sig.fmt(m.now)}</b><small>next period forecast</small></div>`;
+          const arrow = m.delta > 0 ? "▲" : m.delta < 0 ? "▼" : "•";
+          return `<div class="mv ${m.notable ? (m.good ? "good" : "bad") : ""}"><span>${sig.label}</span><b>${arrow} ${sig.key === "weight" ? Math.abs(m.delta).toFixed(1) : sig.fmt(Math.abs(m.delta)).replace(/^±/, "")}</b><small>${sig.fmt(m.before)} → ${sig.fmt(m.now)}</small></div>`; }).join("")}</div>
+      </div>`; }).join("")}
+    <form class="stack" data-goalform><label class="eyebrow" for="goal-text">Add a goal in your own words</label>
+      <div class="row"><input class="input" id="goal-text" placeholder="I want to stop crashing at 3 pm" autocomplete="off"><button class="btn small" type="submit">Add</button></div>
+      <div class="chips">${GOAL_SUGGESTIONS.filter((t) => !goals.some((g) => g.text === t)).map((t) => `<button type="button" class="chip" data-goal-suggest="${esc(t)}">${t}</button>`).join("")}</div></form>
+    ${done ? `<p class="muted" style="font-size:13px">Checked in this week: felt ${done.feel}/5${done.weight ? `, ${done.weight} lb` : ""}.</p>` : `
+    <div class="stack" style="gap:8px"><span class="eyebrow">This week's check-in</span>
+      <div class="row between"><span>How did the week feel?</span><div class="seg" style="width:58%">${[1, 2, 3, 4, 5].map((n) => `<button class="${(ui.weekFeel || 3) === n ? "on" : ""}" data-week-feel="${n}">${n}</button>`).join("")}</div></div>
+      ${weightGoal ? `<label class="row between" for="week-weight"><span>Weight today (lb)</span><input class="input" id="week-weight" inputmode="decimal" style="width:110px" value="${state.weights?.[TODAY] ?? ""}"></label>` : ""}
+      <button class="btn block" data-action="save-week">Save weekly check-in</button></div>`}
+    ${state.weights && weightGoal ? `<p class="muted" style="font-size:11px">Earlier weights are demo history.</p>` : ""}
+  </div>`;
+}
+function addLifeGoal(text) {
+  const t = text.trim(); if (!t) return;
+  const goal = newLifeGoal(t, TODAY);
+  state.lifeGoals = [...(state.lifeGoals || []), goal];
+  if ((goal.outcomes.includes("weight")) && !state.weights) state.weights = demoWeights(addDays(TODAY, -7));
+  save(); render(); toast("Goal added. Claude is choosing what to track.");
+  interpretGoal(goal);
+}
+
 function renderHabits() {
   const rows = rowsByDay(), impacts = state.habits.map((h) => habitImpact(h, rows)), changed = habitsChanged(impacts, rows);
   const weeks = [3, 2, 1, 0].map((w) => {
@@ -1409,6 +1571,7 @@ function renderHabits() {
   const todayDone = state.habits.filter((h) => state.checks[`${h.id}|${TODAY}`]).length;
   return `
     <div class="stack rise"><span class="eyebrow">Habit tracker</span><h1>${todayDone} of ${state.habits.length} done today</h1></div>
+    ${weeklyCheckin()}
     ${state.habits.length ? renderChanged(impacts, changed) : ""}
     ${swipeDeck()}
     <div class="card rise"><h2>Weekly consistency</h2>
@@ -1900,7 +2063,11 @@ document.addEventListener("click", (e) => {
     if (pr.cd) { const last = addDays(TODAY, -(pr.cd - 1)); state.periods = [2, 1, 0].map((k) => addDays(last, -k * pr.len)); }
     else if (pr.gaps) { let day = addDays(TODAY, -(pr.gaps.reduce((a, b) => a + b, 0) + 6)); state.periods = [day]; for (const g of pr.gaps) { day = addDays(day, g); state.periods.push(day); } }
     else seedPeriods();
-    makeHabits(); return;
+    state.lifeGoals = (pr.lifeGoals || []).map((t) => newLifeGoal(t, addDays(TODAY, -7)));
+    state.weights = state.lifeGoals.some((g) => g.outcomes.includes("weight")) ? demoWeights(addDays(TODAY, -7)) : null;
+    state.weekly = {};
+    makeHabits().then(() => { if (pr.checkinDemo) { set({ step: "app", tab: "habits" }); toast("One week in. Here is Dana's check-in."); state.lifeGoals.forEach(interpretGoal); } });
+    return;
   }
   if (d.daytype) { state.profile.dayType = d.daytype; if (state.connected.calendar) toast(`Calendar switched to ${DAY_TYPES[d.daytype].label.toLowerCase()} demo`); set({}); return; }
   if (d.stage) { state.profile.lifeStage = d.stage; set({}); return; }
@@ -1944,6 +2111,8 @@ document.addEventListener("click", (e) => {
     const habit = { ...rec.habit, id: "s" + Date.now().toString(36) };
     state.habits.push(habit); save(); render(); toast(`Added "${habit.title}" to your habits`); return;
   }
+  if (d.goalSuggest) { addLifeGoal(d.goalSuggest); return; }
+  if (d.weekFeel) { ui.weekFeel = Number(d.weekFeel); render(); return; }
   if (d.ramble != null) { ui.draft = SAMPLE_RAMBLES[+d.ramble]; render(); return; }
   if (d.symptom) {
     const i = state.logs.findIndex((l) => l.day === TODAY && l.symptom === d.symptom);
@@ -1980,6 +2149,12 @@ document.addEventListener("click", (e) => {
       break;
     case "calendar-connect": window.claude?.use?.("calendar").then((cal) => cal ? cal.connect() : toast("Calendar sign in works on the HerLife web app.")); break;
     case "back-today": set({ previewCd: null }); break;
+    case "save-week": {
+      const wInput = document.getElementById("week-weight"), weight = wInput && parseFloat(wInput.value);
+      if (Number.isFinite(weight)) state.weights = { ...(state.weights || {}), [TODAY]: weight };
+      state.weekly = { ...(state.weekly || {}), [TODAY]: { feel: ui.weekFeel || 3, weight: Number.isFinite(weight) ? weight : null } };
+      save(); render(); toast("Weekly check-in saved to your record"); break;
+    }
     case "save-checkin": state.checkins = { ...(state.checkins || {}), [TODAY]: { ...ui.checkinDraft } }; ui.editCheckin = false; applyDataSource(); save(); render(); toast("Check-in saved to your record"); break;
     case "edit-checkin": ui.editCheckin = true; ui.checkinDraft = { ...state.checkins[TODAY] }; render(); break;
     case "oura-sync": ui.ouraBusy = true; render(); (ui.ouraReal ? syncOura() : new Promise((res) => setTimeout(() => res({ mode: "demo", note: "Oura synced. Last night is in." }), 1400))).then((r) => { ui.ouraBusy = false; state.connected.ouraMode = r.mode; save(); render(); toast(r.note); }); break;
@@ -1999,6 +2174,10 @@ document.addEventListener("click", (e) => {
       break;
     }
   }
+});
+document.addEventListener("submit", (e) => {
+  if (!e.target.matches("[data-goalform]")) return;
+  e.preventDefault(); const input = document.getElementById("goal-text"); addLifeGoal(input.value); input.value = "";
 });
 document.addEventListener("input", (e) => {
   const t = e.target;
