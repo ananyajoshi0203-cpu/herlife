@@ -986,7 +986,7 @@ const INFO = {
   impact: ["How habit impact is measured", "We compare your outcomes on days you did the habit with days you did not, since you started it. Sleep and HRV are read from the following night. A change counts only past a threshold (10 min sleep, 3 ms HRV, 800 steps, 3 readiness points). It shows a pattern, not proof of cause."],
   record: ["Your record", "The story your doctor rarely gets: 90 days of sleep, stress, movement, mood, and cycle in one place, ready to share at your appointment."],
 };
-const info = (key) => INFO[key] ? `<button class="info" type="button" data-info="${key}" aria-label="What is ${esc(INFO[key][0])}?">i</button>` : "";
+const infoBtn = (key) => INFO[key] ? `<button class="info" type="button" data-info="${key}" aria-label="What is ${esc(INFO[key][0])}?">i</button>` : "";
 function renderInfo() {
   const [title, body] = INFO[ui.infoOpen] || [];
   if (!title) return "";
@@ -1126,7 +1126,7 @@ function renderApp(ctx) {
   const phase = phaseOf(ctx.cd);
   return `
     <div class="topbar"><div class="brand">${brandMark}HerLife</div>
-      <div class="row">${!cycleLens() ? `<span class="pill accent mono">Ready ${ctx.row.ready ?? "--"}</span>` : periodStarts().length ? `<button class="pill accent phase-chip" data-tab="cycle" title="Cycle day ${ctx.cd} of ${CYCLE_LEN}"><span class="dot"></span>${PHASES[phase].label} · ${phaseChipText(ctx.cd)}</button>${info("cycleday")}` : `<button class="pill accent" data-tab="cycle">Log your period</button>`}<button class="pill" data-action="switch" title="Sign in as someone else">Switch</button></div></div>
+      <div class="row">${!cycleLens() ? `<span class="pill accent mono">Ready ${ctx.row.ready ?? "--"}</span>` : periodStarts().length ? `<button class="pill accent phase-chip" data-tab="cycle" title="Cycle day ${ctx.cd} of ${CYCLE_LEN}"><span class="dot"></span>${PHASES[phase].label} · ${phaseChipText(ctx.cd)}</button>${infoBtn("cycleday")}` : `<button class="pill accent" data-tab="cycle">Log your period</button>`}<button class="pill" data-action="switch" title="Sign in as someone else">Switch</button></div></div>
     <div class="scroll"><div class="screen">${tabs[state.tab](ctx)}</div></div>
     <nav class="tabbar" style="grid-template-columns:repeat(${tabList.length},1fr)">${tabList.map(([k, l]) => `<button class="${state.tab === k ? "on" : ""}" data-tab="${k}">${icon[k]}${l}</button>`).join("")}</nav>
     ${ui.note ? `<div class="toast" role="status">${esc(ui.note)}</div>` : ""}`;
@@ -1179,8 +1179,8 @@ function bodyWeather(ctx) {
   const score = energyOf(ctx.row, ctx.row.day || TODAY) ?? ctx.row.ready ?? 70;
   return `<div class="weather rise" style="--score:${score}" role="img" aria-label="Body weather: energy ${score}, ${weatherLabel(score)}">
       <div class="orb-hero" aria-hidden="true"><i></i><i></i><i></i></div>
-      <div class="weather-val"><span class="eyebrow">Body weather ${info("weather")}</span><b class="mono">${score}</b><strong>${weatherLabel(score)}</strong></div></div>
-    <div class="row between" style="margin-top:4px"><span class="eyebrow">Your 5 pillars</span>${info("pillars")}</div><div class="pillar-row rise">${pillars(ctx).map((pl) => `<div class="pillar"><div class="ring-wrap sm">${ring(pl.score, 100, 56, 6, pl.token)}<div class="val ic" style="color:var(${pl.token})">${glyph(PILLAR_GLYPH[pl.label])}</div></div><b>${pl.score}</b><span>${pl.label}</span></div>`).join("")}</div>`;
+      <div class="weather-val"><span class="eyebrow">Body weather ${infoBtn("weather")}</span><b class="mono">${score}</b><strong>${weatherLabel(score)}</strong></div></div>
+    <div class="row between" style="margin-top:4px"><span class="eyebrow">Your 5 pillars</span>${infoBtn("pillars")}</div><div class="pillar-row rise">${pillars(ctx).map((pl) => `<div class="pillar"><div class="ring-wrap sm">${ring(pl.score, 100, 56, 6, pl.token)}<div class="val ic" style="color:var(${pl.token})">${glyph(PILLAR_GLYPH[pl.label])}</div></div><b>${pl.score}</b><span>${pl.label}</span></div>`).join("")}</div>`;
 }
 const WORKOUT_ART = '<svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="48" cy="14" r="6" fill="currentColor" opacity=".25"/><circle cx="48" cy="14" r="6"/><path d="M28 70l10-20 10 10v12M18 40l10-14 16 4 6 12 10 4"/><path d="M8 74h64" opacity=".35"/></svg>';
 const RECIPE_ART = '<svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 40h60a30 30 0 0 1-60 0z" fill="currentColor" opacity=".2"/><path d="M10 40h60a30 30 0 0 1-60 0z"/><circle cx="30" cy="36" r="5" fill="currentColor" opacity=".45"/><circle cx="44" cy="34" r="4" fill="currentColor" opacity=".35"/><path d="M28 24c0-6 6-6 6-12M44 24c0-6 6-6 6-12"/></svg>';
@@ -1284,12 +1284,12 @@ function sleepForecast(row) {
 function sleepCard(row) {
   const f = sleepForecast(row); if (!f) return "";
   const light = Math.max(0, 100 - f.rem - f.deep);
-  return `<div class="card rise"><div class="row between"><h2 class="with-info">Last night${info("sleep")}</h2><span class="eyebrow mono">${hm(row.sleepMin)}</span></div>
+  return `<div class="card rise"><div class="row between"><h2 class="with-info">Last night${infoBtn("sleep")}</h2><span class="eyebrow mono">${hm(row.sleepMin)}</span></div>
     ${hypnogram(row)}
     <div class="row between muted" style="font-size:12px"><span><span class="dot" style="color:var(--ph-fol)"></span> Deep ${f.deep}%</span><span><span class="dot" style="color:var(--ph-lut)"></span> REM ${f.rem}%</span><span>Light ${light}%</span></div>
     <div class="gauges">
-      ${gauge(rechargeScore(row), "--ph-lut", "Emotional recharge" + info("recharge"), `REM ${f.rem}% · usual ${f.remBase}%`)}
-      ${gauge(recoveryScore(row), "--ph-fol", "Physical recovery" + info("recovery"), `Deep ${f.deep}% · usual ${f.deepBase}%`)}
+      ${gauge(rechargeScore(row), "--ph-lut", "Emotional recharge" + infoBtn("recharge"), `REM ${f.rem}% · usual ${f.remBase}%`)}
+      ${gauge(recoveryScore(row), "--ph-fol", "Physical recovery" + infoBtn("recovery"), `Deep ${f.deep}% · usual ${f.deepBase}%`)}
     </div>
     <details class="more"><summary>What this means today</summary>
       <div class="insight"><i style="background:var(--ph-lut)"></i><p style="font-size:14px"><b>Mood:</b> ${f.mood}</p></div>
@@ -1339,12 +1339,12 @@ function mindCard(ctx) {
   const note = remPct !== null && remPct < remUsual - 2 ? `REM was ${remPct}% of your sleep, under your usual ${remUsual}%. REM sleep helps the brain process emotions, so a tense day can feel bigger after a short REM night.`
     : avg(stress.slice(-3)) > avg(stress) + 15 ? "Your stress minutes have climbed the last few days. Short breaks between meetings help your nervous system reset."
     : "Your stress and energy look balanced this week.";
-  return `<div class="card rise"><div class="row between"><h2 class="with-info">Mind and energy${info("mind")}</h2><span class="eyebrow">14 days</span></div>
+  return `<div class="card rise"><div class="row between"><h2 class="with-info">Mind and energy${infoBtn("mind")}</h2><span class="eyebrow">14 days</span></div>
     ${weekMoods()}
     <div class="mind-rows">
-      <div class="mrow"><div><span class="eyebrow">Energy ${info("energy")}</span><b class="mono">${num(energyOf(row, ctx.row.day || TODAY))}</b></div>${areaSpark(energy, "--ph-ovu")}</div>
-      <div class="mrow"><div><span class="eyebrow">Stress load ${info("stressload")}</span><b class="mono">${num(stressLoad(row, ctx.row.day || TODAY))}</b><small class="muted">${stressWord(stressLoad(row, ctx.row.day || TODAY))}${hasWearable() ? "" : " · estimated"}</small></div>${areaSpark(stress, "--warn")}</div>
-      <div class="mrow"><div><span class="eyebrow">REM ${info("sleep")}</span><b class="mono">${Number.isFinite(row.rem) ? hm(row.rem) : "--"}</b></div>${Number.isFinite(row.rem) ? areaSpark(rem, "--ph-lut") : `<small class="muted">Needs a wearable</small>`}</div>
+      <div class="mrow"><div><span class="eyebrow">Energy ${infoBtn("energy")}</span><b class="mono">${num(energyOf(row, ctx.row.day || TODAY))}</b></div>${areaSpark(energy, "--ph-ovu")}</div>
+      <div class="mrow"><div><span class="eyebrow">Stress load ${infoBtn("stressload")}</span><b class="mono">${num(stressLoad(row, ctx.row.day || TODAY))}</b><small class="muted">${stressWord(stressLoad(row, ctx.row.day || TODAY))}${hasWearable() ? "" : " · estimated"}</small></div>${areaSpark(stress, "--warn")}</div>
+      <div class="mrow"><div><span class="eyebrow">REM ${infoBtn("sleep")}</span><b class="mono">${Number.isFinite(row.rem) ? hm(row.rem) : "--"}</b></div>${Number.isFinite(row.rem) ? areaSpark(rem, "--ph-lut") : `<small class="muted">Needs a wearable</small>`}</div>
     </div>
     <details class="more"><summary>Read the pattern</summary><p style="font-size:14px">${note}</p></details>
     ${heavy ? `<div class="card flat" style="padding:12px"><h3>It's been a heavy stretch</h3><p class="muted" style="font-size:13px">You've logged ${lowMoods} low, anxious, or stressed check-ins in two weeks. That's worth sharing with someone you trust or your doctor. If you're in crisis, call or text <b class="mono">988</b> (Suicide and Crisis Lifeline, US).</p></div>` : ""}
@@ -1363,7 +1363,7 @@ function checkinCard() {
 }
 function tuningCard() {
   const list = tunings(); if (!list.length) return "";
-  return `<div class="card rise"><div class="row between"><h2 class="with-info">Tuned for you${info("tuned")}</h2><span class="eyebrow">${list.length} condition${list.length > 1 ? "s" : ""}</span></div>
+  return `<div class="card rise"><div class="row between"><h2 class="with-info">Tuned for you${infoBtn("tuned")}</h2><span class="eyebrow">${list.length} condition${list.length > 1 ? "s" : ""}</span></div>
     ${list.map(([name, t]) => `<div class="stack" style="gap:6px"><div class="row"><span class="pill accent">${name}</span><small class="muted">${t.lever}</small></div>
       <ul style="margin:0;padding-left:18px;font-size:14px;display:flex;flex-direction:column;gap:3px">${t.recs.map((r) => `<li>${esc(r)}</li>`).join("")}</ul></div>`).join("")}
     <p class="muted" style="font-size:11px">Lifestyle support alongside your care team's plan, never a replacement for it.</p></div>`;
@@ -1582,7 +1582,7 @@ function renderChanged(impacts, changed) {
 }
 function renderImpact(imp) {
   const primary = imp.effects.find((e) => e.measured), lag = OUTCOMES[imp.outcomes[0]].lag;
-  const head = `<div class="row between" style="flex-wrap:wrap"><span class="eyebrow">Impact ${info("impact")}</span><span class="pill accent">Lever: ${esc(imp.lever.toLowerCase())}</span></div>
+  const head = `<div class="row between" style="flex-wrap:wrap"><span class="eyebrow">Impact ${infoBtn("impact")}</span><span class="pill accent">Lever: ${esc(imp.lever.toLowerCase())}</span></div>
     <small class="muted">Goal: ${esc(imp.goal)} · measured ${lag ? "the night after" : "the same day"}</small>`;
   if (!primary) {
     const e = imp.effects[0] || { nOn: 0, nOff: 0 };
@@ -1743,7 +1743,7 @@ function weeklyCheckin() {
   const rows = rowsByDay(), week = addDays(TODAY, -6), done = state.weekly?.[TODAY];
   const goals = state.lifeGoals || [];
   const weightGoal = goals.some((g) => g.outcomes.includes("weight") || g.signals.includes("weight"));
-  return `<div class="card rise weekly"><div class="row between"><div><span class="eyebrow">Weekly check-in · ${fmtDay(week, { month: "short", day: "numeric" })} to ${fmtDay(TODAY, { month: "short", day: "numeric" })}</span><h2 class="with-info">How your goals moved${info("weekly")}</h2></div></div>
+  return `<div class="card rise weekly"><div class="row between"><div><span class="eyebrow">Weekly check-in · ${fmtDay(week, { month: "short", day: "numeric" })} to ${fmtDay(TODAY, { month: "short", day: "numeric" })}</span><h2 class="with-info">How your goals moved${infoBtn("weekly")}</h2></div></div>
     ${goals.map((g) => { const prog = goalProgress(g, rows), [flagLabel, flagTok] = FLAGS[prog.flag], weeksIn = Math.max(1, Math.round((new Date(TODAY) - new Date(g.since)) / 6048e5)); return `
       <div class="goalblock">
         <div class="row between"><div><b class="goal-title">${esc(g.label)}</b><small class="muted"> · "${esc(g.text)}" · week ${weeksIn}</small></div><span class="flag" style="--flag:var(${flagTok})">${flagLabel}</span></div>
@@ -1751,7 +1751,7 @@ function weeklyCheckin() {
         <div class="row" style="flex-wrap:wrap;gap:6px"><span class="eyebrow">Tracking daily</span>${g.signals.map((k) => `<span class="pill">${SIGNALS[k].label}</span>`).join("")}${g.source === "claude" ? `<span class="ai-badge">${icon.spark} Claude</span>` : ""}</div>
         ${mountain(prog, g.since)}
         <p style="font-size:13px"><b class="mono">${prog.consistent} of ${prog.total}</b> days consistent since you set this goal${prog.habits.length ? ` · ${prog.habits.map((h) => esc(h.title)).join(", ")}` : ""}</p>
-        <span class="eyebrow">What moved since ${fmtDay(g.since, { month: "short", day: "numeric" })} ${info("moved")}</span>
+        <span class="eyebrow">What moved since ${fmtDay(g.since, { month: "short", day: "numeric" })} ${infoBtn("moved")}</span>
         <div class="moved">${prog.moved.map((m) => { const sig = SIGNALS[m.key]; if (m.now === null) return `<div class="mv"><span>${sig.label}</span><b class="muted">Not enough data</b></div>`;
           if (m.key === "predictErr") return `<div class="mv good"><span>${sig.label}</span><b>${sig.fmt(m.now)}</b><small>next period forecast</small></div>`;
           const arrow = m.delta > 0 ? "▲" : m.delta < 0 ? "▼" : "•";
@@ -1790,7 +1790,7 @@ function renderHabits() {
     ${weeklyCheckin()}
     ${state.habits.length ? renderChanged(impacts, changed) : ""}
     ${swipeDeck()}
-    <div class="card rise"><h2 class="with-info">Weekly consistency${info("consistency")}</h2>
+    <div class="card rise"><h2 class="with-info">Weekly consistency${infoBtn("consistency")}</h2>
       <div class="weeks">${weeks.map((w) => `<div class="wk"><div class="bar"><i style="height:${Math.max(4, w.pct)}%"></i></div><b class="mono">${w.pct}%</b><span>${w.label}</span></div>`).join("")}</div>
       <p class="muted" style="font-size:13px">${weeks[3].pct >= weeks[2].pct ? `Up ${weeks[3].pct - weeks[2].pct} points on last week. Keep it going.` : `A softer week. That happens; one check today restarts the climb.`}</p></div>
     ${state.habits.map((h, i) => { const done = !!state.checks[`${h.id}|${TODAY}`]; return `
@@ -1850,7 +1850,7 @@ function renderToday(ctx) {
 
     ${upNextCard()}
     <div class="card rise">
-      <div class="row between"><h2 class="with-info">Today's plan${info("plan")}</h2>${plan.source === "claude" ? `<span class="ai-badge">${icon.spark} Claude</span>` : ""}</div>
+      <div class="row between"><h2 class="with-info">Today's plan${infoBtn("plan")}</h2>${plan.source === "claude" ? `<span class="ai-badge">${icon.spark} Claude</span>` : ""}</div>
       <div class="plan-tiles">
         <div class="ptile" style="--tint:var(${ease ? "--ph-lut" : info.token})"><div class="art-lg">${WORKOUT_ART}</div>
           <span class="eyebrow">Move</span><h3>${esc(plan.workout.name)}</h3>
@@ -1865,12 +1865,12 @@ function renderToday(ctx) {
       <button class="btn soft block" data-action="ai-plan" ${ui.planning ? "disabled" : ""}>${icon.spark} ${ui.planning ? "Claude is planning your day..." : plan.source === "claude" ? "Try another plan" : "Personalize with Claude"}</button>
     </div>
 
-    <div class="card rise"><div class="row between"><h2 class="with-info">Your habits today${info("habits")}</h2><button class="link" data-tab="habits">${weekPct}% this week</button></div>
+    <div class="card rise"><div class="row between"><h2 class="with-info">Your habits today${infoBtn("habits")}</h2><button class="link" data-tab="habits">${weekPct}% this week</button></div>
       ${state.habits.map((h) => { const done = !!state.checks[`${h.id}|${TODAY}`]; return `<div class="habit"><div><div class="habit-title">${esc(h.title)}</div><small class="muted">${esc(h.cue)} · ${streak(h)} day streak</small></div>
         <button class="check ${done ? "on" : ""}" data-check="${h.id}" aria-pressed="${done}" aria-label="Mark ${esc(h.title)} done today">${icon.check}</button></div>`; }).join("")}
     </div>
 
-    ${ease ? `<div class="card ease rise"><span class="eyebrow">Your body is asking</span><h2 class="with-info">Ease off today.${info("ease")}</h2>
+    ${ease ? `<div class="card ease rise"><span class="eyebrow">Your body is asking</span><h2 class="with-info">Ease off today.${infoBtn("ease")}</h2>
       <div class="breath" aria-hidden="true"><i></i><i></i><span>Breathe</span></div>
       <div class="reason-chips">${reasons.map((r) => `<span>${esc(r)}</span>`).join("")}</div>
       <p style="font-size:14px;position:relative;z-index:1">A walk instead of a workout, and bed a little earlier.</p></div>` : ""}
@@ -1889,19 +1889,19 @@ function renderToday(ctx) {
       <div class="ring-wrap">${ring(row.ready || 0, 100)}<div class="val"><div><b>${row.ready ?? "--"}</b><span class="eyebrow">Readiness</span></div></div></div>
       <div class="grid2">
         <div class="metric"><b>${hm(row.sleepMin || 0)}</b><span>Sleep ${row.sleepMin < base.sleepMin - 15 ? "· short" : ""}</span></div>
-        <div class="metric"><b>${num(row.hrv)} ms</b><span>HRV · base ${Math.round(base.hrv)} ${info("hrv")}</span></div>
-        <div class="metric"><b>${row.temp > 0 ? "+" : ""}${(row.temp ?? 0).toFixed(2)}°</b><span>Temp vs normal ${info("temp")}</span></div>
+        <div class="metric"><b>${num(row.hrv)} ms</b><span>HRV · base ${Math.round(base.hrv)} ${infoBtn("hrv")}</span></div>
+        <div class="metric"><b>${row.temp > 0 ? "+" : ""}${(row.temp ?? 0).toFixed(2)}°</b><span>Temp vs normal ${infoBtn("temp")}</span></div>
         <div class="metric"><b>${(row.steps || 0).toLocaleString()}</b><span>Steps yesterday</span></div>
       </div></div>
       <div class="row between"><span class="eyebrow">${state.connected.ouraMode === "live" ? "Live from your Oura Ring" : "Oura Ring · demo data"}</span><button class="link" data-action="oura-sync" style="font-size:13px">${ui.ouraBusy ? "Syncing..." : "Sync Oura"}</button></div>
     </div>` : ""}
 
-    <div class="card flat rise agecard"><span class="eyebrow">At ${esc(state.profile.age || "your age")}, what matters most ${info("age")}</span>
+    <div class="card flat rise agecard"><span class="eyebrow">At ${esc(state.profile.age || "your age")}, what matters most ${infoBtn("age")}</span>
       <p class="agetip">${ageBand().tip}</p>
       <div class="stack" style="gap:6px"><small class="muted">Your focus areas for ages ${ageBand().label}</small>
         <div class="chips">${ageBand().focus.map((f) => `<span class="pill accent">${f}</span>`).join("")}</div></div></div>
 
-    <div class="card rise"><div class="row between"><h2 class="with-info">Your day${info("day")}</h2><span class="eyebrow">${ui.calendarLive ? "Live from Google Calendar" : state.connected.calendar ? `${CAL_PROVIDERS.find(([k]) => k === state.calendarProvider)?.[1] || "Calendar"} · demo` : "Not connected"}</span></div>
+    <div class="card rise"><div class="row between"><h2 class="with-info">Your day${infoBtn("day")}</h2><span class="eyebrow">${ui.calendarLive ? "Live from Google Calendar" : state.connected.calendar ? `${CAL_PROVIDERS.find(([k]) => k === state.calendarProvider)?.[1] || "Calendar"} · demo` : "Not connected"}</span></div>
       ${state.connected.calendar ? `<div class="busyweek">${dayType().week.map((h, i) => `<div><i style="height:${Math.max(4, h / 12 * 100)}%;background:var(${h >= 7 ? "--warn" : "--accent"})"></i><span>${"MTWTFSS"[i]}</span></div>`).join("")}</div>
         <p class="muted" style="font-size:12px">${dayType().label} · ${dayType().week.reduce((a, b) => a + b, 0)} busy hours this week</p>` : ""}
       ${state.connected.calendar ? (window.claude?.hosted && !ui.calendarLive ? `<button class="link" data-action="calendar-connect">Connect Google Calendar for your real day</button>` : "") : `<p class="muted" style="font-size:13px">Connect a calendar and HerLife will find free time for workouts and warn you about heavy days. Until then, booked sessions show here.</p>${window.claude?.hosted ? `<button class="link" data-action="calendar-connect">Connect Google Calendar</button>` : ""}`}
@@ -1987,7 +1987,7 @@ function renderCycle(ctx) {
       <div class="insight"><i style="background:var(--ph-fol)"></i><div><b>Move</b><p class="muted">${esc(info.move)}</p></div></div>
       <div class="insight"><i style="background:var(--nourish)"></i><div><b>Eat</b><p class="muted">${esc(info.eat)}</p></div></div>
     </div>
-    ${hasWearable() ? `<div class="card rise"><div class="row between"><h2 class="with-info">Temperature trail${info("temptrail")}</h2><span class="eyebrow">Oura confirms</span></div>
+    ${hasWearable() ? `<div class="card rise"><div class="row between"><h2 class="with-info">Temperature trail${infoBtn("temptrail")}</h2><span class="eyebrow">Oura confirms</span></div>
       ${tempChart()}
       <p class="muted" style="font-size:13px">Your temperature rises after ovulation and drops right before your period. HerLife uses that shift to confirm ovulation and flag a cycle that looks different from your log.</p></div>` : ""}
     <div class="card rise"><h2>How do you feel today?</h2>
