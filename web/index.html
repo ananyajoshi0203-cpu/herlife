@@ -691,6 +691,7 @@ async function connectRecord() {
       const saved = JSON.parse(body.json), base = defaultState();
       state = { ...base, ...saved, profile: { ...base.profile, ...saved.profile }, consent: { ...base.consent, ...saved.consent }, connected: { ...base.connected, ...saved.connected } };
       try { localStorage.setItem(STORE_KEY, body.json); } catch (e) {}
+      if (state.persona && state.step === "app" && !requestedProfile) state.step = "welcome";
     } else if (state.step === "app") save();
     ui.cloud = true; render();
   } catch (e) { console.warn("[bloom] db load", e?.code); }
