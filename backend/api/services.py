@@ -13,7 +13,10 @@ from pydantic import BaseModel
 from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
 
+from backend.api import claude
+from backend.api.cycle_signal import cycle_signal
 from backend.api.db import (
+    CheckinRow,
     HabitCheckRow,
     HabitRow,
     PeriodRow,
@@ -21,13 +24,20 @@ from backend.api.db import (
     UserRow,
     WearableDayRow,
 )
+from backend.api.guidance import season_for
+from backend.api.impact import habit_impact, outcome_series
 from backend.api.schemas import (
     CYCLE_AWARE_STAGES,
+    Checkin,
+    CheckinAverages,
     CycleContext,
+    CycleSignal,
+    DataSource,
     DoctorRecord,
     GymAccess,
     Habit,
     HabitConsistency,
+    HabitImpact,
     LifestyleAverages,
     LogCategory,
     LogEntry,
@@ -49,7 +59,7 @@ from backend.canonical.models import (
     Source,
     Stress,
 )
-from backend.insights import compute, rounded_mean
+from backend.insights import RecordInsights, compute, rounded_mean
 
 LIFESTYLE_WINDOW = timedelta(days=30)
 BASELINE_WINDOW = timedelta(days=14)
@@ -60,6 +70,11 @@ READINESS_DROP = 10
 STRESS_SPIKE_RATIO = 1.5
 WARM_TEMPERATURE_C = 0.5
 EASE_OFF_BEDTIME_SHIFT = timedelta(minutes=30)
+LOW_SELF_ENERGY = 2
+HIGH_SELF_STRESS = 4
+# Product heuristic, mirroring the app: stress minutes climbing by more than this
+# each week over the last month count as a rising stress load.
+RISING_STRESS_SLOPE_MIN_PER_WEEK = 2.0
 RECORD_NOTE = (
     "A lifestyle record kept by the patient in Bloom and her wearable. "
     "It is a record to support the conversation, not a diagnosis."
@@ -115,9 +130,23 @@ def load_periods(session: Session, user_id: uuid.UUID) -> list[PeriodLog]:
     ]
 
 
-def load_dataset(session: Session, user_id: uuid.UUID) -> CanonicalDataset:
+def calendar_days(periods: Sequence[PeriodLog], today: date) -> list[Readiness]:
+    """One temperature-less day per calendar day since her first logged period.
+
+    `build_cycle` walks the readiness days it is given. Without a wearable there
+    are none, so this hands it the calendar instead; the score is never read.
+    """
+    first = min((log.start_day for log in periods), default=today)
+    return [
+        Readiness(day=first + timedelta(days=offset), source=Source.SELF_REPORT, score=0)
+        for offset in range((today - first).days + 1)
+    ]
+
+
+def load_dataset(session: Session, user_id: uuid.UUID, today: date | None = None) -> CanonicalDataset:
     readiness = load_wearable(session, user_id, WearableKind.READINESS, Readiness)
     periods = load_periods(session, user_id)
+    cycle_walk = readiness or calendar_days(periods, today or date.today())
     return CanonicalDataset(
         user_id=str(user_id),
         generated_at=datetime.now(),
@@ -126,11 +155,37 @@ def load_dataset(session: Session, user_id: uuid.UUID) -> CanonicalDataset:
         activity=load_wearable(session, user_id, WearableKind.ACTIVITY, Activity),
         stress=load_wearable(session, user_id, WearableKind.STRESS, Stress),
         periods=periods,
-        cycle=build_cycle(periods, readiness),
+        cycle=build_cycle(periods, cycle_walk),
     )
 
 
-def within[T: DailyRecord | CycleDay](records: Iterable[T], end: date, window: timedelta) -> list[T]:
+def load_checkins(session: Session, user_id: uuid.UUID) -> list[Checkin]:
+    rows = session.scalars(select(CheckinRow).where(CheckinRow.user_id == user_id).order_by(CheckinRow.day))
+    return [Checkin.model_validate(row, from_attributes=True) for row in rows]
+
+
+def has_wearable(dataset: CanonicalDataset) -> bool:
+    return bool(dataset.sleep or dataset.readiness)
+
+
+def data_source(dataset: CanonicalDataset, checkins: Sequence[Checkin]) -> DataSource:
+    if has_wearable(dataset):
+        return DataSource.WEARABLE
+    return DataSource.SELF_CHECK_IN if checkins else DataSource.NONE
+
+
+def checkin_averages(checkins: Sequence[Checkin], end: date, window: timedelta = LIFESTYLE_WINDOW) -> CheckinAverages:
+    recent = within(checkins, end, window)
+    return CheckinAverages(
+        window_days=window.days,
+        days=len(recent),
+        sleep_hours=rounded_mean(checkin.sleep_hours for checkin in recent),
+        energy=rounded_mean(checkin.energy for checkin in recent),
+        stress=rounded_mean(checkin.stress for checkin in recent),
+    )
+
+
+def within[T: DailyRecord | CycleDay | Checkin](records: Iterable[T], end: date, window: timedelta) -> list[T]:
     return [record for record in records if end - window < record.day <= end]
 
 
@@ -158,7 +213,7 @@ def lifestyle_averages(
     )
 
 
-def latest[T: DailyRecord | CycleDay](records: Sequence[T], today: date) -> T | None:
+def latest[T: DailyRecord | CycleDay | Checkin](records: Sequence[T], today: date) -> T | None:
     return max((record for record in records if record.day <= today), key=lambda record: record.day, default=None)
 
 
@@ -233,6 +288,19 @@ def ease_off_reasons(dataset: CanonicalDataset, today: date) -> list[str]:
     return reasons
 
 
+def checkin_reasons(checkin: Checkin | None) -> list[str]:
+    if checkin is None:
+        return []
+    reasons: list[str] = []
+    if timedelta(hours=checkin.sleep_hours) < SHORT_NIGHT:
+        reasons.append(f"You slept about {checkin.sleep_hours:g} hours last night.")
+    if checkin.energy <= LOW_SELF_ENERGY:
+        reasons.append(f"You rated your energy {checkin.energy} out of 5.")
+    if checkin.stress >= HIGH_SELF_STRESS:
+        reasons.append(f"You rated your stress {checkin.stress} out of 5.")
+    return reasons
+
+
 PHASE_NOTES: dict[CyclePhase, str] = {
     CyclePhase.MENSTRUAL: "Period days. Many women like gentler movement and extra rest now.",
     CyclePhase.FOLLICULAR: "Energy often builds in this phase, a good window for harder sessions.",
@@ -282,8 +350,13 @@ def eat_plan(user: User, ease_off: bool, cycle: CycleContext | None) -> str:
     return f"Build each meal around {protein} and a vegetable, and keep water nearby."
 
 
-def build_plan(user: User, dataset: CanonicalDataset, today: date) -> TodayPlan:
-    reasons = ease_off_reasons(dataset, today)
+def build_plan(user: User, dataset: CanonicalDataset, checkins: Sequence[Checkin], today: date) -> TodayPlan:
+    source = data_source(dataset, checkins)
+    reasons = (
+        ease_off_reasons(dataset, today)
+        if source == DataSource.WEARABLE
+        else checkin_reasons(latest(checkins, today))
+    )
     cycle = cycle_context(user, dataset, today)
     if cycle and cycle.phase == CyclePhase.MENSTRUAL and cycle.cycle_day <= 2:
         reasons.append("You are early in your period.")
@@ -299,6 +372,8 @@ def build_plan(user: User, dataset: CanonicalDataset, today: date) -> TodayPlan:
     steady_move, easy_move = MOVE_PLAN[user.gym_access]
     return TodayPlan(
         day=today,
+        used_ai=False,
+        data_source=source,
         sleep=sleep,
         move=easy_move if ease_off else steady_move,
         eat=eat_plan(user, ease_off, cycle),
@@ -308,7 +383,52 @@ def build_plan(user: User, dataset: CanonicalDataset, today: date) -> TodayPlan:
         ease_off=ease_off,
         reasons=reasons,
         cycle=cycle,
+        age_band=user.age_band,
+        season=season_for(today),
     )
+
+
+def plan_today(user: User, dataset: CanonicalDataset, checkins: Sequence[Checkin], today: date) -> TodayPlan:
+    """The rule-based plan, rewritten by Claude for her season and age band when Claude is available."""
+    plan = build_plan(user, dataset, checkins, today)
+    answer = claude.write_plan(user, plan)
+    return plan.model_copy(update=answer.value.model_dump() | {"used_ai": answer.used_ai})
+
+
+def stress_is_rising(insights: RecordInsights, checkins: Sequence[Checkin], today: date) -> bool:
+    slope = insights.lifestyle.recent_slopes.stress_high_min
+    self_stress = checkin_averages(checkins, today, BASELINE_WINDOW).stress
+    return (
+        insights.lifestyle.heavy_day.is_notable
+        or (slope is not None and slope > RISING_STRESS_SLOPE_MIN_PER_WEEK)
+        or (self_stress is not None and self_stress >= HIGH_SELF_STRESS)
+    )
+
+
+def signal_for(
+    user: User, dataset: CanonicalDataset, insights: RecordInsights, checkins: Sequence[Checkin], today: date
+) -> CycleSignal | None:
+    return cycle_signal(
+        user.age,
+        user.life_stage,
+        (log.start_day for log in dataset.periods),
+        today,
+        stress_is_rising(insights, checkins, today),
+    )
+
+
+def habit_impacts(session: Session, user_id: uuid.UUID, dataset: CanonicalDataset, today: date) -> list[HabitImpact]:
+    series = outcome_series(dataset, load_checkins(session, user_id))
+    habits = session.scalars(select(HabitRow).where(HabitRow.user_id == user_id).order_by(HabitRow.created_on))
+    return [
+        habit_impact(
+            to_habit(habit),
+            set(session.scalars(select(HabitCheckRow.day).where(HabitCheckRow.habit_id == habit.id))),
+            series,
+            today,
+        )
+        for habit in habits
+    ]
 
 
 def self_report_summary(session: Session, user_id: uuid.UUID) -> SelfReportSummary:
@@ -325,17 +445,22 @@ def self_report_summary(session: Session, user_id: uuid.UUID) -> SelfReportSumma
 
 
 def build_record(session: Session, user: User, today: date) -> DoctorRecord:
-    dataset = load_dataset(session, user.id)
+    dataset = load_dataset(session, user.id, today)
+    checkins = load_checkins(session, user.id)
     insights = compute(dataset)
     show_cycle = user.life_stage in CYCLE_AWARE_STAGES and bool(dataset.periods)
+    checkin_days = [checkin.day for checkin in checkins]
     return DoctorRecord(
         generated_at=datetime.now(),
         patient=user,
-        first_day=insights.first_day,
-        last_day=insights.last_day,
+        first_day=insights.first_day or min(checkin_days, default=None),
+        last_day=insights.last_day or max(checkin_days, default=None),
         lifestyle=lifestyle_averages(dataset, last_observed_day(dataset)),
         self_reports=self_report_summary(session, user.id),
         habits=habit_consistency(session, user.id, today),
+        data_source=data_source(dataset, checkins),
+        self_check_ins=checkin_averages(checkins, max(checkin_days)) if checkins else None,
         cycle=insights if show_cycle else None,
+        cycle_signal=signal_for(user, dataset, insights, checkins, today),
         note=RECORD_NOTE,
     )

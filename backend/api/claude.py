@@ -18,7 +18,15 @@ from datetime import timedelta
 import anthropic
 from pydantic import BaseModel, ValidationError
 
-from backend.api.schemas import GymAccess, LifestyleAverages, LogCategory, UserCreate
+from backend.api.guidance import Season
+from backend.api.schemas import (
+    GymAccess,
+    LifestyleAverages,
+    LogCategory,
+    PlanText,
+    TodayPlan,
+    User,
+)
 
 MODEL = "claude-sonnet-5-5"
 FALLBACK_BETA = "server-side-fallback-2026-07-01"
@@ -179,9 +187,9 @@ def sort_voice_log(text: str) -> Answer[VoiceSort]:
 
 HABITS_SYSTEM = f"""You suggest exactly {HABIT_COUNT} small daily habits for a woman using Bloom, a lifestyle app.
 Tie every habit to one of her two goals and put that goal, verbatim, in `goal`. Fit them to her gym access, diet,
-conditions, and recent wearable numbers. `title` is a short action she can check off today. `why` is one warm
-sentence on why it helps her, citing her own data when it is relevant. These are lifestyle suggestions, not
-medical advice. American English, no em dashes."""
+conditions, recent wearable numbers, the priorities of her age band, and the season. `title` is a short action
+she can check off today. `why` is one warm sentence on why it helps her, citing her own data when it is
+relevant. These are lifestyle suggestions, not medical advice. American English, no em dashes."""
 
 
 @dataclass(frozen=True)
@@ -266,7 +274,7 @@ def interleave[T](first: Sequence[T], second: Sequence[T]) -> list[T]:
     )
 
 
-def suggest_habits_by_rules(profile: UserCreate, recent: LifestyleAverages) -> HabitIdeas:
+def suggest_habits_by_rules(profile: User, recent: LifestyleAverages) -> HabitIdeas:
     first_goal, second_goal = profile.goals
     pool = interleave(
         [(first_goal, template) for template in templates_for_goal(first_goal, profile.gym_access)],
@@ -291,12 +299,40 @@ def suggest_habits_by_rules(profile: UserCreate, recent: LifestyleAverages) -> H
     return HabitIdeas(habits=ideas[:HABIT_COUNT])
 
 
-def describe(profile: UserCreate, recent: LifestyleAverages) -> str:
-    return f"Profile: {profile.model_dump_json(exclude={'name'})}\nRecent averages: {recent.model_dump_json()}"
+def describe_person(profile: User, season: Season) -> str:
+    return (
+        f"Profile: {profile.model_dump_json(exclude={'name', 'id', 'created_at', 'age_band'})}\n"
+        f"Age band {profile.age_band.label}, priorities: {', '.join(profile.age_band.focus)}.\n"
+        f"Season: {season.label}."
+    )
 
 
-def suggest_habits(profile: UserCreate, recent: LifestyleAverages) -> Answer[HabitIdeas]:
-    ideas = ask_structured(HABITS_SYSTEM, describe(profile, recent), HabitIdeas)
+def describe(profile: User, recent: LifestyleAverages, season: Season) -> str:
+    return f"{describe_person(profile, season)}\nRecent averages: {recent.model_dump_json()}"
+
+
+def suggest_habits(profile: User, recent: LifestyleAverages, season: Season) -> Answer[HabitIdeas]:
+    ideas = ask_structured(HABITS_SYSTEM, describe(profile, recent, season), HabitIdeas)
     if ideas and len(ideas.habits) >= HABIT_COUNT and all(idea.goal in profile.goals for idea in ideas.habits):
         return Answer(HabitIdeas(habits=ideas.habits[:HABIT_COUNT]), used_ai=True)
     return Answer(suggest_habits_by_rules(profile, recent), used_ai=False)
+
+
+PLAN_SYSTEM = """You write today's plan for a woman using Bloom, a lifestyle app. You get her profile, her age band
+priorities, the season, and a draft plan built from her own data. Rewrite the four lines (`sleep`, `move`, `eat`,
+`mind`) so each is one or two warm, specific sentences that reflect her season and age band where it fits. Keep every
+concrete time, food, and amount from the draft. When the draft says to ease off, keep the plan gentle. Only mention
+her cycle if the draft gives cycle context. Lifestyle suggestions only, never medical advice. American English, no em
+dashes."""
+
+
+def describe_plan(profile: User, plan: TodayPlan) -> str:
+    draft = plan.model_dump_json(include={"sleep", "move", "eat", "mind", "ease_off", "reasons", "cycle"})
+    return f"{describe_person(profile, plan.season)}\nDraft plan: {draft}"
+
+
+def write_plan(profile: User, plan: TodayPlan) -> Answer[PlanText]:
+    written = ask_structured(PLAN_SYSTEM, describe_plan(profile, plan), PlanText)
+    if written and all(line.strip() for line in (written.sleep, written.move, written.eat, written.mind)):
+        return Answer(written, used_ai=True)
+    return Answer(PlanText(sleep=plan.sleep, move=plan.move, eat=plan.eat, mind=plan.mind), used_ai=False)

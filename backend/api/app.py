@@ -19,6 +19,7 @@ from sqlalchemy.orm import Session
 
 from backend.api import claude, oura_oauth
 from backend.api.db import (
+    CheckinRow,
     Database,
     HabitCheckRow,
     HabitRow,
@@ -28,12 +29,17 @@ from backend.api.db import (
     SelfReportRow,
     UserRow,
 )
+from backend.api.guidance import season_for
 from backend.api.schemas import (
+    Checkin,
+    CheckinCreate,
+    CycleSignal,
     CycleView,
     DoctorRecord,
     HabitCheck,
     HabitCheckCreate,
     HabitConsistency,
+    HabitImpact,
     HabitSuggestions,
     OuraConnected,
     PeriodCreate,
@@ -46,14 +52,17 @@ from backend.api.schemas import (
 )
 from backend.api.services import (
     WearableKind,
-    build_plan,
     build_record,
     habit_consistency,
+    habit_impacts,
     last_observed_day,
     latest,
     lifestyle_averages,
+    load_checkins,
     load_dataset,
+    plan_today,
     replace_wearable_days,
+    signal_for,
     to_habit,
     to_log_entry,
     to_user,
@@ -66,6 +75,7 @@ from backend.canonical.oura_adapter import (
     adapt_stress,
 )
 from backend.connectors.oura import OuraConnector
+from backend.insights import compute
 
 SYNC_WINDOW = timedelta(days=90)
 OAUTH_STATE_TTL = timedelta(minutes=15)
@@ -232,7 +242,9 @@ def create_app(database: Database | None = None) -> FastAPI:
     def suggest_habits(user_id: uuid.UUID, session: SessionDep) -> HabitSuggestions:
         user = to_user(require_user(session, user_id))
         dataset = load_dataset(session, user_id)
-        answer = claude.suggest_habits(user, lifestyle_averages(dataset, last_observed_day(dataset)))
+        answer = claude.suggest_habits(
+            user, lifestyle_averages(dataset, last_observed_day(dataset)), season_for(date.today())
+        )
         rows = [
             HabitRow(user_id=user_id, title=idea.title, why=idea.why, goal=idea.goal, created_on=date.today())
             for idea in answer.value.habits
@@ -260,10 +272,36 @@ def create_app(database: Database | None = None) -> FastAPI:
         require_user(session, user_id)
         return habit_consistency(session, user_id, date.today())
 
-    @app.get("/users/{user_id}/plan/today")
-    def plan_today(user_id: uuid.UUID, session: SessionDep) -> TodayPlan:
+    @app.get("/users/{user_id}/habits/impact")
+    def impact(user_id: uuid.UUID, session: SessionDep) -> list[HabitImpact]:
+        require_user(session, user_id)
+        today = date.today()
+        return habit_impacts(session, user_id, load_dataset(session, user_id, today), today)
+
+    @app.post("/users/{user_id}/checkins", status_code=status.HTTP_201_CREATED)
+    def check_in(user_id: uuid.UUID, body: CheckinCreate, session: SessionDep) -> Checkin:
+        require_user(session, user_id)
+        checkin = Checkin(
+            day=body.day or date.today(), sleep_hours=body.sleep_hours, energy=body.energy, stress=body.stress
+        )
+        if checkin.day > date.today():
+            raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "Check-ins cannot be in the future.")
+        session.merge(CheckinRow(user_id=user_id, **checkin.model_dump()))
+        session.commit()
+        return checkin
+
+    @app.get("/users/{user_id}/cycle/signal")
+    def signal(user_id: uuid.UUID, session: SessionDep) -> CycleSignal | None:
         user = to_user(require_user(session, user_id))
-        return build_plan(user, load_dataset(session, user_id), date.today())
+        today = date.today()
+        dataset = load_dataset(session, user_id, today)
+        return signal_for(user, dataset, compute(dataset), load_checkins(session, user_id), today)
+
+    @app.get("/users/{user_id}/plan/today")
+    def today_plan(user_id: uuid.UUID, session: SessionDep) -> TodayPlan:
+        user = to_user(require_user(session, user_id))
+        today = date.today()
+        return plan_today(user, load_dataset(session, user_id, today), load_checkins(session, user_id), today)
 
     @app.get("/users/{user_id}/record")
     def record(user_id: uuid.UUID, session: SessionDep) -> DoctorRecord:
