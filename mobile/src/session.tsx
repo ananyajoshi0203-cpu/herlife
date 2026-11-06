@@ -3,9 +3,9 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 
 import { CYCLE_AWARE_STAGES, type CyclePhase, type Habit, type User } from "./api";
 
-const USER_KEY = "bloom.user";
+const USER_KEY = "herlife.user";
 /** The API has no list-habits endpoint yet, so the phone keeps the last suggestions it was given. */
-const HABITS_KEY = "bloom.habits";
+const HABITS_KEY = "herlife.habits";
 
 interface Session {
   /** `undefined` while the keychain is still being read; `null` means she has not onboarded. */

@@ -39,7 +39,7 @@ class OuraDays(BaseModel):
     days: list[DayRow]
 
 
-server = MCPServer("bloom_oura")
+server = MCPServer("herlife_oura")
 
 
 @server.tool(annotations=ToolAnnotations(read_only_hint=True))

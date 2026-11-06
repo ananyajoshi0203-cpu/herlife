@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-os.environ["BLOOM_WEB_DB"] = f"sqlite:///{Path(tempfile.mkdtemp()) / 'web_test.db'}"
+os.environ["HERLIFE_WEB_DB"] = f"sqlite:///{Path(tempfile.mkdtemp()) / 'web_test.db'}"
 
 from fastapi.testclient import TestClient  # noqa: E402
 
@@ -26,7 +26,7 @@ def test_page_is_served_with_the_platform_shim_before_the_app(client: TestClient
     html = client.get("/").text
     assert html.startswith("<!doctype html>")
     assert "<title>HerLife</title>" in html
-    assert html.index("/static/bloom-platform.js") < html.index('"use strict";')
+    assert html.index("/static/herlife-platform.js") < html.index('"use strict";')
 
 
 def test_each_browser_gets_its_own_private_record(client: TestClient) -> None:
@@ -55,7 +55,7 @@ def test_oversized_prompts_are_rejected(client: TestClient) -> None:
 
 
 def test_oura_and_calendar_say_not_configured_instead_of_failing(client: TestClient, monkeypatch: pytest.MonkeyPatch) -> None:
-    for var in ("OURA_CLIENT_ID", "OURA_CLIENT_SECRET", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "BLOOM_DEV_OURA_TOKEN", "DEV_OURA_TOKEN"):
+    for var in ("OURA_CLIENT_ID", "OURA_CLIENT_SECRET", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "HERLIFE_DEV_OURA_TOKEN", "DEV_OURA_TOKEN"):
         monkeypatch.delenv(var, raising=False)
     monkeypatch.setattr("backend.webapp.server.DEV_OURA_TOKEN", None)
     assert client.get("/api/oura/daily").json()["detail"]["code"] == "oura_not_configured"

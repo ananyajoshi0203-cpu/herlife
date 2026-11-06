@@ -46,7 +46,7 @@ VOICE_NOTE = ". ".join(sentence for _, sentence in VOICE_SENTENCES) + "."
 def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[TestClient]:
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
     monkeypatch.delenv("OURA_TOKEN", raising=False)
-    with TestClient(create_app(Database(f"sqlite:///{tmp_path / 'bloom.db'}"))) as test_client:
+    with TestClient(create_app(Database(f"sqlite:///{tmp_path / 'herlife.db'}"))) as test_client:
         yield test_client
 
 
@@ -74,7 +74,7 @@ def test_onboarding_to_doctor_record(client: TestClient) -> None:
     assert synced["live"] is False
     assert synced["sleep"] > 0 and synced["readiness"] > 0
 
-    periods = json.loads((RAW_DIR / "bloom_period_log.json").read_text())
+    periods = json.loads((RAW_DIR / "herlife_period_log.json").read_text())
     for period in periods:
         logged = client.post(
             f"/users/{user_id}/periods", json={key: period[key] for key in ("start_day", "end_day", "flow")}

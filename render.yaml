@@ -1,11 +1,11 @@
 services:
   - type: web
-    name: bloom-web
+    name: herlife-web
     runtime: docker
     plan: starter
     healthCheckPath: /healthz
     disk:
-      name: bloom-data
+      name: herlife-data
       mountPath: /data
       sizeGB: 1
     envVars:

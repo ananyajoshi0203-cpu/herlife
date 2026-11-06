@@ -28,7 +28,7 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, sessionmaker
 
 ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_DATABASE_URL = f"sqlite:///{ROOT / 'data' / 'bloom_api.db'}"
+DEFAULT_DATABASE_URL = f"sqlite:///{ROOT / 'data' / 'herlife_api.db'}"
 
 
 class Base(DeclarativeBase):

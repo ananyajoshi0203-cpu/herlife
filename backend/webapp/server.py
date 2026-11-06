@@ -1,7 +1,7 @@
 """HerLife as a real web app: serves the UI and the backend that replaces claude.ai's runtime.
 
 The page talks to `window.claude.use(...)`. On claude.ai the platform answers; here
-static/bloom-platform.js answers the same calls with this server, so one UI ships to both.
+static/herlife-platform.js answers the same calls with this server, so one UI ships to both.
 
     ANTHROPIC_API_KEY=... OURA_CLIENT_ID=... OURA_CLIENT_SECRET=... \\
       .venv/bin/uvicorn backend.webapp.server:app --port 8080
@@ -47,13 +47,15 @@ def load_dotenv(path: Path) -> None:
 load_dotenv(ROOT / ".env")
 PAGE = ROOT / "web" / "index.html"
 STATIC = Path(__file__).resolve().parent / "static"
-PERSON_COOKIE = "bloom_person"
-OAUTH_STATE_COOKIE = "bloom_oura_state"
-GOOGLE_STATE_COOKIE = "bloom_google_state"
+PERSON_COOKIE = "herlife_person"
+# Visitors from before the HerLife rename still carry the old cookie; read it so their record stays theirs.
+LEGACY_PERSON_COOKIE = "bloom_person"
+OAUTH_STATE_COOKIE = "herlife_oura_state"
+GOOGLE_STATE_COOKIE = "herlife_google_state"
 # Single-person local development only: lets you see your own ring before registering an
 # Oura OAuth app. Never set it on a shared deployment, or every visitor reads your ring.
-DEV_OURA_TOKEN = os.environ.get("BLOOM_DEV_OURA_TOKEN") or os.environ.get("DEV_OURA_TOKEN")
-SECURE_COOKIES = os.environ.get("BLOOM_SECURE_COOKIES", "0") == "1"
+DEV_OURA_TOKEN = os.environ.get("HERLIFE_DEV_OURA_TOKEN") or os.environ.get("DEV_OURA_TOKEN")
+SECURE_COOKIES = (os.environ.get("HERLIFE_SECURE_COOKIES") or os.environ.get("BLOOM_SECURE_COOKIES", "0")) == "1"
 MODELS: dict[str, str] = {"quick": "claude-haiku-5-5", "default": "claude-sonnet-5-5", "complex": "claude-opus-5-5"}
 # The models think before answering; 1,500 tokens could be spent entirely on thinking, leaving no text.
 MAX_OUTPUT_TOKENS = 4000
@@ -73,10 +75,10 @@ def person_id(request: Request) -> str:
 
 @app.middleware("http")
 async def assign_person(request: Request, call_next):  # type: ignore[no-untyped-def]
-    existing = request.cookies.get(PERSON_COOKIE)
+    existing = request.cookies.get(PERSON_COOKIE) or request.cookies.get(LEGACY_PERSON_COOKIE)
     request.state.person_id = existing or uuid.uuid4().hex
     response: Response = await call_next(request)
-    if not existing:
+    if not request.cookies.get(PERSON_COOKIE):
         response.set_cookie(PERSON_COOKIE, request.state.person_id, max_age=60 * 60 * 24 * 365,
                             httponly=True, samesite="lax", secure=SECURE_COOKIES)
     return response
@@ -87,7 +89,7 @@ def index() -> str:
     page = PAGE.read_text()
     # The artifact publisher wraps the page in a document skeleton; here we add it ourselves,
     # plus the platform shim, which must load before the app script reads window.claude.
-    page = page.replace('<script>\n"use strict";', '<script src="/static/bloom-platform.js"></script>\n<script>\n"use strict";', 1)
+    page = page.replace('<script>\n"use strict";', '<script src="/static/herlife-platform.js"></script>\n<script>\n"use strict";', 1)
     return (
         '<!doctype html><html lang="en"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">'

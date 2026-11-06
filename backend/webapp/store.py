@@ -11,7 +11,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column
 
 def database_url() -> str:
     """Postgres in production (DATABASE_URL from Neon or Vercel Postgres), SQLite on a laptop."""
-    url = os.environ.get("DATABASE_URL") or os.environ.get("BLOOM_WEB_DB")
+    url = os.environ.get("DATABASE_URL") or os.environ.get("HERLIFE_WEB_DB")
     if url:
         # Neon and Vercel hand out postgres:// URLs; SQLAlchemy needs the psycopg driver named.
         return url.replace("postgres://", "postgresql+psycopg://", 1).replace("postgresql://", "postgresql+psycopg://", 1)
@@ -19,7 +19,7 @@ def database_url() -> str:
         # Vercel only allows writes to /tmp, which resets on cold starts. Good enough for a first
         # deploy; connect Neon Postgres (DATABASE_URL) so records persist.
         return "sqlite:////tmp/herlife.db"
-    return f"sqlite:///{Path(__file__).resolve().parents[2] / 'data' / 'bloom_web.db'}"
+    return f"sqlite:///{Path(__file__).resolve().parents[2] / 'data' / 'herlife_web.db'}"
 
 
 DB_URL = database_url()

@@ -78,7 +78,7 @@ A browser that has used HerLife before reopens where it left off; tap **Switch**
 ```
 web/index.html            One UI for the hosted app (and a claude.ai artifact)
 backend/webapp/           FastAPI server for Vercel: page, AI, saved records, Oura and Google OAuth
-  static/bloom-platform.js  Answers the page's window.claude calls with our own server
+  static/herlife-platform.js  Answers the page's window.claude calls with our own server
 backend/api/              Production API: users, sync, cycle signal, habits, impact, plan, record
 backend/canonical/        Vendor-neutral health models, Oura adapter, cycle builder
 backend/insights.py       90-day patterns for the doctor record
@@ -90,7 +90,7 @@ docs/                     Pitch, research (28 citations), data model, API, demo 
 ```
 
 - **Claude** (Anthropic API) writes habits from free-text goals, sorts voice logs, maps any goal to the signals and outcomes to track, personalizes the daily plan, and writes the doctor summary. Every call has a timeout and a deterministic fallback, so the app never dead-ends.
-- **Data**: Oura API v2 through a canonical adapter (any wearable next), Bloom's own period log for the cycle, Oura temperature only to confirm ovulation, and Postgres (Neon) for each person's record.
+- **Data**: Oura API v2 through a canonical adapter (any wearable next), HerLife's own period log for the cycle, Oura temperature only to confirm ovulation, and Postgres (Neon) for each person's record.
 - **Research-backed rules**: cycle staging follows STRAW+10, normal ranges follow FIGO and ACOG, and seasonal advice cites the CDC, NIH, and NIMH. See [docs/RESEARCH.md](docs/RESEARCH.md).
 - **Not a medical device.** HerLife offers lifestyle suggestions and keeps a record; it never diagnoses.
 

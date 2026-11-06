@@ -29,7 +29,7 @@
   const OURA_PATH = { oura_daily: (input) => `/api/oura/daily?days=${encodeURIComponent(input?.days ?? 90)}` };
   const mcp = {
     async callTool(server, tool, input) {
-      if (server !== "host:bloom_oura" || !OURA_PATH[tool]) throw { code: "not_in_manifest" };
+      if (server !== "host:herlife_oura" || !OURA_PATH[tool]) throw { code: "not_in_manifest" };
       try { return { payload: await api("GET", OURA_PATH[tool](input)), content: [] }; }
       catch (error) {
         if (error.code === "oura_not_connected") { window.location.href = "/api/oura/connect"; throw { code: "cancelled", message: "Opening Oura sign in" }; }

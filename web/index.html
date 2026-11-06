@@ -437,7 +437,8 @@ const RECORD = SEED_RAW.record || null;
 const LOGGED_PERIODS = SEED_RAW.periods || [];
 let TODAY = SEED.length ? SEED[SEED.length - 1].day : new Date().toISOString().slice(0, 10);
 let CYCLE_LEN = 29;
-const STORE_KEY = "bloom.v2";
+const STORE_KEY = "herlife.v2";
+const LEGACY_STORE_KEY = "bloom.v2";
 
 const PHASES = {
   menstrual: { label: "Menstrual", short: "Period", token: "--ph-men", energy: "Lowest energy of the month. Rest, iron, and warmth help.", body: "Estrogen and progesterone are at their lowest. Cramps, fatigue, and lighter sleep are common in the first two days.", move: "Gentle movement, walks, restorative yoga.", eat: "Iron and vitamin C together: lentils, leafy greens, citrus." },
@@ -662,7 +663,7 @@ let ui = { thinking: false, recording: false, draft: "", sorted: null, syncing: 
 
 function loadState() {
   try {
-    const raw = localStorage.getItem(STORE_KEY);
+    const raw = localStorage.getItem(STORE_KEY) ?? localStorage.getItem(LEGACY_STORE_KEY);
     if (raw) {
       const saved = JSON.parse(raw), base = defaultState();
       return { ...base, ...saved, profile: { ...base.profile, ...saved.profile }, consent: { ...base.consent, ...saved.consent }, connected: { ...base.connected, ...saved.connected } };
@@ -676,14 +677,14 @@ function save() {
   try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {}
   if (!remoteDoc) return;
   clearTimeout(remoteTimer);
-  remoteTimer = setTimeout(() => remoteDoc.set({ json: JSON.stringify(state), updatedAt: state.updatedAt }).catch((e) => console.warn("[bloom] db save", e?.code)), 800);
+  remoteTimer = setTimeout(() => remoteDoc.set({ json: JSON.stringify(state), updatedAt: state.updatedAt }).catch((e) => console.warn("[herlife] db save", e?.code)), 800);
 }
 async function connectRecord() {
   if (!window.claude?.use) return;
   const [db, user] = await Promise.all([window.claude.use("db"), window.claude.use("user")]);
   const id = await user?.id?.();
   if (!db || !id) return;
-  remoteDoc = db.collection("data/users/" + id).doc("bloom");
+  remoteDoc = db.collection("data/users/" + id).doc("herlife");
   try {
     const snap = await within(remoteDoc.get(), 8000);
     const body = snap?.exists ? snap.data() : null;
@@ -694,7 +695,7 @@ async function connectRecord() {
       if (state.persona && state.step === "app" && !requestedProfile) state.step = "welcome";
     } else if (state.step === "app") save();
     ui.cloud = true; render();
-  } catch (e) { console.warn("[bloom] db load", e?.code); }
+  } catch (e) { console.warn("[herlife] db load", e?.code); }
 }
 function set(patch) { Object.assign(state, patch); save(); render(); }
 
@@ -707,7 +708,7 @@ const within = (promise, ms) => Promise.race([promise, new Promise((resolve) => 
 async function askClaude(prompt, tier = "quick") {
   const sample = await within(getSample(), 6000);
   if (!sample) return null;
-  try { return await within(sample.json(prompt, { modelTier: tier }), tier === "quick" ? 20000 : 35000); } catch (e) { console.warn("[bloom] claude", e?.code, e?.message); return null; }
+  try { return await within(sample.json(prompt, { modelTier: tier }), tier === "quick" ? 20000 : 35000); } catch (e) { console.warn("[herlife] claude", e?.code, e?.message); return null; }
 }
 
 /* Today context: real today, or a day from her history when the judge scrubs the cycle. */
@@ -785,18 +786,18 @@ async function loadCalendar() {
     CALENDAR = events.map((e) => ({ start: hhmm(e.start), end: hhmm(e.end), title: e.title }));
     ui.calendarLive = true; state.connected.calendar = true; save(); render();
     return true;
-  } catch (e) { console.warn("[bloom] calendar", e?.code); return false; }
+  } catch (e) { console.warn("[herlife] calendar", e?.code); return false; }
 }
 async function bookOnCalendar(slot, minutes, title) {
   const cal = ui.calendarLive && await window.claude?.use?.("calendar");
   if (!cal) return false;
   const [h, m] = slot.split(":").map(Number), start = new Date(); start.setHours(h, m, 0, 0);
   try { await cal.create({ title, start: start.toISOString(), end: new Date(start.getTime() + minutes * 60000).toISOString() }); return true; }
-  catch (e) { console.warn("[bloom] calendar book", e?.code); return false; }
+  catch (e) { console.warn("[herlife] calendar book", e?.code); return false; }
 }
 
 /* Real Oura, through HerLife's local MCP server (owner, Claude desktop app). Everyone else keeps the demo persona. */
-const OURA_SERVER = "host:bloom_oura";
+const OURA_SERVER = "host:herlife_oura";
 const OURA_FIX = {
   server_not_connected: "Open HerLife on your computer with the HerLife Oura connector running to use your ring.",
   not_in_manifest: "Oura access is turned off for this page. Turn it on in the page's permissions.",
@@ -826,7 +827,7 @@ async function syncOura() {
     TODAY = SEED[SEED.length - 1].day;
     return { mode: "live", note: `Synced ${SEED.length} nights from your Oura Ring` };
   } catch (e) {
-    console.warn("[bloom] oura", e?.code, e?.message);
+    console.warn("[herlife] oura", e?.code, e?.message);
     return { mode: "demo", note: OURA_FIX[e?.code] || "Oura didn't answer. Showing the demo data for now." };
   }
 }

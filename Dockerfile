@@ -1,6 +1,6 @@
 FROM python:3.14-slim
 WORKDIR /app
-ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 BLOOM_WEB_DB=sqlite:////data/bloom_web.db BLOOM_SECURE_COOKIES=1
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 HERLIFE_WEB_DB=sqlite:////data/herlife_web.db HERLIFE_SECURE_COOKIES=1
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY backend ./backend

@@ -14,7 +14,7 @@ summary. See `docs/PITCH.md`.
 - `backend/canonical/oura_adapter.py`: raw Oura -> canonical sleep, readiness, activity, stress. Produces no cycle rows: Oura does not sync periods.
 - `backend/canonical/cycle.py`: `build_cycle(periods, readiness)`. Cycle day and phase come from HerLife's self-reported period log; Oura temperature only sets `ovulation_confirmed`. `_phase_for` must match `phaseOf` in `web/index.html`.
 - `backend/synthetic/oura_generator.py`: 90 days of Oura-shaped payloads with a real cycle signal (persona "Maya").
-- `backend/synthetic/period_log_generator.py`: Maya's period log (`data/raw/bloom_period_log.json`), aligned with the Oura generator's cycle.
+- `backend/synthetic/period_log_generator.py`: Maya's period log (`data/raw/herlife_period_log.json`), aligned with the Oura generator's cycle.
 - `backend/pipeline.py`: generate -> adapt Oura + load period log -> build cycle -> `data/health.db` + `data/canonical/*.json` (incl. `periods`, `cycle`) + `web/seed.json`.
 - `web/index.html`: the whole app, published as an artifact. Claude calls go through the artifact `sample` capability.
 - `docs/`: plan, pitch, data model, demo script.

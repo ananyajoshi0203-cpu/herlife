@@ -1,6 +1,6 @@
 # HerLife API
 
-FastAPI service in `backend/api/`. SQLite at `data/bloom_api.db`. Reads and writes only canonical models.
+FastAPI service in `backend/api/`. SQLite at `data/herlife_api.db`. Reads and writes only canonical models.
 
 ```
 .venv/bin/uvicorn backend.api.app:app --reload

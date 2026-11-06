@@ -5,7 +5,7 @@ Oura API v2 ──► OuraConnector ──► oura_adapter ──► sleep, read
 (daily_sleep,     (live or mock)    (units, enums)   activity, stress    │
  sleep, daily_                                                          │ temperature
  readiness, ...)                                                        ▼ (confirms ovulation)
-HerLife period tracker ──► bloom_period_log.json ──► periods ──► cycle.build_cycle ──► cycle
+HerLife period tracker ──► herlife_period_log.json ──► periods ──► cycle.build_cycle ──► cycle
 (self-reported starts,                                         (cycle day + phase
  ends, flow)                                                    from logged starts)
                                                                         │

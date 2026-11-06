@@ -17,7 +17,7 @@ from backend.connectors.oura import RAW_DIR
 from backend.synthetic.oura_generator import CYCLE_LENGTH, DAYS, FIRST_PERIOD_OFFSET, SEED
 
 PERIOD_LENGTH = timedelta(days=5)
-PERIOD_LOG_FILE = "bloom_period_log.json"
+PERIOD_LOG_FILE = "herlife_period_log.json"
 FLOW_WEIGHTS: dict[Flow, int] = {Flow.LIGHT: 1, Flow.MEDIUM: 3, Flow.HEAVY: 2}
 
 
