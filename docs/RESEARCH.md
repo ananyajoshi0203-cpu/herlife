@@ -208,3 +208,13 @@ These back the "This season" and "Mind and energy" cards on Today. Each card sho
 | Crisis line on the Mind card | 988 Suicide and Crisis Lifeline, call or text 988 in the US | https://988lifeline.org |
 
 **Product rules, not sourced figures:** the "heavy stretch" card shows at 4 or more low or drained mood check-ins in 14 days, or more than 130 high-stress minutes a day on average over 5 days. Energy is the mean of readiness, sleep score, mood, and self-rated energy. Cycle estimates without a logged period use the first cool night after 8 or more nights at or above +0.18 C, consistent with the about 0.3 C luteal shift in the Oura pilot [7].
+
+### Sleep stages, mood, and recovery (Last night's sleep card)
+
+| Claim in the app | Source |
+|---|---|
+| Typical adult share of sleep: REM about 20 to 25%, deep (slow wave) about 13 to 23% | Sleep Foundation, Stages of Sleep. https://www.sleepfoundation.org/how-sleep-works/stages-of-sleep |
+| REM supports overnight emotional processing; less REM can leave reactions to emotional events stronger the next day | Walker MP, van der Helm E. Psychol Bull 2009;135(5):731-748. https://doi.org/10.1037/a0016570 |
+| Deep (slow wave) sleep is when most growth hormone is released, supporting physical recovery | Van Cauter E, Leproult R, Plat L. JAMA 2000;284(7):861-868. https://doi.org/10.1001/jama.284.7.861 |
+
+**Product rules:** emotional recharge = REM share / 23% x 85, and physical recovery = deep share / 18% x 85, each capped at 100. Today's mood and energy forecast compares last night's share with her own 30-night average (more than 2 points either way). The mood check-in uses two axes, valence and energy, so anxious and energized both count as high energy, and the "heavy stretch" note counts check-ins with valence 30 or below.

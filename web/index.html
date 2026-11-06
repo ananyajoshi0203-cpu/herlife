@@ -163,6 +163,8 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
 .win { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: center; }
 .win .star { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--accent-ink); }
 
+.stages { display: flex; height: 16px; border-radius: 8px; overflow: hidden; gap: 2px; }
+.stages i { display: block; animation: grow .7s ease-out both; transform-origin: left; }
 .mind { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .mind > div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .mind b { font-size: 18px; }
@@ -265,11 +267,12 @@ td:first-child { font-family: var(--f-body); font-weight: 600; font-size: 13px; 
 @keyframes fade { from { opacity: 0; } }
 .sheet { background: var(--surface); width: 100%; border-radius: 28px 28px 0 0; padding: 22px max(18px, env(safe-area-inset-right, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px)); display: flex; flex-direction: column; gap: 16px; animation: up .45s cubic-bezier(.2,.9,.3,1.1) both; }
 @keyframes up { from { transform: translateY(100%); } }
-.moods { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.moods { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px 6px; }
 .mood { border: 0; background: none; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--muted); }
 .blob { width: 54px; height: 54px; animation: morph 4s ease-in-out infinite; display: grid; place-items: center; transition: transform .2s; }
 .mood:hover .blob, .mood.on .blob { transform: scale(1.15); }
-.mood:nth-child(2) .blob { animation-delay: -1s; } .mood:nth-child(3) .blob { animation-delay: -2s; } .mood:nth-child(4) .blob { animation-delay: -3s; }
+.mood:nth-child(even) .blob { animation-delay: -1.5s; } .mood:nth-child(3n) .blob { animation-delay: -2.5s; }
+.mood-axis { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); }
 
 .toast { position: absolute; left: 50%; bottom: 92px; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 99px; font-size: 13px; font-weight: 600; z-index: 30; animation: toast 2.8s both; max-width: calc(100% - 40px); text-align: center; }
 @keyframes toast { 0% { opacity: 0; transform: translate(-50%, 12px); } 10%, 85% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; } }
@@ -415,13 +418,20 @@ const CATEGORIES = {
   mood: { label: "Mood", token: "--ph-men" },
   symptoms: { label: "Symptoms", token: "--warn" },
 };
+/* valence: how pleasant (0-100), energy: how activated (0-100). Two axes, so "anxious" and "energized" are both high energy. */
 const MOODS = [
-  { id: "drained", label: "Drained", token: "--ph-lut" },
-  { id: "low", label: "Low", token: "--ph-men" },
-  { id: "okay", label: "Okay", token: "--muted" },
-  { id: "good", label: "Good", token: "--ph-fol" },
-  { id: "glowing", label: "Glowing", token: "--ph-ovu" },
+  { id: "drained", label: "Drained", token: "--ph-lut", valence: 25, energy: 10, face: { eyes: "closed", mouth: "M8 17q4-2.5 8 0" } },
+  { id: "low", label: "Low", token: "--ph-lut", valence: 25, energy: 30, face: { eyes: "dot", mouth: "M8 17q4-3 8 0" } },
+  { id: "anxious", label: "Anxious", token: "--warn", valence: 30, energy: 75, face: { eyes: "wide", brows: "M6.5 7.5l3 1M17.5 7.5l-3 1", mouth: "M8 16q1-1 2 0t2 0t2 0t2 0" } },
+  { id: "stressed", label: "Stressed", token: "--warn", valence: 25, energy: 85, face: { eyes: "dot", brows: "M6.5 7l3 1.5M17.5 7l-3 1.5", mouth: "M8 16.5l2-1 2 1 2-1 2 1" } },
+  { id: "irritable", label: "Irritable", token: "--ph-men", valence: 30, energy: 65, face: { eyes: "dot", brows: "M6.5 7.5l3.5 1.5M17.5 7.5l-3.5 1.5", mouth: "M8.5 16.5h7" } },
+  { id: "okay", label: "Okay", token: "--muted", valence: 55, energy: 50, face: { eyes: "dot", mouth: "M8 16h8" } },
+  { id: "calm", label: "Calm", token: "--ph-fol", valence: 75, energy: 35, face: { eyes: "happy", mouth: "M9 15.5q3 2 6 0" } },
+  { id: "good", label: "Good", token: "--ph-fol", valence: 80, energy: 60, face: { eyes: "dot", mouth: "M8 15q4 3 8 0" } },
+  { id: "energized", label: "Energized", token: "--ph-ovu", valence: 85, energy: 90, face: { eyes: "wide", mouth: "M7.5 14.5q4.5 5 9 0z", spark: true } },
+  { id: "glowing", label: "Glowing", token: "--ph-ovu", valence: 95, energy: 70, face: { eyes: "happy", mouth: "M7 14q5 5 10 0" } },
 ];
+const moodById = (id) => MOODS.find((m) => m.id === id);
 const SAMPLE_RAMBLES = [
   "Slept pretty badly, woke up at 3 and couldn't fall back asleep. Had oatmeal with berries and a big oat latte. Did a 20 minute walk at lunch. Headache started around 2 pm, and I've been feeling anxious about the planning meeting. Craving chocolate like crazy.",
   "Great sleep last night, almost 8 hours. Lifted at the gym, squats felt strong. Salmon bowl for lunch and way too much coffee. Feeling really focused and happy today.",
@@ -838,10 +848,42 @@ function ring(value, max, size = 116, stroke = 11, token = "--accent") {
     <circle class="ring-arc" cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="var(${token})" stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c}" data-dash="${off}"/></svg>`;
 }
 
+/* Typical adult share of sleep: REM about 20 to 25%, deep about 13 to 23% (see docs/RESEARCH.md). */
+const remPct = (r) => Number.isFinite(r.rem) && r.sleepMin ? Math.round(100 * r.rem / r.sleepMin) : null;
+const deepPct = (r) => Number.isFinite(r.deep) && r.sleepMin ? Math.round(100 * r.deep / r.sleepMin) : null;
+const clamp = (v) => Math.max(0, Math.min(100, Math.round(v)));
+const rechargeScore = (r) => { const p = remPct(r); return p === null ? undefined : clamp(p / 23 * 85); };
+const recoveryScore = (r) => { const p = deepPct(r); return p === null ? undefined : clamp(p / 18 * 85); };
+function sleepForecast(row) {
+  const rem = remPct(row), deep = deepPct(row), base = SEED.slice(-30);
+  if (rem === null) return null;
+  const remBase = Math.round(avg(base.map(remPct))), deepBase = Math.round(avg(base.map(deepPct)));
+  const mood = rem < remBase - 2 ? "You may feel more reactive today. Low REM leaves less overnight emotional processing, so give yourself extra room before reacting."
+    : rem > remBase + 2 ? "Strong REM night. You are well set up for a steady mood and clear thinking."
+    : "REM was close to your usual, so expect your normal emotional baseline.";
+  const body = deep < deepBase - 2 ? "Deep sleep ran short, so your body recovered less. Keep training moderate."
+    : deep > deepBase + 2 ? "Plenty of deep sleep, so your body recovered well. A good day for effort."
+    : "Deep sleep was typical, so recovery is on track.";
+  return { rem, deep, remBase, deepBase, mood, body };
+}
+function sleepCard(row) {
+  const f = sleepForecast(row); if (!f) return "";
+  const light = Math.max(0, 100 - f.rem - f.deep);
+  return `<div class="card rise"><div class="row between"><h2>Last night's sleep</h2><span class="eyebrow mono">${hm(row.sleepMin)}</span></div>
+    <div class="stages"><i style="flex:${f.deep};background:var(--ph-fol)"></i><i style="flex:${f.rem};background:var(--ph-lut)"></i><i style="flex:${light};background:var(--line)"></i></div>
+    <div class="row between muted" style="font-size:12px"><span><span class="dot" style="color:var(--ph-fol)"></span> Deep ${f.deep}%</span><span><span class="dot" style="color:var(--ph-lut)"></span> REM ${f.rem}%</span><span>Light ${light}%</span></div>
+    <div class="grid2">
+      <div class="tile"><span>Emotional recharge</span><b class="mono">${rechargeScore(row)}</b><span>REM ${f.rem}% · your usual ${f.remBase}%</span></div>
+      <div class="tile"><span>Physical recovery</span><b class="mono">${recoveryScore(row)}</b><span>Deep ${f.deep}% · your usual ${f.deepBase}%</span></div>
+    </div>
+    <div class="insight"><i style="background:var(--ph-lut)"></i><p style="font-size:14px"><b>Mood today:</b> ${f.mood}</p></div>
+    <div class="insight"><i style="background:var(--ph-fol)"></i><p style="font-size:14px"><b>Energy today:</b> ${f.body}</p></div>
+    <p class="muted" style="font-size:11px">A prediction from your sleep, not a rule. Your mood check-ins show how well it fits you. Sources: Walker and van der Helm, 2009; Sleep Foundation.</p></div>`;
+}
 function energyOf(row, day) {
   const mood = state.moods.filter((m) => m.day === day).pop();
-  const moodScore = { drained: 20, low: 40, okay: 60, good: 80, glowing: 95 }[mood?.mood];
-  const parts = [row.ready, row.sleep, moodScore, Number.isFinite(row.energySelf) ? row.energySelf * 19 : undefined].filter(Number.isFinite);
+  const moodScore = moodById(mood?.mood)?.energy;
+  const parts = [row.ready, recoveryScore(row), moodScore, Number.isFinite(row.energySelf) ? row.energySelf * 19 : undefined].filter(Number.isFinite);
   return parts.length ? Math.round(avg(parts)) : null;
 }
 function spark(values, token, w = 96, h = 28) {
@@ -858,7 +900,7 @@ function mindCard(ctx) {
   const energy = rows.map((r) => energyOf(r, r.day)), stress = rows.map((r) => r.stress), rem = rows.map((r) => r.rem);
   const remPct = Number.isFinite(row.rem) && row.sleepMin ? Math.round(100 * row.rem / row.sleepMin) : null;
   const remUsual = Math.round(100 * avg(SEED.slice(-30).map((r) => r.rem / r.sleepMin)));
-  const lowMoods = state.moods.filter((m) => m.day >= addDays(TODAY, -13) && ["low", "drained"].includes(m.mood)).length;
+  const lowMoods = state.moods.filter((m) => m.day >= addDays(TODAY, -13) && (moodById(m.mood)?.valence ?? 100) <= 30).length;
   const heavy = lowMoods >= 4 || avg(stress.slice(-5)) > 130;
   const note = remPct !== null && remPct < remUsual - 2 ? `REM was ${remPct}% of your sleep, under your usual ${remUsual}%. REM sleep helps the brain process emotions, so a tense day can feel bigger after a short REM night.`
     : avg(stress.slice(-3)) > avg(stress) + 15 ? "Your stress minutes have climbed the last few days. Short breaks between meetings help your nervous system reset."
@@ -870,7 +912,7 @@ function mindCard(ctx) {
       <div><span class="eyebrow">REM</span><b class="mono">${Number.isFinite(row.rem) ? hm(row.rem) : "--"}</b>${Number.isFinite(row.rem) ? spark(rem, "--ph-lut") : `<small class="muted">Needs a wearable</small>`}</div>
     </div>
     <p style="font-size:14px">${note}</p>
-    ${heavy ? `<div class="card flat" style="padding:12px"><h3>It's been a heavy stretch</h3><p class="muted" style="font-size:13px">You've logged ${lowMoods} low days in two weeks. That's worth sharing with someone you trust or your doctor. If you're in crisis, call or text <b class="mono">988</b> (Suicide and Crisis Lifeline, US).</p></div>` : ""}
+    ${heavy ? `<div class="card flat" style="padding:12px"><h3>It's been a heavy stretch</h3><p class="muted" style="font-size:13px">You've logged ${lowMoods} low, anxious, or stressed check-ins in two weeks. That's worth sharing with someone you trust or your doctor. If you're in crisis, call or text <b class="mono">988</b> (Suicide and Crisis Lifeline, US).</p></div>` : ""}
     <button class="link" data-action="mood" style="text-align:left">Log how you feel</button></div>`;
 }
 function checkinCard() {
@@ -903,7 +945,7 @@ function pillars(ctx) {
   const { row } = ctx;
   const nourishLogs = state.logs.filter((l) => l.day === TODAY && l.category === "nutrition").length;
   const moodToday = state.moods.filter((m) => m.day === TODAY).pop();
-  const moodScore = { drained: 25, low: 45, okay: 65, good: 82, glowing: 96 }[moodToday?.mood];
+  const moodScore = moodById(moodToday?.mood)?.valence ?? rechargeScore(row);
   const list = [
     { label: "Sleep", score: row.sleep || 0, token: "--ph-lut" },
     { label: "Move", score: Math.min(100, Math.round((row.steps || 0) / 90)), token: "--ph-fol" },
@@ -1006,6 +1048,7 @@ function renderToday(ctx) {
       <div class="pillars">${pillars(ctx).map((pl) => `<div class="pillar"><div class="ring-wrap sm">${ring(pl.score, 100, 56, 6, pl.token)}<div class="val"><b>${pl.score}</b></div></div><span>${pl.label}</span></div>`).join("")}</div></div>
 
     ${hasWearable() ? "" : checkinCard()}
+    ${hasWearable() ? sleepCard(ctx.row) : ""}
     ${tuningCard()}
     ${mindCard(ctx)}
     ${seasonCard()}
@@ -1262,13 +1305,17 @@ function signalCard() {
 }
 function renderMood() {
   return `<div class="sheet-back" data-action="mood-close"><div class="sheet" data-stop>
-    <div class="stack"><span class="eyebrow">Quick check-in</span><h2>How's your mood today, ${esc(state.profile.name || "friend")}?</h2><p class="muted">One tap. It goes into your record next to your sleep and cycle.</p></div>
+    <div class="stack"><span class="eyebrow">Quick check-in</span><h2>How's your mood today, ${esc(state.profile.name || "friend")}?</h2><p class="muted">One tap. It sits in your record next to last night's REM and deep sleep, so you can see how sleep shapes your days.</p></div>
+    <div class="mood-axis"><span>Lower energy, left to right</span><span>Higher energy</span></div>
     <div class="moods">${MOODS.map((m, i) => `<button class="mood" data-mood="${m.id}"><div class="blob" style="background:var(${m.token})">${face(i)}</div>${m.label}</button>`).join("")}</div>
     <button class="link" data-action="mood-close">Not now</button></div></div>`;
 }
 function face(i) {
-  const mouth = ["M8 17q4-3 8 0", "M8 16.5q4-1.5 8 0", "M8 16h8", "M8 15q4 3 8 0", "M7 14q5 5 10 0"][i];
-  return `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--surface)" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="10" r="1" fill="var(--surface)"/><circle cx="15" cy="10" r="1" fill="var(--surface)"/><path d="${mouth}"/></svg>`;
+  const f = MOODS[i].face, c = "var(--surface)";
+  const eyes = { dot: `<circle cx="9" cy="10" r="1.1" fill="${c}"/><circle cx="15" cy="10" r="1.1" fill="${c}"/>`,
+    wide: `<circle cx="9" cy="10" r="1.8" fill="none" stroke="${c}" stroke-width="1.4"/><circle cx="15" cy="10" r="1.8" fill="none" stroke="${c}" stroke-width="1.4"/><circle cx="9" cy="10" r=".7" fill="${c}"/><circle cx="15" cy="10" r=".7" fill="${c}"/>`,
+    closed: `<path d="M7.5 10.5h3M13.5 10.5h3"/>`, happy: `<path d="M7.5 11q1.5-2 3 0M13.5 11q1.5-2 3 0"/>` }[f.eyes];
+  return `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${eyes}${f.brows ? `<path d="${f.brows}"/>` : ""}<path d="${f.mouth}"${f.mouth.endsWith("z") ? ` fill="${c}"` : ""}/>${f.spark ? `<path d="M3 4l1.5 1.5M21 4l-1.5 1.5M12 1.5v2" stroke-width="1.4"/>` : ""}</svg>`;
 }
 
 /* ---------- petals canvas on welcome ---------- */
@@ -1476,7 +1523,7 @@ document.addEventListener("click", (e) => {
   }
   if (d.mood) {
     state.moods.push({ day: TODAY, ts: Date.now(), mood: d.mood });
-    state.logs.push({ id: Date.now(), day: TODAY, category: "mood", text: `Feeling ${MOODS.find((m) => m.id === d.mood).label.toLowerCase()}`, detail: "Check-in" });
+    state.logs.push({ id: Date.now(), day: TODAY, category: "mood", text: `Feeling ${moodById(d.mood).label.toLowerCase()}`, detail: `Check-in · REM ${Number.isFinite(dayContext().row.rem) ? remPct(dayContext().row) + "%" : "n/a"} last night` });
     ui.moodOpen = false; state.lastMoodAt = Date.now(); save(); toast("Logged. Thank you for checking in."); return;
   }
   switch (d.action) {
