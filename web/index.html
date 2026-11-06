@@ -300,6 +300,80 @@ td:first-child { font-family: var(--f-body); font-weight: 600; font-size: 13px; 
 .fresh .rise:nth-child(5) { animation-delay: .2s; } .fresh .rise:nth-child(6) { animation-delay: .25s; } .fresh .rise:nth-child(n+7) { animation-delay: .3s; }
 @keyframes rise { from { opacity: .001; transform: translateY(14px); } }
 .ai-badge { display: inline-flex; gap: 5px; align-items: center; font-size: 11px; font-weight: 700; color: var(--accent); }
+
+/* Visual layer: body weather hero, plan tiles, hypnogram, gauges, timeline strip. */
+.weather { position: relative; display: grid; place-items: center; height: 230px; margin-inline: -18px; }
+.orb-hero { position: absolute; width: 200px; height: 200px; filter: blur(2px); opacity: calc(.55 + var(--score) / 220); }
+.orb-hero i { position: absolute; inset: 0; border-radius: 50%; animation: morph 9s ease-in-out infinite, spin 28s linear infinite; }
+.orb-hero i:nth-child(1) { background: radial-gradient(circle at 35% 30%, color-mix(in oklab, var(--ph-ovu) 85%, transparent), transparent 62%), radial-gradient(circle at 70% 70%, var(--accent), transparent 70%); }
+.orb-hero i:nth-child(2) { inset: 18px; background: radial-gradient(circle at 60% 40%, color-mix(in oklab, var(--accent) 70%, var(--surface)), transparent 70%); animation-duration: 7s, 20s; animation-direction: normal, reverse; }
+.orb-hero i:nth-child(3) { inset: 46px; background: radial-gradient(circle, color-mix(in oklab, var(--surface) 75%, transparent), transparent 72%); animation: breathe 6s ease-in-out infinite; }
+.weather-val { position: relative; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.weather-val b { font-size: 56px; line-height: 1; font-weight: 700; }
+.weather-val strong { font-family: var(--f-display); font-size: 16px; }
+.pillar-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(54px, 1fr)); gap: 6px; margin-top: -8px; }
+.pillar-row .pillar b { font-family: var(--f-data); font-size: 13px; color: var(--ink); }
+.ring-wrap .val.ic svg { transform: none; width: 20px; height: 20px; }
+.lede { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+details.more summary { font-size: 13px; font-weight: 700; color: var(--accent); cursor: pointer; list-style: none; }
+details.more summary::-webkit-details-marker { display: none; }
+details.more[open] > :not(summary) { margin-top: 8px; }
+.plan-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ptile { border-radius: var(--r-md); background: var(--surface-2); padding: 10px; display: flex; flex-direction: column; gap: 8px; min-width: 0; align-items: flex-start; }
+.ptile .art-lg { align-self: stretch; height: 96px; border-radius: 12px; display: grid; place-items: center; background: linear-gradient(150deg, color-mix(in oklab, var(--tint) 30%, var(--surface)), color-mix(in oklab, var(--tint) 10%, var(--surface))); color: var(--tint); }
+.ptile .art-lg svg { width: 78px; height: 78px; }
+.ptile h3 { font-size: 14px; line-height: 1.25; }
+.ptile details ol, .ptile details ul { margin: 0; padding-left: 18px; font-size: 13px; }
+.mchip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: 99px; background: var(--surface); font-size: 11.5px; font-weight: 600; color: var(--muted); }
+.mchip svg { width: 13px; height: 13px; }
+.meter { display: inline-flex; gap: 2px; align-items: flex-end; height: 12px; }
+.meter i { width: 4px; border-radius: 2px; background: var(--line); }
+.meter i:nth-child(1) { height: 5px; } .meter i:nth-child(2) { height: 8px; } .meter i:nth-child(3) { height: 12px; }
+.meter i.on { background: var(--tint, var(--accent)); }
+.breath { display: grid; place-items: center; height: 150px; position: relative; z-index: 1; }
+.breath i { position: absolute; width: 90px; height: 90px; border-radius: 50%; background: color-mix(in oklab, var(--ph-lut) 40%, transparent); animation: breathe-slow 8s ease-in-out infinite; }
+.breath i:nth-child(2) { width: 60px; height: 60px; background: color-mix(in oklab, var(--surface) 60%, transparent); animation-delay: .4s; }
+.breath span { position: relative; font-size: 12px; font-weight: 700; color: var(--ink); }
+@keyframes breathe-slow { 0%, 100% { transform: scale(.85); } 50% { transform: scale(1.45); } }
+.reason-chips { display: flex; flex-wrap: wrap; gap: 6px; position: relative; z-index: 1; }
+.reason-chips span { background: color-mix(in oklab, var(--surface) 70%, transparent); border-radius: 99px; padding: 4px 10px; font-size: 12px; font-weight: 600; }
+.hypno { width: 100%; height: auto; display: block; }
+.hypno text { fill: var(--muted); font-family: var(--f-data); font-size: 9px; }
+.gauges { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.gauge { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2px; }
+.gauge svg { width: 100%; max-width: 150px; height: auto; }
+.gauge .g-arc { transition: stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1); }
+.gauge b { font-family: var(--f-display); font-size: 26px; line-height: 1; margin-top: -34px; }
+.gauge span { font-size: 12px; color: var(--muted); }
+.mind-rows { display: flex; flex-direction: column; gap: 10px; }
+.mrow { display: grid; grid-template-columns: 72px 1fr; gap: 10px; align-items: center; }
+.mrow b { font-size: 18px; display: block; }
+.mrow svg { width: 100%; height: 48px; display: block; }
+.week-moods { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
+.week-moods > div { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10px; color: var(--muted); font-family: var(--f-data); }
+.week-moods .mf { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; }
+.week-moods .mf.empty { border: 1.5px dashed var(--line); }
+.week-moods .mf svg { width: 22px; height: 22px; }
+.habit-head { display: grid; grid-template-columns: 52px 1fr auto; gap: 12px; align-items: center; }
+.habit-head .ring-wrap.sm { width: 52px; height: 52px; }
+.flame { display: inline-flex; align-items: center; gap: 4px; color: var(--warn); font-weight: 700; font-family: var(--f-data); font-size: 13px; }
+.flame svg { width: 16px; height: 16px; }
+.streakbar { flex: 1; height: 6px; border-radius: 6px; background: var(--line); overflow: hidden; }
+.streakbar i { display: block; height: 100%; background: linear-gradient(90deg, var(--ph-ovu), var(--warn)); border-radius: 6px; animation: grow .7s ease-out both; transform-origin: left; }
+.strip { display: grid; grid-template-columns: 58px 1fr; gap: 4px 8px; align-items: center; }
+.strip > span { font-size: 11px; font-weight: 600; color: var(--muted); }
+.strip .cells { display: grid; grid-template-columns: repeat(var(--n), 1fr); gap: 1px; height: 14px; }
+.strip .cells i { border-radius: 1px; display: block; }
+.expect { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.expect > div { border-radius: var(--r-md); background: var(--surface-2); padding: 10px 6px; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; }
+.expect > div.now { outline: 2px solid var(--accent); }
+.expect .ph-ic { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; color: var(--surface); }
+.expect .ph-ic svg { width: 18px; height: 18px; }
+.expect .bars3 { display: flex; gap: 4px; align-items: flex-end; height: 34px; }
+.expect .bars3 i { width: 8px; border-radius: 3px; display: block; }
+.expect .keys { display: flex; gap: 6px; font-size: 9px; color: var(--muted); font-family: var(--f-data); }
+.legend .ph-ic { width: 18px; height: 18px; border-radius: 50%; display: inline-grid; place-items: center; color: var(--surface); }
+.legend .ph-ic svg { width: 11px; height: 11px; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
 </style>
 
@@ -923,6 +997,102 @@ function ring(value, max, size = 116, stroke = 11, token = "--accent") {
     <circle class="ring-arc" cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="var(${token})" stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c}" data-dash="${off}"/></svg>`;
 }
 
+const glyph = (paths, size = 18) => `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
+const PILLAR_GLYPH = {
+  Sleep: '<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>',
+  Move: '<circle cx="14" cy="4" r="2"/><path d="M9 21l3-6 3 3v3M6 12l3-4 5 1 2 4 3 1"/>',
+  Nourish: '<path d="M3 11h18a9 9 0 0 1-18 0zM8 7c0-2 2-2 2-4M13 7c0-2 2-2 2-4"/>',
+  Mind: '<path d="M12 20s-7-4.4-7-9.6A4 4 0 0 1 12 8a4 4 0 0 1 7 2.4C19 15.6 12 20 12 20z"/>',
+  Cycle: '<circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 8 8"/><circle cx="12" cy="4" r="1.6" fill="currentColor"/>',
+};
+const PHASE_GLYPH = {
+  menstrual: '<path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z"/>',
+  follicular: '<path d="M12 21v-9M12 12c0-4 3-7 7-7 0 4-3 7-7 7zM12 15c0-3-2-5-6-5 0 3 2 5 6 5z"/>',
+  ovulatory: '<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/>',
+  luteal: '<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>',
+};
+/* Typical direction of energy, mood, and sleep quality per phase, on a 1 to 4 scale, for the "what to expect" glance. */
+const PHASE_FEEL = { menstrual: [1, 2, 2], follicular: [3, 3, 3], ovulatory: [4, 4, 3], luteal: [2, 2, 2] };
+const clockGlyph = '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>';
+const flameGlyph = '<path d="M12 22c4 0 7-3 7-7 0-4-3-6-4-10-2 2-3 4-3 6-1-1-2-2-2-4-2 2-5 5-5 8 0 4 3 7 7 7z"/>';
+function meter(level, of = 3) { return `<span class="meter" role="img" aria-label="Intensity ${level} of ${of}">${Array.from({ length: of }, (_, i) => `<i class="${i < level ? "on" : ""}"></i>`).join("")}</span>`; }
+function weatherLabel(score) { return score >= 82 ? "Bright and clear" : score >= 72 ? "Mild and steady" : score >= 62 ? "Soft and cloudy" : "Rest weather"; }
+function bodyWeather(ctx) {
+  const score = energyOf(ctx.row, ctx.row.day || TODAY) ?? ctx.row.ready ?? 70;
+  return `<div class="weather rise" style="--score:${score}" role="img" aria-label="Body weather: energy ${score}, ${weatherLabel(score)}">
+      <div class="orb-hero" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="weather-val"><span class="eyebrow">Body weather</span><b class="mono">${score}</b><strong>${weatherLabel(score)}</strong></div></div>
+    <div class="pillar-row rise">${pillars(ctx).map((pl) => `<div class="pillar"><div class="ring-wrap sm">${ring(pl.score, 100, 56, 6, pl.token)}<div class="val ic" style="color:var(${pl.token})">${glyph(PILLAR_GLYPH[pl.label])}</div></div><b>${pl.score}</b><span>${pl.label}</span></div>`).join("")}</div>`;
+}
+const WORKOUT_ART = '<svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="48" cy="14" r="6" fill="currentColor" opacity=".25"/><circle cx="48" cy="14" r="6"/><path d="M28 70l10-20 10 10v12M18 40l10-14 16 4 6 12 10 4"/><path d="M8 74h64" opacity=".35"/></svg>';
+const RECIPE_ART = '<svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 40h60a30 30 0 0 1-60 0z" fill="currentColor" opacity=".2"/><path d="M10 40h60a30 30 0 0 1-60 0z"/><circle cx="30" cy="36" r="5" fill="currentColor" opacity=".45"/><circle cx="44" cy="34" r="4" fill="currentColor" opacity=".35"/><path d="M28 24c0-6 6-6 6-12M44 24c0-6 6-6 6-12"/></svg>';
+/* Draws a plausible night from stage totals: deep front-loaded across ~90 minute cycles, REM back-loaded. */
+function hypnogram(row) {
+  const total = row.sleepMin, deep = row.deep || 0, rem = row.rem || 0;
+  const n = Math.max(3, Math.round(total / 90)), W = 340, H = 110, top = 8, rowH = 22;
+  const dw = Array.from({ length: n }, (_, i) => n - i), rw = Array.from({ length: n }, (_, i) => i + 1);
+  const sum = (a) => a.reduce((x, y) => x + y, 0), segs = [];
+  for (let i = 0; i < n; i++) {
+    const d = deep * dw[i] / sum(dw), r = rem * rw[i] / sum(rw), l = Math.max(0, total / n - d - r);
+    segs.push(["light", l * 0.6], ["deep", d], ["light", l * 0.4], ["rem", r]);
+    if (i === Math.floor(n / 2)) segs.push(["awake", 4]);
+  }
+  const level = { awake: 0, rem: 1, light: 2, deep: 3 }, color = { awake: "--warn", rem: "--ph-lut", light: "--muted", deep: "--ph-fol" };
+  const span = sum(segs.map((g) => g[1])), x = (m) => 30 + (m / span) * (W - 34);
+  let t = 0, rects = "", line = "";
+  segs.forEach(([st, m]) => {
+    if (m <= 0) return;
+    const y = top + level[st] * rowH;
+    rects += `<rect x="${x(t).toFixed(1)}" y="${y}" width="${Math.max(1, x(t + m) - x(t)).toFixed(1)}" height="${rowH - 4}" rx="3" fill="var(${color[st]})" opacity="${st === "light" ? 0.35 : 1}"/>`;
+    line += `${line ? "L" : "M"}${x(t).toFixed(1)} ${y + rowH / 2 - 2}L${x(t + m).toFixed(1)} ${y + rowH / 2 - 2}`;
+    t += m;
+  });
+  const labels = ["Awake", "REM", "Light", "Deep"].map((l, i) => `<text x="0" y="${top + i * rowH + 13}">${l}</text>`).join("");
+  return `<svg class="hypno" viewBox="0 0 ${W} ${H}" role="img" aria-label="Sleep stages through the night">${labels}${rects}<path d="${line}" fill="none" stroke="var(--ink)" stroke-width="1" opacity=".35"/><text x="30" y="${H - 2}">${row.bed || "Bed"}</text><text x="${W - 34}" y="${H - 2}">Wake</text></svg>`;
+}
+function gauge(value, token, label, sub) {
+  const v = Number.isFinite(value) ? value : 0;
+  return `<div class="gauge"><svg viewBox="0 0 120 70" aria-hidden="true"><path d="M10 62a50 50 0 0 1 100 0" fill="none" stroke="var(--line)" stroke-width="11" stroke-linecap="round"/>
+    <path class="g-arc" d="M10 62a50 50 0 0 1 100 0" fill="none" stroke="var(${token})" stroke-width="11" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100" data-dash="${100 - v}"/></svg>
+    <b class="mono">${num(value)}</b><strong style="font-size:13px">${label}</strong><span>${sub}</span></div>`;
+}
+function areaSpark(values, token, w = 240, h = 48) {
+  const v = values.map((x) => Number.isFinite(x) ? x : null), fin = v.filter((x) => x !== null);
+  if (fin.length < 2) return `<svg viewBox="0 0 ${w} ${h}"></svg>`;
+  const lo = Math.min(...fin), hi = Math.max(...fin), x = (i) => (i / (v.length - 1)) * (w - 8) + 4, y = (val) => h - 4 - ((val - lo) / ((hi - lo) || 1)) * (h - 10);
+  const pts = v.map((val, i) => val === null ? null : [x(i), y(val)]).filter(Boolean);
+  const line = pts.map(([px, py], i) => `${i ? "L" : "M"}${px.toFixed(1)} ${py.toFixed(1)}`).join("");
+  const [lx, ly] = pts[pts.length - 1], gid = `ag${token.replace(/\W/g, "")}`;
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(${token})" stop-opacity=".35"/><stop offset="1" stop-color="var(${token})" stop-opacity="0"/></linearGradient></defs>
+    <path d="${line}L${lx.toFixed(1)} ${h}L${pts[0][0].toFixed(1)} ${h}Z" fill="url(#${gid})"/><path d="${line}" fill="none" stroke="var(${token})" stroke-width="2.2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/><circle cx="${lx.toFixed(1)}" cy="${ly.toFixed(1)}" r="3.5" fill="var(${token})"/></svg>`;
+}
+function weekMoods() {
+  return `<div class="week-moods" aria-label="Mood over the last 7 days">${weekDays().map((d) => {
+    const m = state.moods.filter((x) => x.day === d).pop(), i = MOODS.findIndex((x) => x.id === m?.mood);
+    return `<div><span class="mf ${i < 0 ? "empty" : ""}" style="${i < 0 ? "" : `background:var(${MOODS[i].token})`}" title="${fmtDay(d)}${i < 0 ? "" : ": " + MOODS[i].label}">${i < 0 ? "" : face(i)}</span>${fmtDay(d, { weekday: "narrow" })}</div>`;
+  }).join("")}</div>`;
+}
+function timelineStrip() {
+  const rows = SEED.slice(-90); if (!rows.length) return "";
+  const sym = new Set(allSymptoms().map((x) => x.day));
+  const mix = (token, pct) => `color-mix(in oklab, var(${token}) ${Math.round(pct)}%, var(--surface-2))`;
+  const tracks = [
+    ["Sleep", (r) => Number.isFinite(r.sleepMin) ? mix("--ph-lut", Math.max(10, Math.min(100, (r.sleepMin - 300) / 2))) : "var(--surface-2)"],
+    ["Stress", (r) => Number.isFinite(r.stress) ? mix("--warn", Math.max(8, Math.min(100, r.stress / 1.9))) : "var(--surface-2)"],
+    ...(cycleLens() ? [["Cycle", (r) => r.phase && PHASES[r.phase] ? `var(${PHASES[r.phase].token})` : "var(--surface-2)"]] : []),
+    ["Symptoms", (r) => sym.has(r.day) ? "var(--ph-men)" : "var(--surface-2)"],
+  ];
+  return `<div class="card rise"><div class="row between"><h2>${rows.length} days at a glance</h2><span class="eyebrow mono">${fmtDay(rows[0].day, { month: "short", day: "numeric" })} to today</span></div>
+    <div class="strip" style="--n:${rows.length}">${tracks.map(([label, fill]) => `<span>${label}</span><div class="cells">${rows.map((r) => `<i style="background:${fill(r)}" title="${r.day}"></i>`).join("")}</div>`).join("")}</div>
+    <p class="muted" style="font-size:11px">Darker means more. Each cell is one day.</p></div>`;
+}
+function phaseExpect(current) {
+  const keys = ["E", "M", "S"], tokens = ["--ph-ovu", "--ph-men", "--ph-lut"];
+  return `<div class="card rise"><div class="row between"><h2>What to expect</h2><span class="eyebrow">Energy, mood, sleep</span></div>
+    <div class="expect">${Object.entries(PHASES).map(([k, p]) => `<div class="${k === current ? "now" : ""}"><span class="ph-ic" style="background:var(${p.token})">${glyph(PHASE_GLYPH[k])}</span>${p.short}
+      <div class="bars3">${PHASE_FEEL[k].map((v, i) => `<i style="height:${v * 25}%;background:var(${tokens[i]})"></i>`).join("")}</div><div class="keys">${keys.map((x) => `<span>${x}</span>`).join("")}</div></div>`).join("")}</div></div>`;
+}
+
 /* Typical adult share of sleep: REM about 20 to 25%, deep about 13 to 23% (see docs/RESEARCH.md). */
 const remPct = (r) => Number.isFinite(r.rem) && r.sleepMin ? Math.round(100 * r.rem / r.sleepMin) : null;
 const deepPct = (r) => Number.isFinite(r.deep) && r.sleepMin ? Math.round(100 * r.deep / r.sleepMin) : null;
@@ -944,16 +1114,17 @@ function sleepForecast(row) {
 function sleepCard(row) {
   const f = sleepForecast(row); if (!f) return "";
   const light = Math.max(0, 100 - f.rem - f.deep);
-  return `<div class="card rise"><div class="row between"><h2>Last night's sleep</h2><span class="eyebrow mono">${hm(row.sleepMin)}</span></div>
-    <div class="stages"><i style="flex:${f.deep};background:var(--ph-fol)"></i><i style="flex:${f.rem};background:var(--ph-lut)"></i><i style="flex:${light};background:var(--line)"></i></div>
+  return `<div class="card rise"><div class="row between"><h2>Last night</h2><span class="eyebrow mono">${hm(row.sleepMin)}</span></div>
+    ${hypnogram(row)}
     <div class="row between muted" style="font-size:12px"><span><span class="dot" style="color:var(--ph-fol)"></span> Deep ${f.deep}%</span><span><span class="dot" style="color:var(--ph-lut)"></span> REM ${f.rem}%</span><span>Light ${light}%</span></div>
-    <div class="grid2">
-      <div class="tile"><span>Emotional recharge</span><b class="mono">${rechargeScore(row)}</b><span>REM ${f.rem}% · your usual ${f.remBase}%</span></div>
-      <div class="tile"><span>Physical recovery</span><b class="mono">${recoveryScore(row)}</b><span>Deep ${f.deep}% · your usual ${f.deepBase}%</span></div>
+    <div class="gauges">
+      ${gauge(rechargeScore(row), "--ph-lut", "Emotional recharge", `REM ${f.rem}% · usual ${f.remBase}%`)}
+      ${gauge(recoveryScore(row), "--ph-fol", "Physical recovery", `Deep ${f.deep}% · usual ${f.deepBase}%`)}
     </div>
-    <div class="insight"><i style="background:var(--ph-lut)"></i><p style="font-size:14px"><b>Mood today:</b> ${f.mood}</p></div>
-    <div class="insight"><i style="background:var(--ph-fol)"></i><p style="font-size:14px"><b>Energy today:</b> ${f.body}</p></div>
-    <p class="muted" style="font-size:11px">A prediction from your sleep, not a rule. Your mood check-ins show how well it fits you. Sources: Walker and van der Helm, 2009; Sleep Foundation.</p></div>`;
+    <details class="more"><summary>What this means today</summary>
+      <div class="insight"><i style="background:var(--ph-lut)"></i><p style="font-size:14px"><b>Mood:</b> ${f.mood}</p></div>
+      <div class="insight" style="margin-top:8px"><i style="background:var(--ph-fol)"></i><p style="font-size:14px"><b>Energy:</b> ${f.body}</p></div>
+      <p class="muted" style="font-size:11px;margin-top:8px">A prediction from your sleep, not a rule. Sources: Walker and van der Helm, 2009; Sleep Foundation.</p></details></div>`;
 }
 function energyOf(row, day) {
   const mood = state.moods.filter((m) => m.day === day).pop();
@@ -981,12 +1152,13 @@ function mindCard(ctx) {
     : avg(stress.slice(-3)) > avg(stress) + 15 ? "Your stress minutes have climbed the last few days. Short breaks between meetings help your nervous system reset."
     : "Your stress and energy look balanced this week.";
   return `<div class="card rise"><div class="row between"><h2>Mind and energy</h2><span class="eyebrow">14 days</span></div>
-    <div class="mind">
-      <div><span class="eyebrow">Energy</span><b class="mono">${num(energyOf(row, ctx.row.day || TODAY))}</b>${spark(energy, "--ph-ovu")}</div>
-      <div><span class="eyebrow">Stress</span><b class="mono">${num(row.stress)}${Number.isFinite(row.stress) ? "m" : ""}</b>${spark(stress, "--warn")}</div>
-      <div><span class="eyebrow">REM</span><b class="mono">${Number.isFinite(row.rem) ? hm(row.rem) : "--"}</b>${Number.isFinite(row.rem) ? spark(rem, "--ph-lut") : `<small class="muted">Needs a wearable</small>`}</div>
+    ${weekMoods()}
+    <div class="mind-rows">
+      <div class="mrow"><div><span class="eyebrow">Energy</span><b class="mono">${num(energyOf(row, ctx.row.day || TODAY))}</b></div>${areaSpark(energy, "--ph-ovu")}</div>
+      <div class="mrow"><div><span class="eyebrow">Stress</span><b class="mono">${num(row.stress)}${Number.isFinite(row.stress) ? "m" : ""}</b></div>${areaSpark(stress, "--warn")}</div>
+      <div class="mrow"><div><span class="eyebrow">REM</span><b class="mono">${Number.isFinite(row.rem) ? hm(row.rem) : "--"}</b></div>${Number.isFinite(row.rem) ? areaSpark(rem, "--ph-lut") : `<small class="muted">Needs a wearable</small>`}</div>
     </div>
-    <p style="font-size:14px">${note}</p>
+    <details class="more"><summary>Read the pattern</summary><p style="font-size:14px">${note}</p></details>
     ${heavy ? `<div class="card flat" style="padding:12px"><h3>It's been a heavy stretch</h3><p class="muted" style="font-size:13px">You've logged ${lowMoods} low, anxious, or stressed check-ins in two weeks. That's worth sharing with someone you trust or your doctor. If you're in crisis, call or text <b class="mono">988</b> (Suicide and Crisis Lifeline, US).</p></div>` : ""}
     <button class="link" data-action="mood" style="text-align:left">Log how you feel</button></div>`;
 }
@@ -1236,17 +1408,17 @@ function renderHabits() {
   });
   const todayDone = state.habits.filter((h) => state.checks[`${h.id}|${TODAY}`]).length;
   return `
-    <div class="stack rise"><span class="eyebrow">Habit tracker</span><h1>${todayDone} of ${state.habits.length} done today</h1><p class="muted">Consistency beats intensity. Here is every week, at a glance.</p></div>
+    <div class="stack rise"><span class="eyebrow">Habit tracker</span><h1>${todayDone} of ${state.habits.length} done today</h1></div>
     ${state.habits.length ? renderChanged(impacts, changed) : ""}
     ${swipeDeck()}
     <div class="card rise"><h2>Weekly consistency</h2>
       <div class="weeks">${weeks.map((w) => `<div class="wk"><div class="bar"><i style="height:${Math.max(4, w.pct)}%"></i></div><b class="mono">${w.pct}%</b><span>${w.label}</span></div>`).join("")}</div>
       <p class="muted" style="font-size:13px">${weeks[3].pct >= weeks[2].pct ? `Up ${weeks[3].pct - weeks[2].pct} points on last week. Keep it going.` : `A softer week. That happens; one check today restarts the climb.`}</p></div>
     ${state.habits.map((h, i) => { const done = !!state.checks[`${h.id}|${TODAY}`]; return `
-      <div class="card rise"><div class="habit"><div><div class="habit-title">${esc(h.title)}</div><small class="muted">${esc(h.cue)}</small></div>
+      ${(() => { const n28 = Array.from({ length: 28 }, (_, k) => state.checks[`${h.id}|${addDays(TODAY, -k)}`]).filter(Boolean).length, st = streak(h); return `<div class="card rise"><div class="habit-head"><div class="ring-wrap sm">${ring(n28, 28, 56, 6)}<div class="val"><b>${Math.round(100 * n28 / 28)}</b></div></div><div><div class="habit-title">${esc(h.title)}</div><small class="muted">${esc(h.cue)}</small></div>
         <button class="check ${done ? "on" : ""}" data-check="${h.id}" aria-pressed="${done}" aria-label="Mark ${esc(h.title)} done today">${icon.check}</button></div>
-        <p class="muted" style="font-size:13px">${esc(h.why)}</p>
-        <div class="row between"><span class="pill accent mono">${streak(h)} day streak</span><span class="mono muted" style="font-size:12px">${Array.from({ length: 28 }, (_, i) => state.checks[`${h.id}|${addDays(TODAY, -i)}`]).filter(Boolean).length}/28 days</span></div>
+        <div class="row"><span class="flame" aria-label="${st} day streak">${glyph(flameGlyph)}${st}</span><div class="streakbar"><i style="width:${Math.min(100, Math.round(100 * st / 21))}%"></i></div><span class="mono muted" style="font-size:12px">${n28}/28</span></div>
+        <details class="more"><summary>Why it helps</summary><p class="muted" style="font-size:13px">${esc(h.why)}</p></details>`; })()}
         <div class="month">${Array.from({ length: 28 }, (_, i) => { const d = addDays(TODAY, i - 27); return `<i class="${state.checks[`${h.id}|${d}`] ? "on" : ""} ${d === TODAY ? "today" : ""}" title="${fmtDay(d)}"></i>`; }).join("")}</div>
         ${renderImpact(impacts[i])}
       </div>`; }).join("")}
@@ -1267,10 +1439,9 @@ function renderToday(ctx) {
   const weekPct = state.habits.length ? Math.round(100 * state.habits.flatMap(habitWeek).filter(Boolean).length / (state.habits.length * 7)) : 0;
   return `
     <div class="stack rise"><span class="eyebrow">${ctx.preview ? "Previewing cycle day " + cd : fmtDay(TODAY, { weekday: "long", month: "long", day: "numeric" })}</span>
-      <h1>${hour < 12 ? "Good morning" : "Hi"}, ${esc(name)}.</h1><p class="muted">${esc(cycleLens() ? info.energy : plan.headline)}</p></div>
+      <h1>${hour < 12 ? "Good morning" : "Hi"}, ${esc(name)}.</h1><p class="muted lede">${esc(cycleLens() ? info.energy : plan.headline)}</p></div>
 
-    <div class="card rise"><div class="row between"><h2>Your day at a glance</h2><span class="eyebrow">5 pillars</span></div>
-      <div class="pillars">${pillars(ctx).map((pl) => `<div class="pillar"><div class="ring-wrap sm">${ring(pl.score, 100, 56, 6, pl.token)}<div class="val"><b>${pl.score}</b></div></div><span>${pl.label}</span></div>`).join("")}</div></div>
+    ${bodyWeather(ctx)}
 
     ${hasWearable() ? "" : checkinCard()}
     ${hasWearable() ? sleepCard(ctx.row) : ""}
@@ -1295,8 +1466,9 @@ function renderToday(ctx) {
     </div>
 
     ${ease ? `<div class="card ease rise"><span class="eyebrow">Your body is asking</span><h2>Ease off today.</h2>
-      <ul style="margin:0;padding-left:18px">${reasons.map((r) => `<li>${esc(r)}</li>`).join("")}</ul>
-      <p>We swapped your workout for a walk and moved your bedtime earlier. Resting today is part of the plan, not a break from it.</p></div>` : ""}
+      <div class="breath" aria-hidden="true"><i></i><i></i><span>Breathe</span></div>
+      <div class="reason-chips">${reasons.map((r) => `<span>${esc(r)}</span>`).join("")}</div>
+      <p style="font-size:14px;position:relative;z-index:1">A walk instead of a workout, and bed a little earlier.</p></div>` : ""}
 
     <div class="card flat rise"><div class="row between"><span class="eyebrow">For your ${ageBand().label}</span><span class="chips">${ageBand().focus.map((f) => `<span class="pill">${f}</span>`).join("")}</span></div><p style="font-size:14px">${ageBand().tip}</p></div>
 
@@ -1304,17 +1476,17 @@ function renderToday(ctx) {
 
     <div class="card rise">
       <div class="row between"><h2>Today's plan</h2>${plan.source === "claude" ? `<span class="ai-badge">${icon.spark} Claude</span>` : ""}</div>
-      <p class="muted">${esc(plan.headline)}</p>
-      <div class="feature"><div class="art">${icon.move}</div><div class="stack">
-        <div><span class="eyebrow">Move · ${plan.workout.minutes} min</span><h3>${esc(plan.workout.name)}</h3></div>
-        <details><summary>See the session</summary><ol>${plan.workout.steps.map((s) => `<li>${esc(s)}</li>`).join("")}</ol></details>
-        <div class="row"><span class="muted" style="font-size:13px">${booked ? "Booked on your calendar" : `Your calendar is free at <b class="mono">${slot}</b>`}</span>
-        ${booked ? "" : `<button class="btn small soft" data-action="book" data-slot="${slot}" data-title="${esc(plan.workout.name)}" data-min="${plan.workout.minutes}">Book it</button>`}</div>
-      </div></div>
-      <div class="feature"><div class="art">${icon.bowl}</div><div class="stack">
-        <div><span class="eyebrow">Eat · ${plan.recipe.minutes} min</span><h3>${esc(plan.recipe.name)}</h3><p class="muted" style="font-size:13px">${esc(plan.recipe.why)}</p></div>
-        <details><summary>Get the recipe</summary><ul>${plan.recipe.ingredients.map((s) => `<li>${esc(s)}</li>`).join("")}</ul><ol>${plan.recipe.steps.map((s) => `<li>${esc(s)}</li>`).join("")}</ol></details>
-      </div></div>
+      <div class="plan-tiles">
+        <div class="ptile" style="--tint:var(${ease ? "--ph-lut" : info.token})"><div class="art-lg">${WORKOUT_ART}</div>
+          <span class="eyebrow">Move</span><h3>${esc(plan.workout.name)}</h3>
+          <div class="row" style="gap:6px;flex-wrap:wrap"><span class="mchip">${glyph(clockGlyph)}${plan.workout.minutes} min</span><span class="mchip">${meter(ease ? 1 : { menstrual: 1, luteal: 2, follicular: 3, ovulatory: 3 }[phase])}</span></div>
+          ${booked ? `<span class="mchip" style="color:var(--good)">Booked</span>` : `<button class="btn small soft" data-action="book" data-slot="${slot}" data-title="${esc(plan.workout.name)}" data-min="${plan.workout.minutes}">Book <span class="mono">${slot}</span></button>`}
+          <details class="more"><summary>The session</summary><ol>${plan.workout.steps.map((x) => `<li>${esc(x)}</li>`).join("")}</ol></details></div>
+        <div class="ptile" style="--tint:var(--ph-ovu)"><div class="art-lg">${RECIPE_ART}</div>
+          <span class="eyebrow">Eat</span><h3>${esc(plan.recipe.name)}</h3>
+          <div class="row" style="gap:6px;flex-wrap:wrap"><span class="mchip">${glyph(clockGlyph)}${plan.recipe.minutes} min</span><span class="mchip">${plan.recipe.ingredients.length} items</span></div>
+          <details class="more"><summary>The recipe</summary><p class="muted" style="font-size:13px">${esc(plan.recipe.why)}</p><ul>${plan.recipe.ingredients.map((x) => `<li>${esc(x)}</li>`).join("")}</ul><ol>${plan.recipe.steps.map((x) => `<li>${esc(x)}</li>`).join("")}</ol></details></div>
+      </div>
       <button class="btn soft block" data-action="ai-plan" ${ui.planning ? "disabled" : ""}>${icon.spark} ${ui.planning ? "Claude is planning your day..." : plan.source === "claude" ? "Try another plan" : "Personalize with Claude"}</button>
     </div>
 
@@ -1382,15 +1554,16 @@ function renderCycle(ctx) {
   return `
     ${estimatedCycle() ? `<div class="card flat rise"><span class="eyebrow">Estimated</span><h3>Phases predicted from your temperature</h3><p class="muted" style="font-size:13px">You haven't logged a period, so HerLife used Oura's temperature pattern to estimate your last ${startsFromTemperature(SEED).length} cycle starts. Log a period below to make it exact.</p></div>` : ""}
     ${periodStarts().length ? "" : `<div class="card ease rise"><h2>No period logged yet</h2><p>Log your last period start below and HerLife will predict your phases. On the pill or in perimenopause? HerLife still tracks sleep, food, mood, and symptoms; phase tips just stay off.</p></div>`}
-    <div class="stack rise"><span class="eyebrow">Cycle${ctx.preview ? " · previewing day " + cd : ""}</span><h1>${info.label} phase</h1><p class="muted">${esc(info.body)}</p></div>
+    <div class="stack rise"><span class="eyebrow">Cycle${ctx.preview ? " · previewing day " + cd : ""}</span><h1>${info.label} phase</h1><p class="muted lede">${esc(info.energy)}</p><details class="more"><summary>What is happening</summary><p class="muted" style="font-size:14px">${esc(info.body)}</p></details></div>
     <div class="cycle-ring rise"><svg viewBox="0 0 300 300" role="img" aria-label="Cycle day ${cd} of ${CYCLE_LEN}">${segs}
       <circle cx="${marker[0].toFixed(1)}" cy="${marker[1].toFixed(1)}" r="9" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/></svg>
       <div class="center"><div><span class="eyebrow">Day</span><b>${cd}</b><span class="muted" style="font-size:13px">Period in ${untilPeriod} day${untilPeriod === 1 ? "" : "s"}</span></div></div></div>
-    <div class="legend rise">${Object.values(PHASES).map((p) => `<div><i style="background:var(${p.token})"></i>${p.label}</div>`).join("")}<div><i style="background:var(--ph-ovu);border-radius:50%;transform:scale(.5)"></i>Fertile window</div></div>
+    <div class="legend rise">${Object.entries(PHASES).map(([k, p]) => `<div><span class="ph-ic" style="background:var(${p.token})">${glyph(PHASE_GLYPH[k])}</span>${p.label}</div>`).join("")}<div><i style="background:var(--ph-ovu);border-radius:50%;transform:scale(.5)"></i>Fertile window</div></div>
     <div class="grid2 rise">
       <div class="tile"><span>Next period</span><b>${fmtDay(nextPeriod, { month: "short", day: "numeric" })}</b><span>From ${state.periods.length} periods you logged</span></div>
       <div class="tile"><span>Fertile window</span><b style="font-size:20px">${fmtDay(fertileStart, { month: "short", day: "numeric" })} to ${fmtDay(fertileEnd, { day: "numeric" })}</b><span>${cd > ovulation + 1 ? "Passed this cycle" : "Estimated"}</span></div>
     </div>
+    ${phaseExpect(phase)}
     ${signalCard()}
     <div class="card rise"><div class="row between"><h2>Period tracker</h2><span class="eyebrow">Logged by you</span></div>
       <div class="row" style="flex-wrap:wrap">${state.periods.includes(TODAY)
@@ -1487,7 +1660,8 @@ function renderRecord() {
   const maxCount = Math.max(1, ...counts.flat());
   const logged = state.logs.length + HISTORY_SYMPTOMS.length;
   return `
-    <div class="stack rise"><span class="eyebrow">Lifestyle record</span><h1>The story your doctor never gets.</h1><p class="muted">90 days of how you sleep, move, eat, stress, and feel${cycleLens() ? ", plus your cycle" : ""}. Ready to bring to your appointment.</p></div>
+    <div class="stack rise"><span class="eyebrow">Lifestyle record</span><h1>The story your doctor never gets.</h1><p class="muted lede">90 days, ready for your appointment.</p></div>
+    ${timelineStrip()}
     <div class="tiles rise">
       <div class="tile"><b class="mono">${SEED.length}</b><span>${hasWearable() ? "nights from Oura" : "days checked in"}</span></div>
       <div class="tile"><b class="mono">${logged}</b><span>self-reported entries</span></div>
