@@ -620,7 +620,7 @@ const addDays = (iso, n) => { const d = new Date(iso + "T12:00:00"); d.setDate(d
 const fmtDay = (iso, opts = { weekday: "short", month: "short", day: "numeric" }) => new Date(iso + "T12:00:00").toLocaleDateString("en-US", opts);
 const avg = (xs) => { const v = xs.filter(Number.isFinite); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : 0; };
 const num = (v, f = (x) => Math.round(x)) => Number.isFinite(v) ? f(v) : "--";
-const hm = (min) => `${Math.floor(min / 60)}h ${String(Math.round(min % 60)).padStart(2, "0")}m`;
+const hm = (min) => { const total = Math.round(min); return `${Math.floor(total / 60)}h ${String(total % 60).padStart(2, "0")}m`; };
 const cssVar = (token) => `var(${token})`;
 
 function phaseOf(cd, len = CYCLE_LEN) {
@@ -1102,7 +1102,7 @@ function renderOnboarding() {
       <button class="btn block rise" data-action="make-habits" ${state.goals.length === 2 ? "" : "disabled"}>${state.goals.length === 2 ? "Build my habits" : `Choose ${2 - state.goals.length} more`}</button>`,
     habits: () => `${progress()}
       ${ui.thinking ? `<div class="thinking"><div class="stellar" aria-hidden="true"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="44" class="orbit"/><circle cx="60" cy="60" r="30" class="orbit"/><g class="star"><path d="M60 38 C62 54 66 58 82 60 C66 62 62 66 60 82 C58 66 54 62 38 60 C54 58 58 54 60 38Z"/></g><g class="planets outer"><circle cx="60" cy="16" r="6" fill="var(--sp-1)"/><circle cx="98" cy="82" r="5" fill="var(--sp-2)"/><circle cx="22" cy="82" r="5.5" fill="var(--sp-3)"/></g><g class="planets inner"><circle cx="60" cy="30" r="4.5" fill="var(--sp-4)"/><circle cx="60" cy="90" r="4" fill="var(--sp-5)"/></g></svg></div><h2>Reading your goals and your data</h2><p class="muted">HerLife is picking habits that fit ${esc(p.name || "you")}.</p><button class="link" data-action="skip-ai">Use HerLife's picks instead</button></div>` : `
-      ${candidateDeck()}      <button class="link rise" data-action="make-habits">Suggest different habits</button>`}`,
+      ${candidateDeck()}`}`,
   };
   const banner = ["welcome", "login", "account"].includes(state.step) ? "" : personaBanner();
   return `<div class="scroll"><div class="screen">${banner}${views[state.step]()}</div></div>`;
