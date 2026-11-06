@@ -404,7 +404,7 @@ const WORKOUTS = {
   luteal: { gym: ["Zone 2 cardio and upper body", 40, ["25 min steady bike, conversational pace", "Rows and presses 3 x 10 at moderate load", "Extra water: you run warmer now"]], home: ["Pilates core flow", 30, ["Hundred, roll ups, single leg stretch", "Side lying leg series", "Long exhale stretch to finish"]] },
   ease: { gym: ["Walk and mobility", 25, ["20 min outdoor walk", "5 min hips and shoulders", "This counts. Rest is training."]], home: ["Walk and mobility", 25, ["20 min outdoor walk", "5 min hips and shoulders", "This counts. Rest is training."]] },
 };
-const CALENDAR = [
+let CALENDAR = [
   { start: "09:00", end: "09:30", title: "Team standup" },
   { start: "10:00", end: "11:30", title: "Product review" },
   { start: "13:30", end: "14:30", title: "1:1 with Priya" },
@@ -599,12 +599,33 @@ function startsFromTemperature(rows) {
   return starts;
 }
 
+/* Live Google Calendar on the hosted web app; the artifact keeps the sample day. */
+const hhmm = (iso) => { const d = new Date(iso); return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`; };
+async function loadCalendar() {
+  const cal = await window.claude?.use?.("calendar");
+  if (!cal) return false;
+  try {
+    const events = await cal.today();
+    CALENDAR = events.map((e) => ({ start: hhmm(e.start), end: hhmm(e.end), title: e.title }));
+    ui.calendarLive = true; state.connected.calendar = true; save(); render();
+    return true;
+  } catch (e) { console.warn("[bloom] calendar", e?.code); return false; }
+}
+async function bookOnCalendar(slot, minutes, title) {
+  const cal = ui.calendarLive && await window.claude?.use?.("calendar");
+  if (!cal) return false;
+  const [h, m] = slot.split(":").map(Number), start = new Date(); start.setHours(h, m, 0, 0);
+  try { await cal.create({ title, start: start.toISOString(), end: new Date(start.getTime() + minutes * 60000).toISOString() }); return true; }
+  catch (e) { console.warn("[bloom] calendar book", e?.code); return false; }
+}
+
 /* Real Oura, through Bloom's local MCP server (owner, Claude desktop app). Everyone else keeps the demo persona. */
 const OURA_SERVER = "host:bloom_oura";
 const OURA_FIX = {
   server_not_connected: "Open Bloom in the Claude desktop app with the Bloom Oura server running to use your ring.",
   not_in_manifest: "Oura access is turned off for this page. Turn it on in the page's permissions.",
-  cancelled: "Oura sync was cancelled.",
+  cancelled: "Opening Oura sign in.",
+  oura_not_configured: "Oura sign in isn't set up on this server yet. Showing the demo data.",
   not_granted: "This view can't reach connectors. Showing the demo data.",
   capability_disabled: "This view can't reach connectors. Showing the demo data.",
 };
@@ -1093,8 +1114,8 @@ function renderToday(ctx) {
       <button class="btn soft block" data-action="ai-plan" ${ui.planning ? "disabled" : ""}>${icon.spark} ${ui.planning ? "Claude is planning your day..." : plan.source === "claude" ? "Try another plan" : "Personalize with Claude"}</button>
     </div>
 
-    <div class="card rise"><div class="row between"><h2>Your day</h2><span class="eyebrow">${state.connected.calendar ? "Calendar" : "Not connected"}</span></div>
-      ${state.connected.calendar ? "" : `<p class="muted" style="font-size:13px">Connect a calendar and Bloom will find free time for workouts and warn you about heavy days. Until then, booked sessions show here.</p>`}
+    <div class="card rise"><div class="row between"><h2>Your day</h2><span class="eyebrow">${ui.calendarLive ? "Live from Google Calendar" : state.connected.calendar ? "Sample calendar" : "Not connected"}</span></div>
+      ${state.connected.calendar ? (window.claude?.hosted && !ui.calendarLive ? `<button class="link" data-action="calendar-connect">Connect Google Calendar for your real day</button>` : "") : `<p class="muted" style="font-size:13px">Connect a calendar and Bloom will find free time for workouts and warn you about heavy days. Until then, booked sessions show here.</p>${window.claude?.hosted ? `<button class="link" data-action="calendar-connect">Connect Google Calendar</button>` : ""}`}
       <div class="timeline">${items.map((e, i) => `<div class="tl ${e.kind}"><span class="t">${e.start}</span><span class="rail"><i></i>${i < items.length - 1 ? "<s></s>" : ""}</span><div class="what"><b>${esc(e.title)}</b><small>${e.start} to ${e.end}${e.kind === "plan" ? " · added by Bloom" : ""}</small></div></div>`).join("")}</div>
     </div>
 
@@ -1493,6 +1514,7 @@ document.addEventListener("click", (e) => {
   if (d.stage) { state.profile.lifeStage = d.stage; set({}); return; }
   if (d.toggle) { const list = state.profile[d.toggle]; const i = list.indexOf(d.val); i >= 0 ? list.splice(i, 1) : list.push(d.val); set({}); return; }
   if (d.goal) { const g = state.goals; const i = g.indexOf(d.goal); if (i >= 0) g.splice(i, 1); else { g.push(d.goal); if (g.length > 2) g.shift(); } set({}); return; }
+  if (d.connect === "calendar" && window.claude?.hosted) { window.claude.use("calendar").then((cal) => cal.connect()); return; }
   if (d.connect) {
     ui.syncing = d.connect; render(); let pct = 0;
     const real = d.connect === "oura" ? syncOura() : Promise.resolve(null);
@@ -1538,7 +1560,11 @@ document.addEventListener("click", (e) => {
     case "switch": ui.moodOpen = false; set({ step: "login" }); break;
     case "reset": try { localStorage.removeItem(STORE_KEY); } catch (err) {} remoteDoc?.delete?.().catch(() => {}); state = defaultState(); ui = { ...ui, sorted: null, draft: "", moodOpen: false }; render(); break;
     case "ai-plan": aiPlan(); break;
-    case "book": state.booked.push({ start: d.slot, end: toTime(toMin(d.slot) + Number(d.min)), title: d.title }); save(); toast(`Booked ${d.slot} on your calendar`); break;
+    case "book":
+      state.booked.push({ start: d.slot, end: toTime(toMin(d.slot) + Number(d.min)), title: d.title }); save();
+      bookOnCalendar(d.slot, Number(d.min), d.title).then((live) => toast(live ? `Added to your Google Calendar at ${d.slot}` : `Booked ${d.slot} in Bloom`));
+      break;
+    case "calendar-connect": window.claude?.use?.("calendar").then((cal) => cal ? cal.connect() : toast("Calendar sign in works on the Bloom web app.")); break;
     case "back-today": set({ previewCd: null }); break;
     case "save-checkin": state.checkins = { ...(state.checkins || {}), [TODAY]: { ...ui.checkinDraft } }; ui.editCheckin = false; applyDataSource(); save(); render(); toast("Check-in saved to your record"); break;
     case "edit-checkin": ui.editCheckin = true; ui.checkinDraft = { ...state.checkins[TODAY] }; render(); break;
@@ -1580,6 +1606,18 @@ function scheduleMood(ms) {
 if (state.step === "app") seedPeriods();
 applyDataSource();
 render();
+const calendarReturn = new URLSearchParams(location.search).get("calendar");
+if (calendarReturn && window.claude?.hosted) {
+  history.replaceState(null, "", location.pathname);
+  if (calendarReturn !== "connected") toast(calendarReturn === "not_configured" ? "Google sign in isn't set up on this server yet." : "Calendar sign in was cancelled.");
+}
+if (window.claude?.hosted) loadCalendar().then((ok) => ok && calendarReturn === "connected" && toast("Google Calendar connected. Your real day is on Today."));
+const ouraReturn = new URLSearchParams(location.search).get("oura");
+if (ouraReturn && window.claude?.hosted) {
+  history.replaceState(null, "", location.pathname);
+  if (ouraReturn === "connected") syncOura().then((r) => { state.connected.oura = true; state.connected.ouraMode = r.mode; save(); render(); toast(r.note); });
+  else toast(ouraReturn === "not_configured" ? OURA_FIX.oura_not_configured : "Oura sign in was cancelled.");
+}
 connectRecord().then(() => { if (state.connected.ouraMode === "live") syncOura().then((r) => { state.connected.ouraMode = r.mode; render(); }); });
 if (state.step === "app") scheduleMood(30000);
 </script>
