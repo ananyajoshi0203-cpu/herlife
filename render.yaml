@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: bloom-web
+    runtime: docker
+    plan: starter
+    healthCheckPath: /healthz
+    disk:
+      name: bloom-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: OURA_CLIENT_ID
+        sync: false
+      - key: OURA_CLIENT_SECRET
+        sync: false
+      - key: OURA_REDIRECT_URI
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_REDIRECT_URI
+        sync: false
