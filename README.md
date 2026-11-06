@@ -3,7 +3,7 @@
 <p align="center"><b>Health that fits into her life.</b><br>
 An AI health coordinator for busy women: it plans small, realistic health actions around her calendar, adapts to her body and cycle, learns what works for her, and turns it all into a record her doctor can use.</p>
 
-<p align="center"><a href="https://herlife-six.vercel.app"><b>Try the live app: herlife-six.vercel.app</b></a><br>
+<p align="center"><a href="https://herlife-six.vercel.app/?profile=priya"><b>Try the live app: herlife-six.vercel.app</b></a><br>
 <a href="https://github.com/ananyajoshi0203-cpu/herlife/actions/workflows/tests.yml"><img src="https://github.com/ananyajoshi0203-cpu/herlife/actions/workflows/tests.yml/badge.svg" alt="tests"></a></p>
 
 ---
