@@ -6,8 +6,9 @@ import uuid
 from datetime import date, datetime
 from enum import StrEnum
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, computed_field
 
+from backend.api.guidance import AgeBand, Season, age_band_for
 from backend.canonical.models import CycleDay, Flow, PeriodLog
 from backend.insights import RecordInsights
 
@@ -51,6 +52,11 @@ class UserCreate(BaseModel):
 class User(UserCreate):
     id: uuid.UUID
     created_at: datetime
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def age_band(self) -> AgeBand:
+        return age_band_for(self.age)
 
 
 class OuraConnected(BaseModel):
@@ -141,15 +147,115 @@ class CycleContext(BaseModel):
     note: str
 
 
-class TodayPlan(BaseModel):
+class DataSource(StrEnum):
+    WEARABLE = "wearable"
+    SELF_CHECK_IN = "self_check_in"
+    NONE = "none"
+
+
+class CheckinCreate(BaseModel):
+    day: date | None = None
+    sleep_hours: float = Field(ge=0, le=24)
+    energy: int = Field(ge=1, le=5)
+    stress: int = Field(ge=1, le=5)
+
+
+class Checkin(BaseModel):
     day: date
+    sleep_hours: float
+    energy: int
+    stress: int
+
+
+class CheckinAverages(BaseModel):
+    window_days: int
+    days: int
+    sleep_hours: float | None
+    energy: float | None
+    stress: float | None
+
+
+class PlanText(BaseModel):
     sleep: str
     move: str
     eat: str
     mind: str
+
+
+class TodayPlan(PlanText):
+    day: date
+    used_ai: bool
+    data_source: DataSource
     ease_off: bool
     reasons: list[str]
     cycle: CycleContext | None
+    age_band: AgeBand
+    season: Season
+
+
+class SignalLevel(StrEnum):
+    STEADY = "steady"
+    WATCH = "watch"
+    FLAG = "flag"
+
+
+class CycleSignal(BaseModel):
+    level: SignalLevel
+    title: str
+    body: str
+    clinician_question: str | None
+    cycle_lengths_days: list[int]
+    days_since_last_period: int
+
+
+class Lever(StrEnum):
+    SLEEP = "sleep"
+    MOVEMENT = "movement"
+    STRESS = "stress"
+    NUTRITION = "nutrition"
+    MOOD = "mood"
+
+
+class OutcomeMetric(StrEnum):
+    SLEEP_MIN = "sleep_min"
+    HRV_MS = "hrv_ms"
+    STEPS = "steps"
+    READINESS = "readiness"
+
+
+class ImpactStatus(StrEnum):
+    NOTABLE = "notable"
+    NO_CLEAR_DIFFERENCE = "no_clear_difference"
+    INSUFFICIENT_DATA = "insufficient_data"
+
+
+class Comparison(BaseModel):
+    """Mean outcome with the habit against without it; means are withheld below the day minimum."""
+
+    status: ImpactStatus
+    with_habit_days: int
+    without_habit_days: int
+    with_habit_mean: float | None
+    without_habit_mean: float | None
+    difference: float | None
+    summary: str
+
+
+class OutcomeImpact(BaseModel):
+    metric: OutcomeMetric
+    lag_days: int
+    notable_difference: float
+    done_vs_not_done: Comparison
+    before_vs_after: Comparison
+
+
+class HabitImpact(BaseModel):
+    habit_id: uuid.UUID
+    title: str
+    goal: str
+    lever: Lever
+    first_check: date | None
+    outcomes: list[OutcomeImpact]
 
 
 class LifestyleAverages(BaseModel):
@@ -177,5 +283,8 @@ class DoctorRecord(BaseModel):
     lifestyle: LifestyleAverages
     self_reports: SelfReportSummary
     habits: list[HabitConsistency]
+    data_source: DataSource
+    self_check_ins: CheckinAverages | None
     cycle: RecordInsights | None
+    cycle_signal: CycleSignal | None
     note: str

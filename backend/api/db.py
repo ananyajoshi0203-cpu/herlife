@@ -16,6 +16,7 @@ from sqlalchemy import (
     JSON,
     Date,
     DateTime,
+    Float,
     ForeignKey,
     Integer,
     String,
@@ -114,6 +115,18 @@ class HabitCheckRow(Base):
 
     habit_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("habits.id"), primary_key=True)
     day: Mapped[date] = mapped_column(Date, primary_key=True)
+
+
+class CheckinRow(Base):
+    """A morning self check-in, the record's source when she has no wearable."""
+
+    __tablename__ = "checkins"
+
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    day: Mapped[date] = mapped_column(Date, primary_key=True)
+    sleep_hours: Mapped[float] = mapped_column(Float)
+    energy: Mapped[int] = mapped_column(Integer)
+    stress: Mapped[int] = mapped_column(Integer)
 
 
 class Database:
