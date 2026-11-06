@@ -236,6 +236,10 @@ a.source:hover { text-decoration: underline; }
 .nextmove { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; padding: 12px; border-radius: 14px; background: var(--surface); border-left: 4px solid var(--move); }
 .nextmove b { font-family: var(--f-display); font-size: 16px; display: block; }
 .learned { display: flex; flex-direction: column; gap: 8px; padding-top: 6px; border-top: 1px dashed var(--line); }
+.welcome-brand { display: flex; align-items: center; gap: 14px; margin-top: -8px; }
+.brand-mark.big { width: 56px; height: 56px; }
+.wordmark { font-family: var(--f-display); font-weight: 800; font-size: 34px; line-height: 1; letter-spacing: -0.02em; }
+.tagline { font-size: 14px; color: var(--accent); font-weight: 600; margin-top: 4px; }
 .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(56px, 1fr)); gap: 6px; }
 .pillar { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 600; color: var(--muted); }
 .ring-wrap.sm { width: 56px; height: 56px; }
@@ -1024,7 +1028,8 @@ function renderOnboarding() {
   const views = {
     welcome: () => `
       <div class="hero-art rise"><canvas id="petals"></canvas></div>
-      <div class="stack rise"><span class="eyebrow">HerLife</span><h1>Walk into your next appointment with your whole story.</h1></div>
+      <div class="welcome-brand rise">${brandMark.replace('class="brand-mark"', 'class="brand-mark big"')}<div><div class="wordmark">HerLife</div><div class="tagline">Health that fits into her life</div></div></div>
+      <div class="stack rise"><h1>Walk into your next appointment with your whole story.</h1></div>
       <p class="muted rise">Doctors see you for 15 minutes. HerLife keeps the record of everything in between: sleep, food, movement, mood, and your cycle. Then it helps you build habits that fit your body this week.</p>
       <div class="stack rise">
         <button class="btn block" data-action="start-signup">Create my account</button>
