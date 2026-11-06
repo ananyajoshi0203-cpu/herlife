@@ -971,6 +971,7 @@ const INFO = {
   tuned: ["Tuned for you", "Extra guidance for the conditions you told us about, alongside your care team's plan, never instead of it."],
   temptrail: ["Temperature trail", "60 nights of skin temperature. The warm stretches are your luteal phase; the drop marks your period. Shaded bars are logged periods."],
   age: ["What matters at your age", "Women's bodies change by decade: bone and muscle peak in the late 20s and 30s, muscle loss starts quietly in the late 30s, and the menopause transition usually begins in the mid 40s. HerLife weights your habits and plan toward the focus areas for your age."],
+  moved: ["What moved", "Each tile compares your average for the 14 days before you set the goal with your last 7 days. Stress is minutes a day your body was in a high-stress state (Oura). HRV is your overnight heart rate variability. Energy is a HerLife score out of 100: the average of readiness, physical recovery from deep sleep, and your mood check-in energy. A colored arrow means the change is big enough to matter (stress 15 min, HRV 3 ms, energy 4 points); black means within normal day-to-day noise."],
   record: ["Your record", "The story your doctor rarely gets: 90 days of sleep, stress, movement, mood, and cycle in one place, ready to share at your appointment."],
 };
 const info = (key) => INFO[key] ? `<button class="info" type="button" data-info="${key}" aria-label="What is ${esc(INFO[key][0])}?">i</button>` : "";
@@ -1585,12 +1586,12 @@ const SIGNALS = {
   sleepMin: { label: "Sleep", unit: "min", better: 1, notable: 10, fmt: (v) => hm(v) },
   deep: { label: "Deep sleep", unit: "min", better: 1, notable: 5, fmt: (v) => Math.round(v) + "m" },
   rem: { label: "REM sleep", unit: "min", better: 1, notable: 5, fmt: (v) => Math.round(v) + "m" },
-  hrv: { label: "HRV", unit: "ms", better: 1, notable: 3, fmt: (v) => Math.round(v) + " ms" },
+  hrv: { label: "HRV", unit: "ms", better: 1, notable: 3, fmt: (v) => Math.round(v) + " ms", hint: "overnight average" },
   ready: { label: "Readiness", unit: "", better: 1, notable: 3, fmt: (v) => Math.round(v) },
-  energy: { label: "Energy", unit: "", better: 1, notable: 4, fmt: (v) => Math.round(v) },
+  energy: { label: "Energy", unit: "", better: 1, notable: 4, fmt: (v) => Math.round(v), hint: "score out of 100" },
   steps: { label: "Steps", unit: "", better: 1, notable: 800, fmt: (v) => Math.round(v).toLocaleString() },
   kcal: { label: "Active calories", unit: "kcal", better: 1, notable: 40, fmt: (v) => Math.round(v) + " kcal" },
-  stress: { label: "Stress", unit: "min", better: -1, notable: 15, fmt: (v) => Math.round(v) + "m" },
+  stress: { label: "Stress", unit: "min", better: -1, notable: 15, fmt: (v) => Math.round(v) + "m", hint: "high-stress min/day" },
   weight: { label: "Weight", unit: "lb", better: -1, notable: 1, fmt: (v) => v.toFixed(1) + " lb" },
   symptoms: { label: "Symptom days", unit: "", better: -1, notable: 0.15, fmt: (v) => Math.round(v * 7) + "/wk" },
   predictErr: { label: "Period forecast error", unit: "days", better: -1, notable: 1, fmt: (v) => "±" + Math.round(v) + " d" },
@@ -1703,11 +1704,11 @@ function weeklyCheckin() {
         <div class="row" style="flex-wrap:wrap;gap:6px"><span class="eyebrow">Tracking daily</span>${g.signals.map((k) => `<span class="pill">${SIGNALS[k].label}</span>`).join("")}${g.source === "claude" ? `<span class="ai-badge">${icon.spark} Claude</span>` : ""}</div>
         ${mountain(prog, g.since)}
         <p style="font-size:13px"><b class="mono">${prog.consistent} of ${prog.total}</b> days consistent since you set this goal${prog.habits.length ? ` · ${prog.habits.map((h) => esc(h.title)).join(", ")}` : ""}</p>
-        <span class="eyebrow">What moved since ${fmtDay(g.since, { month: "short", day: "numeric" })}</span>
+        <span class="eyebrow">What moved since ${fmtDay(g.since, { month: "short", day: "numeric" })} ${info("moved")}</span>
         <div class="moved">${prog.moved.map((m) => { const sig = SIGNALS[m.key]; if (m.now === null) return `<div class="mv"><span>${sig.label}</span><b class="muted">Not enough data</b></div>`;
           if (m.key === "predictErr") return `<div class="mv good"><span>${sig.label}</span><b>${sig.fmt(m.now)}</b><small>next period forecast</small></div>`;
           const arrow = m.delta > 0 ? "▲" : m.delta < 0 ? "▼" : "•";
-          return `<div class="mv ${m.notable ? (m.good ? "good" : "bad") : ""}"><span>${sig.label}</span><b>${arrow} ${m.key === "weight" ? Math.abs(m.delta).toFixed(1) + " lb" : String(sig.fmt(Math.abs(m.delta))).replace(/^±/, "")}</b><small>${sig.fmt(m.before)} → ${sig.fmt(m.now)}</small></div>`; }).join("")}</div>
+          return `<div class="mv ${m.notable ? (m.good ? "good" : "bad") : ""}"><span>${sig.label}${sig.hint ? ` · ${sig.hint}` : ""}</span><b>${arrow} ${m.key === "weight" ? Math.abs(m.delta).toFixed(1) + " lb" : String(sig.fmt(Math.abs(m.delta))).replace(/^±/, "")}</b><small>${sig.fmt(m.before)} → ${sig.fmt(m.now)}</small></div>`; }).join("")}</div>
       </div>`; }).join("")}
     <form class="stack" data-goalform><label class="eyebrow" for="goal-text">Add a goal in your own words</label>
       <div class="row"><input class="input" id="goal-text" placeholder="I want to stop crashing at 3 pm" autocomplete="off"><button class="btn small" type="submit">Add</button></div>
