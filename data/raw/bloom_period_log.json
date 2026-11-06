@@ -1,0 +1,26 @@
+[
+ {
+  "start_day": "2026-07-31",
+  "end_day": "2026-08-04",
+  "flow": "medium",
+  "source": "self_report"
+ },
+ {
+  "start_day": "2026-08-29",
+  "end_day": "2026-09-02",
+  "flow": "light",
+  "source": "self_report"
+ },
+ {
+  "start_day": "2026-09-27",
+  "end_day": "2026-10-01",
+  "flow": "medium",
+  "source": "self_report"
+ },
+ {
+  "start_day": "2026-10-26",
+  "end_day": "2026-10-30",
+  "flow": "light",
+  "source": "self_report"
+ }
+]

@@ -1,0 +1,722 @@
+[
+ {
+  "day": "2026-08-09",
+  "source": "oura",
+  "score": 84,
+  "temperature_deviation_c": -0.07,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-08-10",
+  "source": "oura",
+  "score": 80,
+  "temperature_deviation_c": -0.01,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-08-11",
+  "source": "oura",
+  "score": 91,
+  "temperature_deviation_c": -0.21,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-08-12",
+  "source": "oura",
+  "score": 91,
+  "temperature_deviation_c": -0.0,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-08-13",
+  "source": "oura",
+  "score": 82,
+  "temperature_deviation_c": -0.12,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-08-14",
+  "source": "oura",
+  "score": 82,
+  "temperature_deviation_c": -0.08,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-08-15",
+  "source": "oura",
+  "score": 74,
+  "temperature_deviation_c": 0.28,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-08-16",
+  "source": "oura",
+  "score": 75,
+  "temperature_deviation_c": 0.27,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-08-17",
+  "source": "oura",
+  "score": 78,
+  "temperature_deviation_c": 0.28,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-08-18",
+  "source": "oura",
+  "score": 75,
+  "temperature_deviation_c": 0.44,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-08-19",
+  "source": "oura",
+  "score": 73,
+  "temperature_deviation_c": 0.3,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-08-20",
+  "source": "oura",
+  "score": 76,
+  "temperature_deviation_c": 0.35,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-08-21",
+  "source": "oura",
+  "score": 67,
+  "temperature_deviation_c": 0.19,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-08-22",
+  "source": "oura",
+  "score": 78,
+  "temperature_deviation_c": 0.42,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-08-23",
+  "source": "oura",
+  "score": 76,
+  "temperature_deviation_c": 0.33,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-08-24",
+  "source": "oura",
+  "score": 75,
+  "temperature_deviation_c": 0.37,
+  "hrv_balance": 67,
+  "recovery_index": 65
+ },
+ {
+  "day": "2026-08-25",
+  "source": "oura",
+  "score": 69,
+  "temperature_deviation_c": 0.28,
+  "hrv_balance": 67,
+  "recovery_index": 65
+ },
+ {
+  "day": "2026-08-26",
+  "source": "oura",
+  "score": 71,
+  "temperature_deviation_c": 0.41,
+  "hrv_balance": 67,
+  "recovery_index": 65
+ },
+ {
+  "day": "2026-08-27",
+  "source": "oura",
+  "score": 74,
+  "temperature_deviation_c": 0.38,
+  "hrv_balance": 67,
+  "recovery_index": 65
+ },
+ {
+  "day": "2026-08-28",
+  "source": "oura",
+  "score": 71,
+  "temperature_deviation_c": 0.42,
+  "hrv_balance": 67,
+  "recovery_index": 65
+ },
+ {
+  "day": "2026-08-29",
+  "source": "oura",
+  "score": 66,
+  "temperature_deviation_c": -0.03,
+  "hrv_balance": 68,
+  "recovery_index": 61
+ },
+ {
+  "day": "2026-08-30",
+  "source": "oura",
+  "score": 70,
+  "temperature_deviation_c": 0.01,
+  "hrv_balance": 68,
+  "recovery_index": 61
+ },
+ {
+  "day": "2026-08-31",
+  "source": "oura",
+  "score": 75,
+  "temperature_deviation_c": -0.07,
+  "hrv_balance": 74,
+  "recovery_index": 69
+ },
+ {
+  "day": "2026-09-01",
+  "source": "oura",
+  "score": 68,
+  "temperature_deviation_c": -0.09,
+  "hrv_balance": 74,
+  "recovery_index": 69
+ },
+ {
+  "day": "2026-09-02",
+  "source": "oura",
+  "score": 77,
+  "temperature_deviation_c": -0.12,
+  "hrv_balance": 74,
+  "recovery_index": 69
+ },
+ {
+  "day": "2026-09-03",
+  "source": "oura",
+  "score": 82,
+  "temperature_deviation_c": -0.05,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-09-04",
+  "source": "oura",
+  "score": 83,
+  "temperature_deviation_c": -0.07,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-09-05",
+  "source": "oura",
+  "score": 82,
+  "temperature_deviation_c": -0.06,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-09-06",
+  "source": "oura",
+  "score": 84,
+  "temperature_deviation_c": -0.05,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-09-07",
+  "source": "oura",
+  "score": 84,
+  "temperature_deviation_c": -0.09,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-09-08",
+  "source": "oura",
+  "score": 84,
+  "temperature_deviation_c": -0.14,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-09-09",
+  "source": "oura",
+  "score": 86,
+  "temperature_deviation_c": -0.14,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-09-10",
+  "source": "oura",
+  "score": 85,
+  "temperature_deviation_c": -0.19,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-09-11",
+  "source": "oura",
+  "score": 75,
+  "temperature_deviation_c": -0.16,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-09-12",
+  "source": "oura",
+  "score": 84,
+  "temperature_deviation_c": -0.06,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-09-13",
+  "source": "oura",
+  "score": 69,
+  "temperature_deviation_c": 0.31,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-09-14",
+  "source": "oura",
+  "score": 73,
+  "temperature_deviation_c": 0.29,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-09-15",
+  "source": "oura",
+  "score": 76,
+  "temperature_deviation_c": 0.34,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-09-16",
+  "source": "oura",
+  "score": 71,
+  "temperature_deviation_c": 0.21,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-09-17",
+  "source": "oura",
+  "score": 79,
+  "temperature_deviation_c": 0.34,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-09-18",
+  "source": "oura",
+  "score": 77,
+  "temperature_deviation_c": 0.2,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-09-19",
+  "source": "oura",
+  "score": 74,
+  "temperature_deviation_c": 0.41,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-09-20",
+  "source": "oura",
+  "score": 74,
+  "temperature_deviation_c": 0.18,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-09-21",
+  "source": "oura",
+  "score": 66,
+  "temperature_deviation_c": 0.31,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-09-22",
+  "source": "oura",
+  "score": 65,
+  "temperature_deviation_c": 0.43,
+  "hrv_balance": 67,
+  "recovery_index": 65
+ },
+ {
+  "day": "2026-09-23",
+  "source": "oura",
+  "score": 70,
+  "temperature_deviation_c": 0.37,
+  "hrv_balance": 67,
+  "recovery_index": 65
+ },
+ {
+  "day": "2026-09-24",
+  "source": "oura",
+  "score": 71,
+  "temperature_deviation_c": 0.47,
+  "hrv_balance": 67,
+  "recovery_index": 65
+ },
+ {
+  "day": "2026-09-25",
+  "source": "oura",
+  "score": 64,
+  "temperature_deviation_c": 0.31,
+  "hrv_balance": 67,
+  "recovery_index": 65
+ },
+ {
+  "day": "2026-09-26",
+  "source": "oura",
+  "score": 66,
+  "temperature_deviation_c": 0.37,
+  "hrv_balance": 67,
+  "recovery_index": 65
+ },
+ {
+  "day": "2026-09-27",
+  "source": "oura",
+  "score": 62,
+  "temperature_deviation_c": -0.13,
+  "hrv_balance": 68,
+  "recovery_index": 61
+ },
+ {
+  "day": "2026-09-28",
+  "source": "oura",
+  "score": 64,
+  "temperature_deviation_c": 0.01,
+  "hrv_balance": 68,
+  "recovery_index": 61
+ },
+ {
+  "day": "2026-09-29",
+  "source": "oura",
+  "score": 69,
+  "temperature_deviation_c": -0.06,
+  "hrv_balance": 74,
+  "recovery_index": 69
+ },
+ {
+  "day": "2026-09-30",
+  "source": "oura",
+  "score": 71,
+  "temperature_deviation_c": -0.1,
+  "hrv_balance": 74,
+  "recovery_index": 69
+ },
+ {
+  "day": "2026-10-01",
+  "source": "oura",
+  "score": 74,
+  "temperature_deviation_c": -0.0,
+  "hrv_balance": 74,
+  "recovery_index": 69
+ },
+ {
+  "day": "2026-10-02",
+  "source": "oura",
+  "score": 84,
+  "temperature_deviation_c": -0.17,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-10-03",
+  "source": "oura",
+  "score": 81,
+  "temperature_deviation_c": -0.11,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-10-04",
+  "source": "oura",
+  "score": 83,
+  "temperature_deviation_c": -0.05,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-10-05",
+  "source": "oura",
+  "score": 74,
+  "temperature_deviation_c": -0.07,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-10-06",
+  "source": "oura",
+  "score": 89,
+  "temperature_deviation_c": -0.1,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-10-07",
+  "source": "oura",
+  "score": 87,
+  "temperature_deviation_c": -0.15,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-10-08",
+  "source": "oura",
+  "score": 78,
+  "temperature_deviation_c": -0.06,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-10-09",
+  "source": "oura",
+  "score": 91,
+  "temperature_deviation_c": -0.1,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-10-10",
+  "source": "oura",
+  "score": 87,
+  "temperature_deviation_c": -0.1,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-10-11",
+  "source": "oura",
+  "score": 84,
+  "temperature_deviation_c": -0.19,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-10-12",
+  "source": "oura",
+  "score": 76,
+  "temperature_deviation_c": 0.31,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-10-13",
+  "source": "oura",
+  "score": 70,
+  "temperature_deviation_c": 0.3,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-10-14",
+  "source": "oura",
+  "score": 80,
+  "temperature_deviation_c": 0.3,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-10-15",
+  "source": "oura",
+  "score": 79,
+  "temperature_deviation_c": 0.26,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-10-16",
+  "source": "oura",
+  "score": 72,
+  "temperature_deviation_c": 0.41,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-10-17",
+  "source": "oura",
+  "score": 69,
+  "temperature_deviation_c": 0.17,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-10-18",
+  "source": "oura",
+  "score": 81,
+  "temperature_deviation_c": 0.31,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-10-19",
+  "source": "oura",
+  "score": 74,
+  "temperature_deviation_c": 0.38,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-10-20",
+  "source": "oura",
+  "score": 67,
+  "temperature_deviation_c": 0.26,
+  "hrv_balance": 74,
+  "recovery_index": 72
+ },
+ {
+  "day": "2026-10-21",
+  "source": "oura",
+  "score": 63,
+  "temperature_deviation_c": 0.42,
+  "hrv_balance": 67,
+  "recovery_index": 65
+ },
+ {
+  "day": "2026-10-22",
+  "source": "oura",
+  "score": 63,
+  "temperature_deviation_c": 0.36,
+  "hrv_balance": 67,
+  "recovery_index": 65
+ },
+ {
+  "day": "2026-10-23",
+  "source": "oura",
+  "score": 75,
+  "temperature_deviation_c": 0.39,
+  "hrv_balance": 67,
+  "recovery_index": 65
+ },
+ {
+  "day": "2026-10-24",
+  "source": "oura",
+  "score": 68,
+  "temperature_deviation_c": 0.36,
+  "hrv_balance": 67,
+  "recovery_index": 65
+ },
+ {
+  "day": "2026-10-25",
+  "source": "oura",
+  "score": 68,
+  "temperature_deviation_c": 0.42,
+  "hrv_balance": 67,
+  "recovery_index": 65
+ },
+ {
+  "day": "2026-10-26",
+  "source": "oura",
+  "score": 64,
+  "temperature_deviation_c": -0.17,
+  "hrv_balance": 68,
+  "recovery_index": 61
+ },
+ {
+  "day": "2026-10-27",
+  "source": "oura",
+  "score": 65,
+  "temperature_deviation_c": -0.04,
+  "hrv_balance": 68,
+  "recovery_index": 61
+ },
+ {
+  "day": "2026-10-28",
+  "source": "oura",
+  "score": 70,
+  "temperature_deviation_c": -0.14,
+  "hrv_balance": 74,
+  "recovery_index": 69
+ },
+ {
+  "day": "2026-10-29",
+  "source": "oura",
+  "score": 75,
+  "temperature_deviation_c": -0.08,
+  "hrv_balance": 74,
+  "recovery_index": 69
+ },
+ {
+  "day": "2026-10-30",
+  "source": "oura",
+  "score": 71,
+  "temperature_deviation_c": -0.02,
+  "hrv_balance": 74,
+  "recovery_index": 69
+ },
+ {
+  "day": "2026-10-31",
+  "source": "oura",
+  "score": 80,
+  "temperature_deviation_c": -0.04,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-11-01",
+  "source": "oura",
+  "score": 84,
+  "temperature_deviation_c": -0.15,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-11-02",
+  "source": "oura",
+  "score": 77,
+  "temperature_deviation_c": -0.18,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-11-03",
+  "source": "oura",
+  "score": 83,
+  "temperature_deviation_c": -0.16,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-11-04",
+  "source": "oura",
+  "score": 80,
+  "temperature_deviation_c": -0.04,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-11-05",
+  "source": "oura",
+  "score": 77,
+  "temperature_deviation_c": -0.07,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ },
+ {
+  "day": "2026-11-06",
+  "source": "oura",
+  "score": 82,
+  "temperature_deviation_c": -0.1,
+  "hrv_balance": 86,
+  "recovery_index": 80
+ }
+]

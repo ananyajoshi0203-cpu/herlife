@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "bloom_oura": {
+      "command": "/Users/ananyajoshi/women_hackathon/.venv/bin/python",
+      "args": ["-m", "backend.mcp_server"],
+      "env": { "PYTHONPATH": "/Users/ananyajoshi/women_hackathon", "OURA_TOKEN": "${OURA_TOKEN:-}" }
+    }
+  }
+}

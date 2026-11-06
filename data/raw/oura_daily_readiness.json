@@ -1,0 +1,1175 @@
+{
+ "data": [
+  {
+   "id": "953f48f1-a09f-76b5-a170-b33839263059",
+   "day": "2026-08-09",
+   "score": 84,
+   "temperature_deviation": -0.07,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-08-09T00:00:00+00:00"
+  },
+  {
+   "id": "5c90a958-7403-e430-ec66-a78795e761d1",
+   "day": "2026-08-10",
+   "score": 80,
+   "temperature_deviation": -0.01,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-08-10T00:00:00+00:00"
+  },
+  {
+   "id": "74c9df6a-cc01-1cdd-9474-031b7f26144b",
+   "day": "2026-08-11",
+   "score": 91,
+   "temperature_deviation": -0.21,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-08-11T00:00:00+00:00"
+  },
+  {
+   "id": "72fdf202-2a96-fb1a-14a0-f9e77f1b103c",
+   "day": "2026-08-12",
+   "score": 91,
+   "temperature_deviation": -0.0,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-08-12T00:00:00+00:00"
+  },
+  {
+   "id": "9e1a8ef4-f341-e07a-83f7-3f16dbf4a8b2",
+   "day": "2026-08-13",
+   "score": 82,
+   "temperature_deviation": -0.12,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-08-13T00:00:00+00:00"
+  },
+  {
+   "id": "5d39d0a8-9a2e-f80f-58ee-8571f4998d7c",
+   "day": "2026-08-14",
+   "score": 82,
+   "temperature_deviation": -0.08,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-08-14T00:00:00+00:00"
+  },
+  {
+   "id": "5b0ee76f-2ac3-4446-e883-a1d45de00997",
+   "day": "2026-08-15",
+   "score": 74,
+   "temperature_deviation": 0.28,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-08-15T00:00:00+00:00"
+  },
+  {
+   "id": "5d58c705-f979-d04a-f47a-ebdd597a1ecf",
+   "day": "2026-08-16",
+   "score": 75,
+   "temperature_deviation": 0.27,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-08-16T00:00:00+00:00"
+  },
+  {
+   "id": "f26149ed-be4c-5ce6-66c1-494e7691b06f",
+   "day": "2026-08-17",
+   "score": 78,
+   "temperature_deviation": 0.28,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-08-17T00:00:00+00:00"
+  },
+  {
+   "id": "4affdcd1-3678-bc8d-4078-3f0a072a98d2",
+   "day": "2026-08-18",
+   "score": 75,
+   "temperature_deviation": 0.44,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-08-18T00:00:00+00:00"
+  },
+  {
+   "id": "1ece615d-b9a6-442e-9e7d-6b377936d536",
+   "day": "2026-08-19",
+   "score": 73,
+   "temperature_deviation": 0.3,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-08-19T00:00:00+00:00"
+  },
+  {
+   "id": "b2fff17b-3f66-5ede-f106-37ce81fc069e",
+   "day": "2026-08-20",
+   "score": 76,
+   "temperature_deviation": 0.35,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-08-20T00:00:00+00:00"
+  },
+  {
+   "id": "29acf1a5-7cbd-1f5a-e28a-f60465f42986",
+   "day": "2026-08-21",
+   "score": 67,
+   "temperature_deviation": 0.19,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-08-21T00:00:00+00:00"
+  },
+  {
+   "id": "453bf491-2e7a-26e9-c76c-603fe7e8f9f6",
+   "day": "2026-08-22",
+   "score": 78,
+   "temperature_deviation": 0.42,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-08-22T00:00:00+00:00"
+  },
+  {
+   "id": "449274d2-ea59-679a-ed3a-32a86af25748",
+   "day": "2026-08-23",
+   "score": 76,
+   "temperature_deviation": 0.33,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-08-23T00:00:00+00:00"
+  },
+  {
+   "id": "6ea330a1-a66d-58b5-d1a4-c01ea887ae22",
+   "day": "2026-08-24",
+   "score": 75,
+   "temperature_deviation": 0.37,
+   "temperature_trend_deviation": 0.38,
+   "contributors": {
+    "hrv_balance": 67,
+    "recovery_index": 65,
+    "body_temperature": 65
+   },
+   "timestamp": "2026-08-24T00:00:00+00:00"
+  },
+  {
+   "id": "0b94af3a-4b05-e1ae-b153-d69c3e01aaa6",
+   "day": "2026-08-25",
+   "score": 69,
+   "temperature_deviation": 0.28,
+   "temperature_trend_deviation": 0.38,
+   "contributors": {
+    "hrv_balance": 67,
+    "recovery_index": 65,
+    "body_temperature": 65
+   },
+   "timestamp": "2026-08-25T00:00:00+00:00"
+  },
+  {
+   "id": "a1320b9d-4de2-f8ad-4cb5-9aa705c22d3f",
+   "day": "2026-08-26",
+   "score": 71,
+   "temperature_deviation": 0.41,
+   "temperature_trend_deviation": 0.38,
+   "contributors": {
+    "hrv_balance": 67,
+    "recovery_index": 65,
+    "body_temperature": 65
+   },
+   "timestamp": "2026-08-26T00:00:00+00:00"
+  },
+  {
+   "id": "d38f8c45-041d-cd94-cdff-5a1cd01a914c",
+   "day": "2026-08-27",
+   "score": 74,
+   "temperature_deviation": 0.38,
+   "temperature_trend_deviation": 0.38,
+   "contributors": {
+    "hrv_balance": 67,
+    "recovery_index": 65,
+    "body_temperature": 65
+   },
+   "timestamp": "2026-08-27T00:00:00+00:00"
+  },
+  {
+   "id": "43fb9fbc-d89c-36b2-130f-27b2cf28f65e",
+   "day": "2026-08-28",
+   "score": 71,
+   "temperature_deviation": 0.42,
+   "temperature_trend_deviation": 0.38,
+   "contributors": {
+    "hrv_balance": 67,
+    "recovery_index": 65,
+    "body_temperature": 65
+   },
+   "timestamp": "2026-08-28T00:00:00+00:00"
+  },
+  {
+   "id": "b578909c-4a75-91f2-7d57-5d17acfb2d5e",
+   "day": "2026-08-29",
+   "score": 66,
+   "temperature_deviation": -0.03,
+   "temperature_trend_deviation": -0.05,
+   "contributors": {
+    "hrv_balance": 68,
+    "recovery_index": 61,
+    "body_temperature": 91
+   },
+   "timestamp": "2026-08-29T00:00:00+00:00"
+  },
+  {
+   "id": "b40de56d-1cd8-6fc1-e309-66194791c2e9",
+   "day": "2026-08-30",
+   "score": 70,
+   "temperature_deviation": 0.01,
+   "temperature_trend_deviation": -0.05,
+   "contributors": {
+    "hrv_balance": 68,
+    "recovery_index": 61,
+    "body_temperature": 91
+   },
+   "timestamp": "2026-08-30T00:00:00+00:00"
+  },
+  {
+   "id": "96d4480f-deb6-7ae7-ffb0-dd9e63e19869",
+   "day": "2026-08-31",
+   "score": 75,
+   "temperature_deviation": -0.07,
+   "temperature_trend_deviation": -0.08,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 69,
+    "body_temperature": 89
+   },
+   "timestamp": "2026-08-31T00:00:00+00:00"
+  },
+  {
+   "id": "c0aed9c5-9d6b-023f-736b-96a0692fd360",
+   "day": "2026-09-01",
+   "score": 68,
+   "temperature_deviation": -0.09,
+   "temperature_trend_deviation": -0.08,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 69,
+    "body_temperature": 89
+   },
+   "timestamp": "2026-09-01T00:00:00+00:00"
+  },
+  {
+   "id": "6d6b987a-7330-9b95-c25e-114fff18fe33",
+   "day": "2026-09-02",
+   "score": 77,
+   "temperature_deviation": -0.12,
+   "temperature_trend_deviation": -0.08,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 69,
+    "body_temperature": 89
+   },
+   "timestamp": "2026-09-02T00:00:00+00:00"
+  },
+  {
+   "id": "e59409c1-4561-9fc0-17b4-834c37495c5e",
+   "day": "2026-09-03",
+   "score": 82,
+   "temperature_deviation": -0.05,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-09-03T00:00:00+00:00"
+  },
+  {
+   "id": "d34d1c0d-f105-8667-1be0-3df0ae9c78bd",
+   "day": "2026-09-04",
+   "score": 83,
+   "temperature_deviation": -0.07,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-09-04T00:00:00+00:00"
+  },
+  {
+   "id": "75efd233-ff12-5eb4-4d30-7fe489980c50",
+   "day": "2026-09-05",
+   "score": 82,
+   "temperature_deviation": -0.06,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-09-05T00:00:00+00:00"
+  },
+  {
+   "id": "d85bbb6b-bd37-929d-4ac7-ccc3cc0c6682",
+   "day": "2026-09-06",
+   "score": 84,
+   "temperature_deviation": -0.05,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-09-06T00:00:00+00:00"
+  },
+  {
+   "id": "e5ee4c91-731b-bc41-64b0-bb142f217e72",
+   "day": "2026-09-07",
+   "score": 84,
+   "temperature_deviation": -0.09,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-09-07T00:00:00+00:00"
+  },
+  {
+   "id": "6eb4fff8-cdce-c408-d26f-1d764f06e95a",
+   "day": "2026-09-08",
+   "score": 84,
+   "temperature_deviation": -0.14,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-09-08T00:00:00+00:00"
+  },
+  {
+   "id": "b77570a4-bf16-8da7-431d-bc3f0b286c70",
+   "day": "2026-09-09",
+   "score": 86,
+   "temperature_deviation": -0.14,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-09-09T00:00:00+00:00"
+  },
+  {
+   "id": "dc7a615d-53ea-b031-3c73-d5f49b750362",
+   "day": "2026-09-10",
+   "score": 85,
+   "temperature_deviation": -0.19,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-09-10T00:00:00+00:00"
+  },
+  {
+   "id": "3c2496eb-ac92-61f1-e429-c87c9ecc7b5f",
+   "day": "2026-09-11",
+   "score": 75,
+   "temperature_deviation": -0.16,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-09-11T00:00:00+00:00"
+  },
+  {
+   "id": "d72eb3a1-3b2a-421a-d1b0-b70be200d218",
+   "day": "2026-09-12",
+   "score": 84,
+   "temperature_deviation": -0.06,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-09-12T00:00:00+00:00"
+  },
+  {
+   "id": "a6d21040-bb73-52c1-9973-cf5c09c9d592",
+   "day": "2026-09-13",
+   "score": 69,
+   "temperature_deviation": 0.31,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-09-13T00:00:00+00:00"
+  },
+  {
+   "id": "5b7042df-e239-d3d7-9107-756fbece7145",
+   "day": "2026-09-14",
+   "score": 73,
+   "temperature_deviation": 0.29,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-09-14T00:00:00+00:00"
+  },
+  {
+   "id": "296cb08c-4886-058b-5912-eb602558d6c0",
+   "day": "2026-09-15",
+   "score": 76,
+   "temperature_deviation": 0.34,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-09-15T00:00:00+00:00"
+  },
+  {
+   "id": "2ed6d460-7913-97a3-d445-a53e3234752b",
+   "day": "2026-09-16",
+   "score": 71,
+   "temperature_deviation": 0.21,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-09-16T00:00:00+00:00"
+  },
+  {
+   "id": "05fbec3a-2dc3-78f2-7037-e03480ea8397",
+   "day": "2026-09-17",
+   "score": 79,
+   "temperature_deviation": 0.34,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-09-17T00:00:00+00:00"
+  },
+  {
+   "id": "a71a56c6-60bb-9aee-e516-093181012ad6",
+   "day": "2026-09-18",
+   "score": 77,
+   "temperature_deviation": 0.2,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-09-18T00:00:00+00:00"
+  },
+  {
+   "id": "9785f4f8-3554-ada8-7ae8-5484eb7f1414",
+   "day": "2026-09-19",
+   "score": 74,
+   "temperature_deviation": 0.41,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-09-19T00:00:00+00:00"
+  },
+  {
+   "id": "cc342416-bce8-8796-64ed-fce5db4a18fc",
+   "day": "2026-09-20",
+   "score": 74,
+   "temperature_deviation": 0.18,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-09-20T00:00:00+00:00"
+  },
+  {
+   "id": "0c3b1266-e542-453d-5d35-9777833edd4b",
+   "day": "2026-09-21",
+   "score": 66,
+   "temperature_deviation": 0.31,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-09-21T00:00:00+00:00"
+  },
+  {
+   "id": "f7962f83-43a5-38c4-cfc3-160166e6626d",
+   "day": "2026-09-22",
+   "score": 65,
+   "temperature_deviation": 0.43,
+   "temperature_trend_deviation": 0.38,
+   "contributors": {
+    "hrv_balance": 67,
+    "recovery_index": 65,
+    "body_temperature": 65
+   },
+   "timestamp": "2026-09-22T00:00:00+00:00"
+  },
+  {
+   "id": "6a4d76e6-a43d-ede7-a5c8-e5c581c75bab",
+   "day": "2026-09-23",
+   "score": 70,
+   "temperature_deviation": 0.37,
+   "temperature_trend_deviation": 0.38,
+   "contributors": {
+    "hrv_balance": 67,
+    "recovery_index": 65,
+    "body_temperature": 65
+   },
+   "timestamp": "2026-09-23T00:00:00+00:00"
+  },
+  {
+   "id": "4417c530-0d72-cb97-b630-f00543678856",
+   "day": "2026-09-24",
+   "score": 71,
+   "temperature_deviation": 0.47,
+   "temperature_trend_deviation": 0.38,
+   "contributors": {
+    "hrv_balance": 67,
+    "recovery_index": 65,
+    "body_temperature": 65
+   },
+   "timestamp": "2026-09-24T00:00:00+00:00"
+  },
+  {
+   "id": "87d69991-d6f7-5151-78de-33617830b083",
+   "day": "2026-09-25",
+   "score": 64,
+   "temperature_deviation": 0.31,
+   "temperature_trend_deviation": 0.38,
+   "contributors": {
+    "hrv_balance": 67,
+    "recovery_index": 65,
+    "body_temperature": 65
+   },
+   "timestamp": "2026-09-25T00:00:00+00:00"
+  },
+  {
+   "id": "5d082eea-c303-4515-9729-39b0db437386",
+   "day": "2026-09-26",
+   "score": 66,
+   "temperature_deviation": 0.37,
+   "temperature_trend_deviation": 0.38,
+   "contributors": {
+    "hrv_balance": 67,
+    "recovery_index": 65,
+    "body_temperature": 65
+   },
+   "timestamp": "2026-09-26T00:00:00+00:00"
+  },
+  {
+   "id": "41b73d54-59d4-a28c-055a-e98e42db5b4b",
+   "day": "2026-09-27",
+   "score": 62,
+   "temperature_deviation": -0.13,
+   "temperature_trend_deviation": -0.05,
+   "contributors": {
+    "hrv_balance": 68,
+    "recovery_index": 61,
+    "body_temperature": 91
+   },
+   "timestamp": "2026-09-27T00:00:00+00:00"
+  },
+  {
+   "id": "011dd8b3-0dd0-9e51-fa55-6835c021fa1b",
+   "day": "2026-09-28",
+   "score": 64,
+   "temperature_deviation": 0.01,
+   "temperature_trend_deviation": -0.05,
+   "contributors": {
+    "hrv_balance": 68,
+    "recovery_index": 61,
+    "body_temperature": 91
+   },
+   "timestamp": "2026-09-28T00:00:00+00:00"
+  },
+  {
+   "id": "e371613e-6c10-b601-160f-6d6ebec6b7ec",
+   "day": "2026-09-29",
+   "score": 69,
+   "temperature_deviation": -0.06,
+   "temperature_trend_deviation": -0.08,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 69,
+    "body_temperature": 89
+   },
+   "timestamp": "2026-09-29T00:00:00+00:00"
+  },
+  {
+   "id": "20454643-3b24-6b47-9444-785741d8b452",
+   "day": "2026-09-30",
+   "score": 71,
+   "temperature_deviation": -0.1,
+   "temperature_trend_deviation": -0.08,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 69,
+    "body_temperature": 89
+   },
+   "timestamp": "2026-09-30T00:00:00+00:00"
+  },
+  {
+   "id": "bbb91047-4d56-c5ae-cb7d-c45a25f83e61",
+   "day": "2026-10-01",
+   "score": 74,
+   "temperature_deviation": -0.0,
+   "temperature_trend_deviation": -0.08,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 69,
+    "body_temperature": 89
+   },
+   "timestamp": "2026-10-01T00:00:00+00:00"
+  },
+  {
+   "id": "b8e3621b-aafb-3717-3a83-35f8d8930882",
+   "day": "2026-10-02",
+   "score": 84,
+   "temperature_deviation": -0.17,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-10-02T00:00:00+00:00"
+  },
+  {
+   "id": "63826536-02b8-c92a-c736-c45253fb51b9",
+   "day": "2026-10-03",
+   "score": 81,
+   "temperature_deviation": -0.11,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-10-03T00:00:00+00:00"
+  },
+  {
+   "id": "fc061e1f-baa6-b8e6-1f55-411eeec4e799",
+   "day": "2026-10-04",
+   "score": 83,
+   "temperature_deviation": -0.05,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-10-04T00:00:00+00:00"
+  },
+  {
+   "id": "a4672c0c-781a-c78f-3173-b8d9a261621f",
+   "day": "2026-10-05",
+   "score": 74,
+   "temperature_deviation": -0.07,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-10-05T00:00:00+00:00"
+  },
+  {
+   "id": "5200866c-4d44-17ea-a786-effc3eb62c1c",
+   "day": "2026-10-06",
+   "score": 89,
+   "temperature_deviation": -0.1,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-10-06T00:00:00+00:00"
+  },
+  {
+   "id": "2715818d-c8ee-3c6e-58b0-8f1f73b3a2cf",
+   "day": "2026-10-07",
+   "score": 87,
+   "temperature_deviation": -0.15,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-10-07T00:00:00+00:00"
+  },
+  {
+   "id": "e7cc7215-7793-7b86-7bff-b6a40ef6df4f",
+   "day": "2026-10-08",
+   "score": 78,
+   "temperature_deviation": -0.06,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-10-08T00:00:00+00:00"
+  },
+  {
+   "id": "82b85bb8-180e-cb0d-fb51-8504cf0061ca",
+   "day": "2026-10-09",
+   "score": 91,
+   "temperature_deviation": -0.1,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-10-09T00:00:00+00:00"
+  },
+  {
+   "id": "a7913051-341a-a3ee-f999-4f1858457b3a",
+   "day": "2026-10-10",
+   "score": 87,
+   "temperature_deviation": -0.1,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-10-10T00:00:00+00:00"
+  },
+  {
+   "id": "ac77a055-a076-e64b-25a5-2d399ddffec8",
+   "day": "2026-10-11",
+   "score": 84,
+   "temperature_deviation": -0.19,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-10-11T00:00:00+00:00"
+  },
+  {
+   "id": "0dfb6f3a-e9f0-ef41-ef11-5a1b940a1624",
+   "day": "2026-10-12",
+   "score": 76,
+   "temperature_deviation": 0.31,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-10-12T00:00:00+00:00"
+  },
+  {
+   "id": "de9ac5ee-37de-eaed-1690-4bebdbc47e5e",
+   "day": "2026-10-13",
+   "score": 70,
+   "temperature_deviation": 0.3,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-10-13T00:00:00+00:00"
+  },
+  {
+   "id": "1465f233-9e43-e933-d13d-6b96afc79745",
+   "day": "2026-10-14",
+   "score": 80,
+   "temperature_deviation": 0.3,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-10-14T00:00:00+00:00"
+  },
+  {
+   "id": "a6a476a3-f954-dd9e-9f31-63050f85f59b",
+   "day": "2026-10-15",
+   "score": 79,
+   "temperature_deviation": 0.26,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-10-15T00:00:00+00:00"
+  },
+  {
+   "id": "cfcf0196-2402-eeb0-d54e-a03549dc8a9f",
+   "day": "2026-10-16",
+   "score": 72,
+   "temperature_deviation": 0.41,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-10-16T00:00:00+00:00"
+  },
+  {
+   "id": "16739251-8a62-43fd-75b0-0b15628da935",
+   "day": "2026-10-17",
+   "score": 69,
+   "temperature_deviation": 0.17,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-10-17T00:00:00+00:00"
+  },
+  {
+   "id": "76a399f8-a1fb-68f1-5f25-a7fe1b2a9134",
+   "day": "2026-10-18",
+   "score": 81,
+   "temperature_deviation": 0.31,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-10-18T00:00:00+00:00"
+  },
+  {
+   "id": "0d0e2c33-070b-80f4-156a-811060d1d905",
+   "day": "2026-10-19",
+   "score": 74,
+   "temperature_deviation": 0.38,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-10-19T00:00:00+00:00"
+  },
+  {
+   "id": "0f2cc346-5a1d-6349-f0f0-58c541802f2f",
+   "day": "2026-10-20",
+   "score": 67,
+   "temperature_deviation": 0.26,
+   "temperature_trend_deviation": 0.3,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 72,
+    "body_temperature": 71
+   },
+   "timestamp": "2026-10-20T00:00:00+00:00"
+  },
+  {
+   "id": "ad79fddc-ea0f-7718-24a5-6eddcebbdcb7",
+   "day": "2026-10-21",
+   "score": 63,
+   "temperature_deviation": 0.42,
+   "temperature_trend_deviation": 0.38,
+   "contributors": {
+    "hrv_balance": 67,
+    "recovery_index": 65,
+    "body_temperature": 65
+   },
+   "timestamp": "2026-10-21T00:00:00+00:00"
+  },
+  {
+   "id": "e3aa471c-8da9-ec93-738d-7cccb6b6a4d2",
+   "day": "2026-10-22",
+   "score": 63,
+   "temperature_deviation": 0.36,
+   "temperature_trend_deviation": 0.38,
+   "contributors": {
+    "hrv_balance": 67,
+    "recovery_index": 65,
+    "body_temperature": 65
+   },
+   "timestamp": "2026-10-22T00:00:00+00:00"
+  },
+  {
+   "id": "42f32846-fdb3-8c62-6e9b-73435d417373",
+   "day": "2026-10-23",
+   "score": 75,
+   "temperature_deviation": 0.39,
+   "temperature_trend_deviation": 0.38,
+   "contributors": {
+    "hrv_balance": 67,
+    "recovery_index": 65,
+    "body_temperature": 65
+   },
+   "timestamp": "2026-10-23T00:00:00+00:00"
+  },
+  {
+   "id": "3afcd2ae-c53b-eebd-858b-089a2e1cfdd8",
+   "day": "2026-10-24",
+   "score": 68,
+   "temperature_deviation": 0.36,
+   "temperature_trend_deviation": 0.38,
+   "contributors": {
+    "hrv_balance": 67,
+    "recovery_index": 65,
+    "body_temperature": 65
+   },
+   "timestamp": "2026-10-24T00:00:00+00:00"
+  },
+  {
+   "id": "e903e9cd-68d6-1743-03f4-3676171fddd2",
+   "day": "2026-10-25",
+   "score": 68,
+   "temperature_deviation": 0.42,
+   "temperature_trend_deviation": 0.38,
+   "contributors": {
+    "hrv_balance": 67,
+    "recovery_index": 65,
+    "body_temperature": 65
+   },
+   "timestamp": "2026-10-25T00:00:00+00:00"
+  },
+  {
+   "id": "f43cc03a-1b91-7a1d-df70-0a5f4aa27976",
+   "day": "2026-10-26",
+   "score": 64,
+   "temperature_deviation": -0.17,
+   "temperature_trend_deviation": -0.05,
+   "contributors": {
+    "hrv_balance": 68,
+    "recovery_index": 61,
+    "body_temperature": 91
+   },
+   "timestamp": "2026-10-26T00:00:00+00:00"
+  },
+  {
+   "id": "0b904d54-2dd1-1155-b793-be67180a3de7",
+   "day": "2026-10-27",
+   "score": 65,
+   "temperature_deviation": -0.04,
+   "temperature_trend_deviation": -0.05,
+   "contributors": {
+    "hrv_balance": 68,
+    "recovery_index": 61,
+    "body_temperature": 91
+   },
+   "timestamp": "2026-10-27T00:00:00+00:00"
+  },
+  {
+   "id": "6694b89e-56ab-1e51-5cfe-42a6c6e362db",
+   "day": "2026-10-28",
+   "score": 70,
+   "temperature_deviation": -0.14,
+   "temperature_trend_deviation": -0.08,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 69,
+    "body_temperature": 89
+   },
+   "timestamp": "2026-10-28T00:00:00+00:00"
+  },
+  {
+   "id": "7427bc76-efda-f3ff-ff5c-859dc6cdeb4d",
+   "day": "2026-10-29",
+   "score": 75,
+   "temperature_deviation": -0.08,
+   "temperature_trend_deviation": -0.08,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 69,
+    "body_temperature": 89
+   },
+   "timestamp": "2026-10-29T00:00:00+00:00"
+  },
+  {
+   "id": "971a80e9-7767-1f6c-15a0-178344b69e2f",
+   "day": "2026-10-30",
+   "score": 71,
+   "temperature_deviation": -0.02,
+   "temperature_trend_deviation": -0.08,
+   "contributors": {
+    "hrv_balance": 74,
+    "recovery_index": 69,
+    "body_temperature": 89
+   },
+   "timestamp": "2026-10-30T00:00:00+00:00"
+  },
+  {
+   "id": "832fe3f2-3055-76f3-38b9-8187556b29dd",
+   "day": "2026-10-31",
+   "score": 80,
+   "temperature_deviation": -0.04,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-10-31T00:00:00+00:00"
+  },
+  {
+   "id": "bd175335-ad7b-13d5-f594-ff78fd43345c",
+   "day": "2026-11-01",
+   "score": 84,
+   "temperature_deviation": -0.15,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-11-01T00:00:00+00:00"
+  },
+  {
+   "id": "d99619cd-6afc-289a-264e-5ace926be728",
+   "day": "2026-11-02",
+   "score": 77,
+   "temperature_deviation": -0.18,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-11-02T00:00:00+00:00"
+  },
+  {
+   "id": "52e8f127-5480-3006-eb8f-b862d256ddf8",
+   "day": "2026-11-03",
+   "score": 83,
+   "temperature_deviation": -0.16,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-11-03T00:00:00+00:00"
+  },
+  {
+   "id": "3ab18dae-8676-ab61-117a-13aead2d9c5f",
+   "day": "2026-11-04",
+   "score": 80,
+   "temperature_deviation": -0.04,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-11-04T00:00:00+00:00"
+  },
+  {
+   "id": "fd80eda2-ef75-d22f-d20f-de9d57e61ea6",
+   "day": "2026-11-05",
+   "score": 77,
+   "temperature_deviation": -0.07,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-11-05T00:00:00+00:00"
+  },
+  {
+   "id": "2cd986e8-3257-ae42-078f-6a4cab090579",
+   "day": "2026-11-06",
+   "score": 82,
+   "temperature_deviation": -0.1,
+   "temperature_trend_deviation": -0.1,
+   "contributors": {
+    "hrv_balance": 86,
+    "recovery_index": 80,
+    "body_temperature": 87
+   },
+   "timestamp": "2026-11-06T00:00:00+00:00"
+  }
+ ],
+ "next_token": null
+}

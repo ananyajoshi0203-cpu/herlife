@@ -1,0 +1,8 @@
+pydantic>=2.8
+fastapi>=0.162
+uvicorn>=0.54
+sqlalchemy>=2.1
+anthropic>=2.6
+httpx>=0.28
+pytest>=9.2
+mcp>=2.0

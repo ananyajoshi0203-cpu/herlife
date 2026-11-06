@@ -1,0 +1,237 @@
+{
+ "generated_at": "2026-11-06T10:42:15.156209",
+ "first_day": "2026-08-09",
+ "last_day": "2026-11-06",
+ "lifestyle": {
+  "weekly": [
+   {
+    "iso_week": "2026-W32",
+    "week_start": "2026-08-03",
+    "days": 1,
+    "sleep_min": 473.0,
+    "steps": 5902.0,
+    "hrv_ms": 54.4,
+    "stress_high_min": 35.0
+   },
+   {
+    "iso_week": "2026-W33",
+    "week_start": "2026-08-10",
+    "days": 7,
+    "sleep_min": 428.6,
+    "steps": 7099.4,
+    "hrv_ms": 52.0,
+    "stress_high_min": 81.1
+   },
+   {
+    "iso_week": "2026-W34",
+    "week_start": "2026-08-17",
+    "days": 7,
+    "sleep_min": 409.0,
+    "steps": 7889.7,
+    "hrv_ms": 47.2,
+    "stress_high_min": 94.0
+   },
+   {
+    "iso_week": "2026-W35",
+    "week_start": "2026-08-24",
+    "days": 7,
+    "sleep_min": 407.1,
+    "steps": 7110.6,
+    "hrv_ms": 46.0,
+    "stress_high_min": 113.7
+   },
+   {
+    "iso_week": "2026-W36",
+    "week_start": "2026-08-31",
+    "days": 7,
+    "sleep_min": 432.4,
+    "steps": 7956.1,
+    "hrv_ms": 54.8,
+    "stress_high_min": 93.0
+   },
+   {
+    "iso_week": "2026-W37",
+    "week_start": "2026-09-07",
+    "days": 7,
+    "sleep_min": 432.3,
+    "steps": 8215.3,
+    "hrv_ms": 54.7,
+    "stress_high_min": 82.6
+   },
+   {
+    "iso_week": "2026-W38",
+    "week_start": "2026-09-14",
+    "days": 7,
+    "sleep_min": 426.0,
+    "steps": 7601.6,
+    "hrv_ms": 47.3,
+    "stress_high_min": 93.9
+   },
+   {
+    "iso_week": "2026-W39",
+    "week_start": "2026-09-21",
+    "days": 7,
+    "sleep_min": 387.4,
+    "steps": 8951.1,
+    "hrv_ms": 44.0,
+    "stress_high_min": 137.9
+   },
+   {
+    "iso_week": "2026-W40",
+    "week_start": "2026-09-28",
+    "days": 7,
+    "sleep_min": 430.1,
+    "steps": 6502.1,
+    "hrv_ms": 53.2,
+    "stress_high_min": 83.0
+   },
+   {
+    "iso_week": "2026-W41",
+    "week_start": "2026-10-05",
+    "days": 7,
+    "sleep_min": 442.0,
+    "steps": 7401.1,
+    "hrv_ms": 54.1,
+    "stress_high_min": 102.0
+   },
+   {
+    "iso_week": "2026-W42",
+    "week_start": "2026-10-12",
+    "days": 7,
+    "sleep_min": 386.0,
+    "steps": 6348.4,
+    "hrv_ms": 47.0,
+    "stress_high_min": 96.3
+   },
+   {
+    "iso_week": "2026-W43",
+    "week_start": "2026-10-19",
+    "days": 7,
+    "sleep_min": 413.1,
+    "steps": 5546.0,
+    "hrv_ms": 44.9,
+    "stress_high_min": 140.4
+   },
+   {
+    "iso_week": "2026-W44",
+    "week_start": "2026-10-26",
+    "days": 7,
+    "sleep_min": 404.0,
+    "steps": 4236.7,
+    "hrv_ms": 53.3,
+    "stress_high_min": 95.6
+   },
+   {
+    "iso_week": "2026-W45",
+    "week_start": "2026-11-02",
+    "days": 5,
+    "sleep_min": 419.8,
+    "steps": 3956.6,
+    "hrv_ms": 69.9,
+    "stress_high_min": 120.0
+   }
+  ],
+  "weekly_slopes": {
+   "weeks_used": 13,
+   "notable": [],
+   "sleep_min": -0.9,
+   "steps": -279.8,
+   "hrv_ms": 0.6,
+   "stress_high_min": 2.1
+  },
+  "recent_slopes": {
+   "weeks_used": 4,
+   "notable": [
+    "steps",
+    "hrv_ms"
+   ],
+   "sleep_min": 9.2,
+   "steps": -848.5,
+   "hrv_ms": 7.7,
+   "stress_high_min": 2.6
+  },
+  "best_sleep_weekday": {
+   "weekday": "Tuesday",
+   "nights": 13,
+   "sleep_min": 434.7
+  },
+  "worst_sleep_weekday": {
+   "weekday": "Sunday",
+   "nights": 13,
+   "sleep_min": 383.8
+  },
+  "sleep_weekday_gap_min": 50.9,
+  "sleep_weekday_gap_is_notable": true,
+  "heavy_day": {
+   "stress_threshold_min": 134.5,
+   "heavy_days": 22,
+   "sleep_after_heavy_min": 391.7,
+   "sleep_after_other_min": 425.6,
+   "difference_min": 33.9,
+   "is_notable": true
+  }
+ },
+ "by_phase": [
+  {
+   "phase": "menstrual",
+   "nights": 15,
+   "sleep_min": 419.6,
+   "hrv_ms": 49.6,
+   "readiness_score": 69.4,
+   "stress_high_min": 87.6
+  },
+  {
+   "phase": "follicular",
+   "nights": 27,
+   "sleep_min": 425.9,
+   "hrv_ms": 58.9,
+   "readiness_score": 83.2,
+   "stress_high_min": 98.1
+  },
+  {
+   "phase": "ovulatory",
+   "nights": 9,
+   "sleep_min": 438.1,
+   "hrv_ms": 51.2,
+   "readiness_score": 79.2,
+   "stress_high_min": 78.8
+  },
+  {
+   "phase": "luteal",
+   "nights": 39,
+   "sleep_min": 405.7,
+   "hrv_ms": 46.1,
+   "readiness_score": 72.1,
+   "stress_high_min": 114.3
+  }
+ ],
+ "pre_period_sleep": {
+  "window_days": 5,
+  "periods_counted": 3,
+  "pre_period_sleep_min": 400.1,
+  "other_nights_sleep_min": 420.8,
+  "drop_min": 20.7,
+  "is_notable": true
+ },
+ "regularity": {
+  "logged_period_starts": [
+   "2026-07-31",
+   "2026-08-29",
+   "2026-09-27",
+   "2026-10-26"
+  ],
+  "cycle_lengths_days": [
+   29,
+   29,
+   29
+  ],
+  "mean_length_days": 29.0,
+  "length_spread_days": 0,
+  "is_regular": true
+ },
+ "ovulation": {
+  "completed_cycles": 3,
+  "confirmed_cycles": 3,
+  "confirmed_rate": 1.0
+ }
+}

@@ -1,0 +1,902 @@
+[
+ {
+  "day": "2026-08-09",
+  "source": "oura",
+  "score": 66,
+  "steps": 5902,
+  "active_kcal": 266,
+  "high_activity_min": 30,
+  "medium_activity_min": 18,
+  "low_activity_min": 150
+ },
+ {
+  "day": "2026-08-10",
+  "source": "oura",
+  "score": 68,
+  "steps": 6623,
+  "active_kcal": 298,
+  "high_activity_min": 0,
+  "medium_activity_min": 21,
+  "low_activity_min": 198
+ },
+ {
+  "day": "2026-08-11",
+  "source": "oura",
+  "score": 59,
+  "steps": 4142,
+  "active_kcal": 186,
+  "high_activity_min": 15,
+  "medium_activity_min": 47,
+  "low_activity_min": 215
+ },
+ {
+  "day": "2026-08-12",
+  "source": "oura",
+  "score": 69,
+  "steps": 6678,
+  "active_kcal": 301,
+  "high_activity_min": 0,
+  "medium_activity_min": 44,
+  "low_activity_min": 238
+ },
+ {
+  "day": "2026-08-13",
+  "source": "oura",
+  "score": 77,
+  "steps": 8757,
+  "active_kcal": 394,
+  "high_activity_min": 30,
+  "medium_activity_min": 53,
+  "low_activity_min": 174
+ },
+ {
+  "day": "2026-08-14",
+  "source": "oura",
+  "score": 67,
+  "steps": 6161,
+  "active_kcal": 277,
+  "high_activity_min": 30,
+  "medium_activity_min": 47,
+  "low_activity_min": 186
+ },
+ {
+  "day": "2026-08-15",
+  "source": "oura",
+  "score": 73,
+  "steps": 7762,
+  "active_kcal": 349,
+  "high_activity_min": 45,
+  "medium_activity_min": 38,
+  "low_activity_min": 207
+ },
+ {
+  "day": "2026-08-16",
+  "source": "oura",
+  "score": 80,
+  "steps": 9573,
+  "active_kcal": 431,
+  "high_activity_min": 30,
+  "medium_activity_min": 28,
+  "low_activity_min": 166
+ },
+ {
+  "day": "2026-08-17",
+  "source": "oura",
+  "score": 74,
+  "steps": 7912,
+  "active_kcal": 356,
+  "high_activity_min": 0,
+  "medium_activity_min": 17,
+  "low_activity_min": 141
+ },
+ {
+  "day": "2026-08-18",
+  "source": "oura",
+  "score": 78,
+  "steps": 9084,
+  "active_kcal": 409,
+  "high_activity_min": 15,
+  "medium_activity_min": 33,
+  "low_activity_min": 194
+ },
+ {
+  "day": "2026-08-19",
+  "source": "oura",
+  "score": 66,
+  "steps": 6051,
+  "active_kcal": 272,
+  "high_activity_min": 45,
+  "medium_activity_min": 51,
+  "low_activity_min": 196
+ },
+ {
+  "day": "2026-08-20",
+  "source": "oura",
+  "score": 81,
+  "steps": 9672,
+  "active_kcal": 435,
+  "high_activity_min": 15,
+  "medium_activity_min": 53,
+  "low_activity_min": 148
+ },
+ {
+  "day": "2026-08-21",
+  "source": "oura",
+  "score": 81,
+  "steps": 9813,
+  "active_kcal": 442,
+  "high_activity_min": 0,
+  "medium_activity_min": 44,
+  "low_activity_min": 190
+ },
+ {
+  "day": "2026-08-22",
+  "source": "oura",
+  "score": 62,
+  "steps": 5109,
+  "active_kcal": 230,
+  "high_activity_min": 15,
+  "medium_activity_min": 43,
+  "low_activity_min": 140
+ },
+ {
+  "day": "2026-08-23",
+  "source": "oura",
+  "score": 72,
+  "steps": 7587,
+  "active_kcal": 341,
+  "high_activity_min": 0,
+  "medium_activity_min": 22,
+  "low_activity_min": 142
+ },
+ {
+  "day": "2026-08-24",
+  "source": "oura",
+  "score": 77,
+  "steps": 8693,
+  "active_kcal": 391,
+  "high_activity_min": 30,
+  "medium_activity_min": 50,
+  "low_activity_min": 162
+ },
+ {
+  "day": "2026-08-25",
+  "source": "oura",
+  "score": 74,
+  "steps": 8120,
+  "active_kcal": 365,
+  "high_activity_min": 30,
+  "medium_activity_min": 15,
+  "low_activity_min": 156
+ },
+ {
+  "day": "2026-08-26",
+  "source": "oura",
+  "score": 70,
+  "steps": 6994,
+  "active_kcal": 315,
+  "high_activity_min": 45,
+  "medium_activity_min": 26,
+  "low_activity_min": 210
+ },
+ {
+  "day": "2026-08-27",
+  "source": "oura",
+  "score": 73,
+  "steps": 7729,
+  "active_kcal": 348,
+  "high_activity_min": 0,
+  "medium_activity_min": 21,
+  "low_activity_min": 124
+ },
+ {
+  "day": "2026-08-28",
+  "source": "oura",
+  "score": 72,
+  "steps": 7538,
+  "active_kcal": 339,
+  "high_activity_min": 0,
+  "medium_activity_min": 59,
+  "low_activity_min": 183
+ },
+ {
+  "day": "2026-08-29",
+  "source": "oura",
+  "score": 62,
+  "steps": 5067,
+  "active_kcal": 228,
+  "high_activity_min": 30,
+  "medium_activity_min": 23,
+  "low_activity_min": 195
+ },
+ {
+  "day": "2026-08-30",
+  "source": "oura",
+  "score": 65,
+  "steps": 5633,
+  "active_kcal": 253,
+  "high_activity_min": 30,
+  "medium_activity_min": 42,
+  "low_activity_min": 123
+ },
+ {
+  "day": "2026-08-31",
+  "source": "oura",
+  "score": 71,
+  "steps": 7244,
+  "active_kcal": 326,
+  "high_activity_min": 15,
+  "medium_activity_min": 18,
+  "low_activity_min": 158
+ },
+ {
+  "day": "2026-09-01",
+  "source": "oura",
+  "score": 87,
+  "steps": 11197,
+  "active_kcal": 504,
+  "high_activity_min": 30,
+  "medium_activity_min": 18,
+  "low_activity_min": 195
+ },
+ {
+  "day": "2026-09-02",
+  "source": "oura",
+  "score": 71,
+  "steps": 7341,
+  "active_kcal": 330,
+  "high_activity_min": 0,
+  "medium_activity_min": 27,
+  "low_activity_min": 167
+ },
+ {
+  "day": "2026-09-03",
+  "source": "oura",
+  "score": 73,
+  "steps": 7860,
+  "active_kcal": 354,
+  "high_activity_min": 30,
+  "medium_activity_min": 44,
+  "low_activity_min": 163
+ },
+ {
+  "day": "2026-09-04",
+  "source": "oura",
+  "score": 87,
+  "steps": 11214,
+  "active_kcal": 505,
+  "high_activity_min": 30,
+  "medium_activity_min": 21,
+  "low_activity_min": 195
+ },
+ {
+  "day": "2026-09-05",
+  "source": "oura",
+  "score": 68,
+  "steps": 6471,
+  "active_kcal": 291,
+  "high_activity_min": 0,
+  "medium_activity_min": 47,
+  "low_activity_min": 192
+ },
+ {
+  "day": "2026-09-06",
+  "source": "oura",
+  "score": 59,
+  "steps": 4366,
+  "active_kcal": 196,
+  "high_activity_min": 0,
+  "medium_activity_min": 36,
+  "low_activity_min": 225
+ },
+ {
+  "day": "2026-09-07",
+  "source": "oura",
+  "score": 84,
+  "steps": 10469,
+  "active_kcal": 471,
+  "high_activity_min": 0,
+  "medium_activity_min": 20,
+  "low_activity_min": 143
+ },
+ {
+  "day": "2026-09-08",
+  "source": "oura",
+  "score": 77,
+  "steps": 8851,
+  "active_kcal": 398,
+  "high_activity_min": 0,
+  "medium_activity_min": 40,
+  "low_activity_min": 194
+ },
+ {
+  "day": "2026-09-09",
+  "source": "oura",
+  "score": 76,
+  "steps": 8411,
+  "active_kcal": 378,
+  "high_activity_min": 15,
+  "medium_activity_min": 15,
+  "low_activity_min": 219
+ },
+ {
+  "day": "2026-09-10",
+  "source": "oura",
+  "score": 67,
+  "steps": 6300,
+  "active_kcal": 284,
+  "high_activity_min": 45,
+  "medium_activity_min": 20,
+  "low_activity_min": 190
+ },
+ {
+  "day": "2026-09-11",
+  "source": "oura",
+  "score": 75,
+  "steps": 8129,
+  "active_kcal": 366,
+  "high_activity_min": 0,
+  "medium_activity_min": 35,
+  "low_activity_min": 160
+ },
+ {
+  "day": "2026-09-12",
+  "source": "oura",
+  "score": 68,
+  "steps": 6385,
+  "active_kcal": 287,
+  "high_activity_min": 15,
+  "medium_activity_min": 31,
+  "low_activity_min": 136
+ },
+ {
+  "day": "2026-09-13",
+  "source": "oura",
+  "score": 78,
+  "steps": 8962,
+  "active_kcal": 403,
+  "high_activity_min": 15,
+  "medium_activity_min": 43,
+  "low_activity_min": 213
+ },
+ {
+  "day": "2026-09-14",
+  "source": "oura",
+  "score": 65,
+  "steps": 5640,
+  "active_kcal": 254,
+  "high_activity_min": 15,
+  "medium_activity_min": 59,
+  "low_activity_min": 147
+ },
+ {
+  "day": "2026-09-15",
+  "source": "oura",
+  "score": 84,
+  "steps": 10469,
+  "active_kcal": 471,
+  "high_activity_min": 0,
+  "medium_activity_min": 41,
+  "low_activity_min": 187
+ },
+ {
+  "day": "2026-09-16",
+  "source": "oura",
+  "score": 85,
+  "steps": 10633,
+  "active_kcal": 478,
+  "high_activity_min": 45,
+  "medium_activity_min": 26,
+  "low_activity_min": 172
+ },
+ {
+  "day": "2026-09-17",
+  "source": "oura",
+  "score": 61,
+  "steps": 4834,
+  "active_kcal": 218,
+  "high_activity_min": 30,
+  "medium_activity_min": 31,
+  "low_activity_min": 181
+ },
+ {
+  "day": "2026-09-18",
+  "source": "oura",
+  "score": 73,
+  "steps": 7681,
+  "active_kcal": 346,
+  "high_activity_min": 0,
+  "medium_activity_min": 57,
+  "low_activity_min": 220
+ },
+ {
+  "day": "2026-09-19",
+  "source": "oura",
+  "score": 60,
+  "steps": 4608,
+  "active_kcal": 207,
+  "high_activity_min": 15,
+  "medium_activity_min": 40,
+  "low_activity_min": 125
+ },
+ {
+  "day": "2026-09-20",
+  "source": "oura",
+  "score": 79,
+  "steps": 9346,
+  "active_kcal": 421,
+  "high_activity_min": 15,
+  "medium_activity_min": 54,
+  "low_activity_min": 140
+ },
+ {
+  "day": "2026-09-21",
+  "source": "oura",
+  "score": 66,
+  "steps": 5920,
+  "active_kcal": 266,
+  "high_activity_min": 0,
+  "medium_activity_min": 17,
+  "low_activity_min": 127
+ },
+ {
+  "day": "2026-09-22",
+  "source": "oura",
+  "score": 86,
+  "steps": 11000,
+  "active_kcal": 495,
+  "high_activity_min": 45,
+  "medium_activity_min": 39,
+  "low_activity_min": 201
+ },
+ {
+  "day": "2026-09-23",
+  "source": "oura",
+  "score": 86,
+  "steps": 11119,
+  "active_kcal": 500,
+  "high_activity_min": 15,
+  "medium_activity_min": 19,
+  "low_activity_min": 161
+ },
+ {
+  "day": "2026-09-24",
+  "source": "oura",
+  "score": 86,
+  "steps": 10942,
+  "active_kcal": 492,
+  "high_activity_min": 45,
+  "medium_activity_min": 33,
+  "low_activity_min": 160
+ },
+ {
+  "day": "2026-09-25",
+  "source": "oura",
+  "score": 79,
+  "steps": 9372,
+  "active_kcal": 422,
+  "high_activity_min": 30,
+  "medium_activity_min": 31,
+  "low_activity_min": 198
+ },
+ {
+  "day": "2026-09-26",
+  "source": "oura",
+  "score": 79,
+  "steps": 9167,
+  "active_kcal": 413,
+  "high_activity_min": 45,
+  "medium_activity_min": 20,
+  "low_activity_min": 238
+ },
+ {
+  "day": "2026-09-27",
+  "source": "oura",
+  "score": 63,
+  "steps": 5138,
+  "active_kcal": 231,
+  "high_activity_min": 15,
+  "medium_activity_min": 37,
+  "low_activity_min": 225
+ },
+ {
+  "day": "2026-09-28",
+  "source": "oura",
+  "score": 60,
+  "steps": 4474,
+  "active_kcal": 201,
+  "high_activity_min": 0,
+  "medium_activity_min": 49,
+  "low_activity_min": 201
+ },
+ {
+  "day": "2026-09-29",
+  "source": "oura",
+  "score": 53,
+  "steps": 2677,
+  "active_kcal": 120,
+  "high_activity_min": 15,
+  "medium_activity_min": 33,
+  "low_activity_min": 178
+ },
+ {
+  "day": "2026-09-30",
+  "source": "oura",
+  "score": 67,
+  "steps": 6294,
+  "active_kcal": 283,
+  "high_activity_min": 0,
+  "medium_activity_min": 50,
+  "low_activity_min": 146
+ },
+ {
+  "day": "2026-10-01",
+  "source": "oura",
+  "score": 80,
+  "steps": 9539,
+  "active_kcal": 429,
+  "high_activity_min": 0,
+  "medium_activity_min": 59,
+  "low_activity_min": 135
+ },
+ {
+  "day": "2026-10-02",
+  "source": "oura",
+  "score": 74,
+  "steps": 8066,
+  "active_kcal": 363,
+  "high_activity_min": 45,
+  "medium_activity_min": 31,
+  "low_activity_min": 213
+ },
+ {
+  "day": "2026-10-03",
+  "source": "oura",
+  "score": 72,
+  "steps": 7608,
+  "active_kcal": 342,
+  "high_activity_min": 0,
+  "medium_activity_min": 18,
+  "low_activity_min": 154
+ },
+ {
+  "day": "2026-10-04",
+  "source": "oura",
+  "score": 69,
+  "steps": 6857,
+  "active_kcal": 309,
+  "high_activity_min": 15,
+  "medium_activity_min": 34,
+  "low_activity_min": 172
+ },
+ {
+  "day": "2026-10-05",
+  "source": "oura",
+  "score": 70,
+  "steps": 6952,
+  "active_kcal": 313,
+  "high_activity_min": 0,
+  "medium_activity_min": 39,
+  "low_activity_min": 211
+ },
+ {
+  "day": "2026-10-06",
+  "source": "oura",
+  "score": 74,
+  "steps": 8008,
+  "active_kcal": 360,
+  "high_activity_min": 0,
+  "medium_activity_min": 60,
+  "low_activity_min": 169
+ },
+ {
+  "day": "2026-10-07",
+  "source": "oura",
+  "score": 72,
+  "steps": 7520,
+  "active_kcal": 338,
+  "high_activity_min": 45,
+  "medium_activity_min": 26,
+  "low_activity_min": 203
+ },
+ {
+  "day": "2026-10-08",
+  "source": "oura",
+  "score": 74,
+  "steps": 8101,
+  "active_kcal": 365,
+  "high_activity_min": 30,
+  "medium_activity_min": 26,
+  "low_activity_min": 194
+ },
+ {
+  "day": "2026-10-09",
+  "source": "oura",
+  "score": 73,
+  "steps": 7690,
+  "active_kcal": 346,
+  "high_activity_min": 0,
+  "medium_activity_min": 17,
+  "low_activity_min": 149
+ },
+ {
+  "day": "2026-10-10",
+  "source": "oura",
+  "score": 67,
+  "steps": 6268,
+  "active_kcal": 282,
+  "high_activity_min": 0,
+  "medium_activity_min": 37,
+  "low_activity_min": 217
+ },
+ {
+  "day": "2026-10-11",
+  "source": "oura",
+  "score": 71,
+  "steps": 7269,
+  "active_kcal": 327,
+  "high_activity_min": 0,
+  "medium_activity_min": 30,
+  "low_activity_min": 125
+ },
+ {
+  "day": "2026-10-12",
+  "source": "oura",
+  "score": 77,
+  "steps": 8654,
+  "active_kcal": 389,
+  "high_activity_min": 0,
+  "medium_activity_min": 44,
+  "low_activity_min": 199
+ },
+ {
+  "day": "2026-10-13",
+  "source": "oura",
+  "score": 79,
+  "steps": 9181,
+  "active_kcal": 413,
+  "high_activity_min": 15,
+  "medium_activity_min": 54,
+  "low_activity_min": 153
+ },
+ {
+  "day": "2026-10-14",
+  "source": "oura",
+  "score": 62,
+  "steps": 4978,
+  "active_kcal": 224,
+  "high_activity_min": 45,
+  "medium_activity_min": 26,
+  "low_activity_min": 238
+ },
+ {
+  "day": "2026-10-15",
+  "source": "oura",
+  "score": 66,
+  "steps": 6100,
+  "active_kcal": 274,
+  "high_activity_min": 15,
+  "medium_activity_min": 56,
+  "low_activity_min": 219
+ },
+ {
+  "day": "2026-10-16",
+  "source": "oura",
+  "score": 61,
+  "steps": 4811,
+  "active_kcal": 216,
+  "high_activity_min": 0,
+  "medium_activity_min": 34,
+  "low_activity_min": 236
+ },
+ {
+  "day": "2026-10-17",
+  "source": "oura",
+  "score": 69,
+  "steps": 6691,
+  "active_kcal": 301,
+  "high_activity_min": 0,
+  "medium_activity_min": 31,
+  "low_activity_min": 174
+ },
+ {
+  "day": "2026-10-18",
+  "source": "oura",
+  "score": 58,
+  "steps": 4024,
+  "active_kcal": 181,
+  "high_activity_min": 45,
+  "medium_activity_min": 17,
+  "low_activity_min": 167
+ },
+ {
+  "day": "2026-10-19",
+  "source": "oura",
+  "score": 74,
+  "steps": 7879,
+  "active_kcal": 355,
+  "high_activity_min": 30,
+  "medium_activity_min": 48,
+  "low_activity_min": 235
+ },
+ {
+  "day": "2026-10-20",
+  "source": "oura",
+  "score": 65,
+  "steps": 5746,
+  "active_kcal": 259,
+  "high_activity_min": 0,
+  "medium_activity_min": 33,
+  "low_activity_min": 227
+ },
+ {
+  "day": "2026-10-21",
+  "source": "oura",
+  "score": 60,
+  "steps": 4400,
+  "active_kcal": 198,
+  "high_activity_min": 0,
+  "medium_activity_min": 17,
+  "low_activity_min": 141
+ },
+ {
+  "day": "2026-10-22",
+  "source": "oura",
+  "score": 62,
+  "steps": 4938,
+  "active_kcal": 222,
+  "high_activity_min": 15,
+  "medium_activity_min": 44,
+  "low_activity_min": 176
+ },
+ {
+  "day": "2026-10-23",
+  "source": "oura",
+  "score": 76,
+  "steps": 8540,
+  "active_kcal": 384,
+  "high_activity_min": 0,
+  "medium_activity_min": 42,
+  "low_activity_min": 160
+ },
+ {
+  "day": "2026-10-24",
+  "source": "oura",
+  "score": 63,
+  "steps": 5281,
+  "active_kcal": 238,
+  "high_activity_min": 0,
+  "medium_activity_min": 21,
+  "low_activity_min": 203
+ },
+ {
+  "day": "2026-10-25",
+  "source": "oura",
+  "score": 50,
+  "steps": 2038,
+  "active_kcal": 120,
+  "high_activity_min": 15,
+  "medium_activity_min": 32,
+  "low_activity_min": 145
+ },
+ {
+  "day": "2026-10-26",
+  "source": "oura",
+  "score": 58,
+  "steps": 3922,
+  "active_kcal": 176,
+  "high_activity_min": 0,
+  "medium_activity_min": 51,
+  "low_activity_min": 230
+ },
+ {
+  "day": "2026-10-27",
+  "source": "oura",
+  "score": 59,
+  "steps": 4188,
+  "active_kcal": 188,
+  "high_activity_min": 45,
+  "medium_activity_min": 49,
+  "low_activity_min": 224
+ },
+ {
+  "day": "2026-10-28",
+  "source": "oura",
+  "score": 67,
+  "steps": 6360,
+  "active_kcal": 286,
+  "high_activity_min": 30,
+  "medium_activity_min": 54,
+  "low_activity_min": 230
+ },
+ {
+  "day": "2026-10-29",
+  "source": "oura",
+  "score": 58,
+  "steps": 4092,
+  "active_kcal": 184,
+  "high_activity_min": 0,
+  "medium_activity_min": 17,
+  "low_activity_min": 238
+ },
+ {
+  "day": "2026-10-30",
+  "source": "oura",
+  "score": 65,
+  "steps": 5647,
+  "active_kcal": 254,
+  "high_activity_min": 0,
+  "medium_activity_min": 50,
+  "low_activity_min": 138
+ },
+ {
+  "day": "2026-10-31",
+  "source": "oura",
+  "score": 53,
+  "steps": 2658,
+  "active_kcal": 120,
+  "high_activity_min": 30,
+  "medium_activity_min": 16,
+  "low_activity_min": 168
+ },
+ {
+  "day": "2026-11-01",
+  "source": "oura",
+  "score": 53,
+  "steps": 2790,
+  "active_kcal": 126,
+  "high_activity_min": 15,
+  "medium_activity_min": 25,
+  "low_activity_min": 212
+ },
+ {
+  "day": "2026-11-02",
+  "source": "oura",
+  "score": 61,
+  "steps": 4760,
+  "active_kcal": 214,
+  "high_activity_min": 45,
+  "medium_activity_min": 23,
+  "low_activity_min": 172
+ },
+ {
+  "day": "2026-11-03",
+  "source": "oura",
+  "score": 62,
+  "steps": 5067,
+  "active_kcal": 228,
+  "high_activity_min": 0,
+  "medium_activity_min": 37,
+  "low_activity_min": 148
+ },
+ {
+  "day": "2026-11-04",
+  "source": "oura",
+  "score": 54,
+  "steps": 2955,
+  "active_kcal": 133,
+  "high_activity_min": 30,
+  "medium_activity_min": 59,
+  "low_activity_min": 197
+ },
+ {
+  "day": "2026-11-05",
+  "source": "oura",
+  "score": 60,
+  "steps": 4522,
+  "active_kcal": 203,
+  "high_activity_min": 0,
+  "medium_activity_min": 51,
+  "low_activity_min": 160
+ },
+ {
+  "day": "2026-11-06",
+  "source": "oura",
+  "score": 52,
+  "steps": 2479,
+  "active_kcal": 120,
+  "high_activity_min": 15,
+  "medium_activity_min": 59,
+  "low_activity_min": 193
+ }
+]

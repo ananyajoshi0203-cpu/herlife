@@ -1,0 +1,1491 @@
+<title>Bloom Lifestyle Record</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: a phone-shaped app shell, centered on desktop, full-bleed on phones. The accent follows her cycle phase. */
+:root {
+  --bg: #F6F2F6; --surface: #FFFFFF; --surface-2: #F1EAF0; --ink: #2A1D2D; --muted: #75677A; --line: #E6DAE4;
+  --ph-men: #B8395C; --ph-fol: #2E8A67; --ph-ovu: #C98712; --ph-lut: #7655C2;
+  --good: #2E8A67; --warn: #C46A12; --frame: #E4DAE3;
+  --accent: var(--ph-fol); --accent-ink: #FFFFFF;
+  --f-display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --f-body: "Figtree", "Segoe UI", system-ui, sans-serif;
+  --f-data: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --r-lg: 22px; --r-md: 14px; --r-sm: 10px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #141016; --surface: #1F1922; --surface-2: #2A222E; --ink: #F3EAF3; --muted: #AE9FB2; --line: #372D3B;
+  --ph-men: #F0718F; --ph-fol: #5CC79C; --ph-ovu: #F2B74B; --ph-lut: #A68BF0; --good: #5CC79C; --warn: #F0A050; --frame: #0B080C;
+  --accent-ink: #160F18; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #141016; --surface: #1F1922; --surface-2: #2A222E; --ink: #F3EAF3; --muted: #AE9FB2; --line: #372D3B;
+  --ph-men: #F0718F; --ph-fol: #5CC79C; --ph-ovu: #F2B74B; --ph-lut: #A68BF0; --good: #5CC79C; --warn: #F0A050; --frame: #0B080C;
+  --accent-ink: #160F18; color-scheme: dark; }
+
+html, body { height: 100%; }
+body { background: var(--frame); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.45; }
+* { box-sizing: border-box; }
+button, input, textarea, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: 30px; line-height: 1.08; font-weight: 800; }
+h2 { font-size: 21px; font-weight: 700; }
+h3 { font-size: 16px; font-weight: 700; }
+p { margin: 0; }
+.mono { font-family: var(--f-data); font-variant-numeric: tabular-nums; }
+.eyebrow { font-size: 11px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.muted { color: var(--muted); }
+
+#app[data-phase="menstrual"] { --accent: var(--ph-men); }
+#app[data-phase="follicular"] { --accent: var(--ph-fol); }
+#app[data-phase="ovulatory"] { --accent: var(--ph-ovu); }
+#app[data-phase="luteal"] { --accent: var(--ph-lut); }
+
+#app { height: 100%; max-width: 440px; margin: 0 auto; background: var(--bg); display: flex; flex-direction: column; position: relative; overflow: hidden; transition: --accent .4s; }
+@media (min-width: 600px) {
+  body { display: grid; place-items: center; padding: 16px; }
+  #app { height: min(900px, calc(100vh - 32px)); width: 420px; border-radius: 38px; box-shadow: 0 30px 80px -20px rgba(40, 10, 40, .35), 0 0 0 10px var(--surface); }
+}
+.scroll { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+.screen { padding-block: 20px 28px; padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: max(18px, env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; gap: 16px; }
+
+/* Ambient phase glow behind the header */
+.glow { position: absolute; inset: -120px -80px auto; height: 340px; background: radial-gradient(closest-side, color-mix(in oklab, var(--accent) 30%, transparent), transparent); filter: blur(10px); pointer-events: none; z-index: 0; transition: background .5s; }
+.scroll, .tabbar, .topbar { position: relative; z-index: 1; }
+
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px max(18px, env(safe-area-inset-right, 0px)) 4px max(18px, env(safe-area-inset-left, 0px)); }
+.brand { font-family: var(--f-display); font-weight: 800; font-size: 22px; display: flex; align-items: center; gap: 8px; }
+.brand-mark { width: 26px; height: 26px; }
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 99px; font-size: 12px; font-weight: 600; background: var(--surface-2); color: var(--muted); border: 0; }
+.pill.accent { background: color-mix(in oklab, var(--accent) 16%, var(--surface)); color: var(--accent); }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; display: inline-block; }
+
+.card { background: var(--surface); border-radius: var(--r-lg); padding: 16px; border: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px; }
+.card.flat { background: var(--surface-2); border-color: transparent; }
+.row { display: flex; align-items: center; gap: 10px; }
+.row.between { justify-content: space-between; }
+.stack { display: flex; flex-direction: column; gap: 8px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+
+.btn { border: 0; border-radius: 99px; padding: 13px 20px; font-weight: 700; background: var(--accent); color: var(--accent-ink); display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: transform .15s, filter .15s; }
+.btn:active { transform: scale(.97); }
+.btn:hover { filter: brightness(1.05); }
+.btn.block { width: 100%; }
+.btn.ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--line); }
+.btn.soft { background: color-mix(in oklab, var(--accent) 14%, var(--surface)); color: var(--accent); }
+.btn.small { padding: 8px 14px; font-size: 13px; }
+.btn[disabled] { opacity: .45; pointer-events: none; }
+.link { background: none; border: 0; color: var(--accent); font-weight: 700; padding: 4px 0; }
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font-size: 13px; font-weight: 600; color: var(--muted); }
+.input { width: 100%; border: 1.5px solid var(--line); background: var(--surface); border-radius: var(--r-md); padding: 12px 14px; }
+.input:focus { border-color: var(--accent); outline: none; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { border: 1.5px solid var(--line); background: var(--surface); border-radius: 99px; padding: 8px 14px; font-size: 14px; font-weight: 500; transition: all .15s; }
+.chip.on { border-color: var(--accent); background: color-mix(in oklab, var(--accent) 14%, var(--surface)); color: var(--accent); font-weight: 700; }
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; background: var(--surface-2); border-radius: 99px; padding: 4px; gap: 4px; }
+.seg button { border: 0; background: transparent; border-radius: 99px; padding: 9px 6px; font-weight: 600; font-size: 13px; color: var(--muted); }
+.seg button.on { background: var(--surface); color: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+
+/* Onboarding */
+.progress { display: flex; gap: 6px; }
+.progress span { flex: 1; height: 4px; border-radius: 4px; background: var(--line); overflow: hidden; position: relative; }
+.progress span.on::after { content: ""; position: absolute; inset: 0; background: var(--accent); animation: grow .5s ease-out both; transform-origin: left; }
+@keyframes grow { from { transform: scaleX(0); } }
+.hero-art { height: 250px; position: relative; margin-inline: -18px; overflow: hidden; }
+.hero-art canvas { width: 100%; height: 100%; display: block; }
+.promise { display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: start; }
+.promise .ic { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: color-mix(in oklab, var(--accent) 14%, var(--surface)); color: var(--accent); }
+.toggle { appearance: none; width: 44px; height: 26px; border-radius: 99px; background: var(--line); position: relative; transition: background .2s; flex: none; border: 0; }
+.toggle::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: var(--surface); transition: transform .2s; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
+.toggle:checked { background: var(--accent); }
+.toggle:checked::after { transform: translateX(18px); }
+.goal { text-align: left; border: 1.5px solid var(--line); background: var(--surface); border-radius: var(--r-md); padding: 14px; display: flex; flex-direction: column; gap: 4px; transition: all .15s; min-width: 0; }
+.goal b { font-family: var(--f-display); font-size: 15px; }
+.goal small { color: var(--muted); font-size: 12px; }
+.goal.on { border-color: var(--accent); background: color-mix(in oklab, var(--accent) 10%, var(--surface)); box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 18%, transparent); }
+.connect { display: grid; grid-template-columns: 44px 1fr auto; gap: 12px; align-items: center; }
+.logo { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: var(--ink); color: var(--bg); font-family: var(--f-display); font-weight: 800; }
+.sync-bar { height: 6px; border-radius: 6px; background: var(--line); overflow: hidden; grid-column: 1 / -1; }
+.sync-bar i { display: block; height: 100%; background: var(--accent); width: 0; transition: width .2s linear; }
+
+/* Thinking state */
+.thinking { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 30px 0; text-align: center; }
+.orb { width: 90px; height: 90px; border-radius: 50%; background: conic-gradient(from 0deg, var(--ph-men), var(--ph-ovu), var(--ph-fol), var(--ph-lut), var(--ph-men)); animation: spin 2.4s linear infinite, morph 3s ease-in-out infinite; filter: blur(1px); }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes morph { 0%,100% { border-radius: 50% 50% 50% 50%; } 33% { border-radius: 58% 42% 55% 45%; } 66% { border-radius: 44% 56% 46% 54%; } }
+
+/* Habits */
+.habit { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; }
+.habit-title { font-weight: 700; }
+.check { width: 40px; height: 40px; border-radius: 12px; border: 2px solid var(--line); background: var(--surface); display: grid; place-items: center; transition: all .2s; color: transparent; }
+.check.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); animation: pop .35s; }
+@keyframes pop { 50% { transform: scale(1.18); } }
+.week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; grid-column: 1 / -1; }
+.week div { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10px; color: var(--muted); }
+.week i { width: 100%; height: 8px; border-radius: 4px; background: var(--line); display: block; }
+.week i.on { background: var(--accent); }
+.week i.today { outline: 1.5px solid var(--accent); outline-offset: 1px; }
+
+/* Today */
+.ready { display: grid; grid-template-columns: 116px 1fr; gap: 14px; align-items: center; }
+.ring-wrap { position: relative; width: 116px; height: 116px; }
+.ring-wrap svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.ring-wrap .val { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; }
+.ring-wrap .val b { font-family: var(--f-display); font-size: 32px; line-height: 1; display: block; }
+.ring-arc { transition: stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1); }
+.metric b { font-family: var(--f-data); font-size: 17px; display: block; font-variant-numeric: tabular-nums; }
+.metric span { font-size: 11px; color: var(--muted); }
+.ease { background: linear-gradient(135deg, color-mix(in oklab, var(--ph-lut) 20%, var(--surface)), color-mix(in oklab, var(--ph-men) 14%, var(--surface))); border: 0; position: relative; overflow: hidden; }
+.ease::after { content: ""; position: absolute; width: 160px; height: 160px; right: -50px; top: -60px; border-radius: 50%; background: color-mix(in oklab, var(--surface) 40%, transparent); animation: breathe 5s ease-in-out infinite; }
+@keyframes breathe { 50% { transform: scale(1.25); opacity: .5; } }
+.timeline { display: flex; flex-direction: column; }
+.tl { display: grid; grid-template-columns: 52px 14px 1fr; gap: 10px; min-height: 40px; }
+.tl .t { font-family: var(--f-data); font-size: 12px; color: var(--muted); padding-top: 2px; }
+.tl .rail { display: flex; flex-direction: column; align-items: center; }
+.tl .rail i { width: 10px; height: 10px; border-radius: 50%; background: var(--line); margin-top: 5px; flex: none; }
+.tl .rail s { flex: 1; width: 2px; background: var(--line); }
+.tl.plan .rail i { background: var(--accent); box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 22%, transparent); }
+.tl .what { padding-bottom: 12px; min-width: 0; }
+.tl.plan .what b { color: var(--accent); }
+.tl .what small { color: var(--muted); display: block; }
+.feature { display: grid; grid-template-columns: 54px 1fr; gap: 12px; align-items: start; }
+.feature .art { width: 54px; height: 54px; border-radius: 16px; background: color-mix(in oklab, var(--accent) 16%, var(--surface)); display: grid; place-items: center; color: var(--accent); }
+details summary { cursor: pointer; font-weight: 700; color: var(--accent); list-style: none; font-size: 14px; }
+details summary::-webkit-details-marker { display: none; }
+details ol, details ul { margin: 8px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
+.scrub { display: flex; flex-direction: column; gap: 6px; }
+input[type=range] { width: 100%; accent-color: var(--accent); }
+.win { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: center; }
+.win .star { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--accent-ink); }
+
+.mind { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.mind > div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.mind b { font-size: 18px; }
+.mind svg { max-width: 100%; }
+.pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(56px, 1fr)); gap: 6px; }
+.pillar { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 600; color: var(--muted); }
+.ring-wrap.sm { width: 56px; height: 56px; }
+.ring-wrap.sm .val b { font-family: var(--f-data); font-size: 14px; }
+.weeks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; align-items: end; }
+.wk { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); text-align: center; }
+.wk .bar { width: 100%; height: 110px; background: var(--surface-2); border-radius: 10px; display: flex; align-items: flex-end; overflow: hidden; }
+.wk .bar i { display: block; width: 100%; background: var(--accent); border-radius: 10px; animation: barUp .8s cubic-bezier(.2,.8,.2,1) both; transform-origin: bottom; }
+.wk:last-child .bar i { background: linear-gradient(var(--accent), color-mix(in oklab, var(--accent) 60%, var(--ph-ovu))); }
+.wk b { color: var(--ink); font-size: 13px; }
+@keyframes barUp { from { transform: scaleY(0); } }
+.month { display: grid; grid-template-columns: repeat(14, 1fr); gap: 4px; }
+.month i { aspect-ratio: 1; border-radius: 4px; background: var(--line); display: block; }
+.month i.on { background: var(--accent); }
+.month i.today { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+.deck { position: relative; height: 190px; outline: none; }
+.swipe-card { position: absolute; inset: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 20px; display: flex; flex-direction: column; gap: 6px; justify-content: center;
+  transform: translateY(calc(var(--depth) * 10px)) scale(calc(1 - var(--depth) * .05)); opacity: calc(1 - var(--depth) * .25); touch-action: pan-y; user-select: none; cursor: grab; box-shadow: 0 14px 30px -18px rgba(40,10,40,.4); overflow: hidden; }
+.swipe-card[style*="--depth:0"] { background: linear-gradient(160deg, var(--surface), color-mix(in oklab, var(--accent) 10%, var(--surface))); }
+.stamp { position: absolute; top: 16px; padding: 4px 12px; border: 3px solid; border-radius: 10px; font-family: var(--f-display); font-weight: 800; font-size: 18px; opacity: 0; transition: opacity .15s; text-transform: uppercase; }
+.stamp.yes { right: 16px; color: var(--good); transform: rotate(10deg); }
+.stamp.no { left: 16px; color: var(--warn); transform: rotate(-10deg); }
+.lean-yes .stamp.yes, .lean-no .stamp.no { opacity: 1; }
+.deck:focus-visible .swipe-card[style*="--depth:0"] { outline: 2px solid var(--accent); }
+.gapbars { display: flex; gap: 8px; align-items: flex-end; height: 70px; }
+.gapbars div { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; height: 100%; justify-content: flex-end; font-size: 11px; }
+.gapbars i { width: 100%; border-radius: 6px 6px 2px 2px; display: block; animation: barUp .6s both; transform-origin: bottom; }
+
+/* Log composer */
+.mic-zone { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 10px 0 4px; }
+.mic { width: 96px; height: 96px; border-radius: 50%; border: 0; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; position: relative; box-shadow: 0 12px 30px -10px var(--accent); }
+.mic.live::before, .mic.live::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--accent); animation: ripple 1.6s ease-out infinite; }
+.mic.live::after { animation-delay: .8s; }
+@keyframes ripple { to { transform: scale(1.8); opacity: 0; } }
+.wave { display: flex; gap: 3px; height: 28px; align-items: center; }
+.wave i { width: 4px; border-radius: 3px; background: var(--accent); height: 4px; transition: height .1s; }
+.wave.live i { animation: wv 0.9s ease-in-out infinite; }
+@keyframes wv { 50% { height: 26px; } }
+textarea.input { min-height: 110px; resize: vertical; }
+.buckets { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.bucket { border-radius: var(--r-md); padding: 12px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.bucket.wide { grid-column: 1 / -1; }
+.bucket h3 { font-size: 13px; display: flex; align-items: center; gap: 6px; }
+.bucket h3 i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+.entry { font-size: 13.5px; padding: 7px 10px; border-radius: 10px; background: var(--surface-2); animation: fly .5s cubic-bezier(.2,.9,.3,1.2) both; overflow-wrap: anywhere; }
+.entry small { display: block; color: var(--muted); font-size: 11.5px; }
+@keyframes fly { from { opacity: 0; transform: translateY(-24px) scale(.9); } }
+
+/* Cycle */
+.cycle-ring { position: relative; width: 100%; max-width: 300px; margin: 0 auto; aspect-ratio: 1; }
+.cycle-ring svg { width: 100%; height: 100%; }
+.cycle-ring .center { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; pointer-events: none; }
+.cycle-ring .center b { font-family: var(--f-display); font-size: 46px; line-height: 1; display: block; }
+.seg-arc { transition: opacity .3s; animation: arcIn .6s both; }
+@keyframes arcIn { from { opacity: 0; } }
+.legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.legend div { display: flex; gap: 8px; align-items: center; font-size: 13px; }
+.legend i { width: 12px; height: 12px; border-radius: 4px; }
+.chart { width: 100%; height: auto; display: block; }
+.chart text { fill: var(--muted); font-family: var(--f-data); font-size: 10px; }
+
+/* Record */
+.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: 12px; }
+.tile b { font-family: var(--f-display); font-size: 26px; display: block; line-height: 1.1; }
+.tile span { font-size: 12px; color: var(--muted); }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { text-align: left; font-size: 11px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; padding: 6px 4px; }
+td { padding: 8px 4px; border-top: 1px solid var(--line); font-family: var(--f-data); font-variant-numeric: tabular-nums; font-size: 12.5px; }
+td:first-child { font-family: var(--f-body); font-weight: 600; font-size: 13px; }
+.insight { display: grid; grid-template-columns: 6px 1fr; gap: 12px; }
+.insight i { border-radius: 4px; background: var(--accent); }
+.heat { display: grid; grid-template-columns: 76px repeat(29, 1fr); gap: 2px; align-items: center; font-size: 11px; }
+.heat span { aspect-ratio: 1; border-radius: 2px; background: var(--surface-2); }
+.trends { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.trend { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.spark { height: 46px; display: flex; align-items: flex-end; gap: 2px; }
+.spark i { flex: 1; border-radius: 3px 3px 0 0; display: block; animation: barUp .6s cubic-bezier(.2,.8,.2,1) both; transform-origin: bottom; }
+.narrative p + p { margin-top: 10px; }
+.doc { background: var(--surface); border-radius: var(--r-lg); border: 1px solid var(--line); padding: 18px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 10px 30px -18px rgba(0,0,0,.3); }
+.doc-head { display: flex; justify-content: space-between; gap: 10px; border-bottom: 2px solid var(--ink); padding-bottom: 10px; }
+
+/* Tab bar */
+.tabbar { display: grid; grid-template-columns: repeat(4, 1fr); background: color-mix(in oklab, var(--surface) 92%, transparent); backdrop-filter: blur(12px); border-top: 1px solid var(--line); padding: 6px max(8px, env(safe-area-inset-right, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) max(8px, env(safe-area-inset-left, 0px)); }
+.tabbar button { border: 0; background: none; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 11px; font-weight: 600; color: var(--muted); padding: 6px 0; position: relative; }
+.tabbar button.on { color: var(--accent); }
+.tabbar button.on::before { content: ""; position: absolute; top: -7px; width: 28px; height: 3px; border-radius: 3px; background: var(--accent); }
+.tabbar svg { width: 24px; height: 24px; }
+
+/* Mood check-in */
+.sheet-back { position: absolute; inset: 0; background: rgba(20, 8, 22, .45); z-index: 20; display: flex; align-items: flex-end; animation: fade .3s both; }
+@keyframes fade { from { opacity: 0; } }
+.sheet { background: var(--surface); width: 100%; border-radius: 28px 28px 0 0; padding: 22px max(18px, env(safe-area-inset-right, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px)); display: flex; flex-direction: column; gap: 16px; animation: up .45s cubic-bezier(.2,.9,.3,1.1) both; }
+@keyframes up { from { transform: translateY(100%); } }
+.moods { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.mood { border: 0; background: none; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--muted); }
+.blob { width: 54px; height: 54px; animation: morph 4s ease-in-out infinite; display: grid; place-items: center; transition: transform .2s; }
+.mood:hover .blob, .mood.on .blob { transform: scale(1.15); }
+.mood:nth-child(2) .blob { animation-delay: -1s; } .mood:nth-child(3) .blob { animation-delay: -2s; } .mood:nth-child(4) .blob { animation-delay: -3s; }
+
+.toast { position: absolute; left: 50%; bottom: 92px; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 99px; font-size: 13px; font-weight: 600; z-index: 30; animation: toast 2.8s both; max-width: calc(100% - 40px); text-align: center; }
+@keyframes toast { 0% { opacity: 0; transform: translate(-50%, 12px); } 10%, 85% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; } }
+.confetti { position: absolute; width: 8px; height: 8px; border-radius: 2px; pointer-events: none; z-index: 40; animation: burst .8s ease-out forwards; }
+@keyframes burst { to { transform: translate(var(--dx), var(--dy)) rotate(260deg); opacity: 0; } }
+
+.fresh .rise { animation: rise .55s cubic-bezier(.2,.8,.2,1) both; }
+.fresh .rise:nth-child(2) { animation-delay: .05s; } .fresh .rise:nth-child(3) { animation-delay: .1s; } .fresh .rise:nth-child(4) { animation-delay: .15s; }
+.fresh .rise:nth-child(5) { animation-delay: .2s; } .fresh .rise:nth-child(6) { animation-delay: .25s; } .fresh .rise:nth-child(n+7) { animation-delay: .3s; }
+@keyframes rise { from { opacity: .001; transform: translateY(14px); } }
+.ai-badge { display: inline-flex; gap: 5px; align-items: center; font-size: 11px; font-weight: 700; color: var(--accent); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
+</style>
+
+<div id="app" data-phase="follicular"></div>
+<script id="seed" type="application/json">{"days":[{"day":"2026-08-09","sleep":84,"sleepMin":473,"deep":78,"rem":109,"hrv":54.4,"rhr":54.0,"bed":"23:36","ready":84,"temp":-0.07,"steps":5902,"kcal":266,"stress":35,"recovery":111,"cd":10,"phase":"follicular","ov":false},{"day":"2026-08-10","sleep":58,"sleepMin":363,"deep":71,"rem":81,"hrv":54.4,"rhr":53.0,"bed":"22:33","ready":80,"temp":-0.01,"steps":6623,"kcal":298,"stress":68,"recovery":107,"cd":11,"phase":"follicular","ov":false},{"day":"2026-08-11","sleep":66,"sleepMin":425,"deep":72,"rem":89,"hrv":70.9,"rhr":53.0,"bed":"23:12","ready":91,"temp":-0.21,"steps":4142,"kcal":186,"stress":115,"recovery":48,"cd":12,"phase":"follicular","ov":false},{"day":"2026-08-12","sleep":62,"sleepMin":404,"deep":77,"rem":91,"hrv":52.3,"rhr":51.0,"bed":"23:37","ready":91,"temp":-0.0,"steps":6678,"kcal":301,"stress":100,"recovery":75,"cd":13,"phase":"follicular","ov":false},{"day":"2026-08-13","sleep":89,"sleepMin":501,"deep":86,"rem":99,"hrv":47.1,"rhr":49.0,"bed":"23:42","ready":82,"temp":-0.12,"steps":8757,"kcal":394,"stress":80,"recovery":91,"cd":14,"phase":"ovulatory","ov":false},{"day":"2026-08-14","sleep":78,"sleepMin":455,"deep":79,"rem":90,"hrv":56.9,"rhr":53.0,"bed":"23:06","ready":82,"temp":-0.08,"steps":6161,"kcal":277,"stress":91,"recovery":79,"cd":15,"phase":"ovulatory","ov":false},{"day":"2026-08-15","sleep":76,"sleepMin":416,"deep":73,"rem":89,"hrv":42.6,"rhr":58.0,"bed":"23:38","ready":74,"temp":0.28,"steps":7762,"kcal":349,"stress":58,"recovery":118,"cd":16,"phase":"ovulatory","ov":false},{"day":"2026-08-16","sleep":69,"sleepMin":436,"deep":77,"rem":87,"hrv":39.9,"rhr":53.0,"bed":"23:19","ready":75,"temp":0.27,"steps":9573,"kcal":431,"stress":56,"recovery":101,"cd":17,"phase":"luteal","ov":false},{"day":"2026-08-17","sleep":53,"sleepMin":333,"deep":60,"rem":64,"hrv":48.7,"rhr":53.0,"bed":"22:15","ready":78,"temp":0.28,"steps":7912,"kcal":356,"stress":105,"recovery":155,"cd":18,"phase":"luteal","ov":true},{"day":"2026-08-18","sleep":77,"sleepMin":454,"deep":79,"rem":94,"hrv":36.4,"rhr":58.0,"bed":"23:33","ready":75,"temp":0.44,"steps":9084,"kcal":409,"stress":83,"recovery":146,"cd":19,"phase":"luteal","ov":true},{"day":"2026-08-19","sleep":78,"sleepMin":451,"deep":82,"rem":97,"hrv":43.8,"rhr":54.0,"bed":"23:00","ready":73,"temp":0.3,"steps":6051,"kcal":272,"stress":91,"recovery":140,"cd":20,"phase":"luteal","ov":true},{"day":"2026-08-20","sleep":76,"sleepMin":418,"deep":75,"rem":90,"hrv":51.5,"rhr":55.0,"bed":"22:22","ready":76,"temp":0.35,"steps":9672,"kcal":435,"stress":137,"recovery":97,"cd":21,"phase":"luteal","ov":true},{"day":"2026-08-21","sleep":61,"sleepMin":364,"deep":58,"rem":73,"hrv":54.1,"rhr":58.0,"bed":"23:11","ready":67,"temp":0.19,"steps":9813,"kcal":442,"stress":81,"recovery":83,"cd":22,"phase":"luteal","ov":true},{"day":"2026-08-22","sleep":71,"sleepMin":417,"deep":70,"rem":88,"hrv":46.9,"rhr":55.0,"bed":"23:06","ready":78,"temp":0.42,"steps":5109,"kcal":230,"stress":98,"recovery":157,"cd":23,"phase":"luteal","ov":true},{"day":"2026-08-23","sleep":75,"sleepMin":426,"deep":74,"rem":89,"hrv":48.7,"rhr":54.0,"bed":"23:36","ready":76,"temp":0.33,"steps":7587,"kcal":341,"stress":63,"recovery":46,"cd":24,"phase":"luteal","ov":true},{"day":"2026-08-24","sleep":58,"sleepMin":366,"deep":51,"rem":78,"hrv":50.4,"rhr":56.0,"bed":"23:35","ready":75,"temp":0.37,"steps":8693,"kcal":391,"stress":163,"recovery":67,"cd":25,"phase":"luteal","ov":true},{"day":"2026-08-25","sleep":59,"sleepMin":384,"deep":67,"rem":91,"hrv":41.4,"rhr":56.0,"bed":"23:45","ready":69,"temp":0.28,"steps":8120,"kcal":365,"stress":121,"recovery":82,"cd":26,"phase":"luteal","ov":true},{"day":"2026-08-26","sleep":78,"sleepMin":475,"deep":65,"rem":94,"hrv":45.5,"rhr":54.0,"bed":"22:46","ready":71,"temp":0.41,"steps":6994,"kcal":315,"stress":189,"recovery":131,"cd":27,"phase":"luteal","ov":true},{"day":"2026-08-27","sleep":53,"sleepMin":342,"deep":45,"rem":77,"hrv":54.5,"rhr":50.0,"bed":"23:52","ready":74,"temp":0.38,"steps":7729,"kcal":348,"stress":80,"recovery":57,"cd":28,"phase":"luteal","ov":true},{"day":"2026-08-28","sleep":70,"sleepMin":436,"deep":68,"rem":96,"hrv":39.1,"rhr":56.0,"bed":"23:03","ready":71,"temp":0.42,"steps":7538,"kcal":339,"stress":138,"recovery":148,"cd":29,"phase":"luteal","ov":true},{"day":"2026-08-29","sleep":68,"sleepMin":405,"deep":64,"rem":80,"hrv":45.5,"rhr":53.0,"bed":"00:22","ready":66,"temp":-0.03,"steps":5067,"kcal":228,"stress":55,"recovery":79,"cd":1,"phase":"menstrual","ov":false},{"day":"2026-08-30","sleep":71,"sleepMin":442,"deep":67,"rem":105,"hrv":45.8,"rhr":52.0,"bed":"22:57","ready":70,"temp":0.01,"steps":5633,"kcal":253,"stress":50,"recovery":40,"cd":2,"phase":"menstrual","ov":false},{"day":"2026-08-31","sleep":64,"sleepMin":404,"deep":64,"rem":83,"hrv":50.8,"rhr":55.0,"bed":"23:06","ready":75,"temp":-0.07,"steps":7244,"kcal":326,"stress":43,"recovery":46,"cd":3,"phase":"menstrual","ov":false},{"day":"2026-09-01","sleep":78,"sleepMin":445,"deep":74,"rem":88,"hrv":52.0,"rhr":51.0,"bed":"22:34","ready":68,"temp":-0.09,"steps":11197,"kcal":504,"stress":46,"recovery":61,"cd":4,"phase":"menstrual","ov":false},{"day":"2026-09-02","sleep":76,"sleepMin":443,"deep":77,"rem":93,"hrv":56.0,"rhr":54.0,"bed":"22:53","ready":77,"temp":-0.12,"steps":7341,"kcal":330,"stress":101,"recovery":51,"cd":5,"phase":"menstrual","ov":false},{"day":"2026-09-03","sleep":72,"sleepMin":446,"deep":97,"rem":93,"hrv":57.2,"rhr":54.0,"bed":"23:27","ready":82,"temp":-0.05,"steps":7860,"kcal":354,"stress":138,"recovery":144,"cd":6,"phase":"follicular","ov":false},{"day":"2026-09-04","sleep":63,"sleepMin":368,"deep":78,"rem":87,"hrv":60.3,"rhr":52.0,"bed":"22:19","ready":83,"temp":-0.07,"steps":11214,"kcal":505,"stress":129,"recovery":45,"cd":7,"phase":"follicular","ov":false},{"day":"2026-09-05","sleep":82,"sleepMin":482,"deep":87,"rem":94,"hrv":52.4,"rhr":53.0,"bed":"00:07","ready":82,"temp":-0.06,"steps":6471,"kcal":291,"stress":60,"recovery":110,"cd":8,"phase":"follicular","ov":false},{"day":"2026-09-06","sleep":72,"sleepMin":439,"deep":76,"rem":102,"hrv":54.7,"rhr":51.0,"bed":"00:25","ready":84,"temp":-0.05,"steps":4366,"kcal":196,"stress":134,"recovery":64,"cd":9,"phase":"follicular","ov":false},{"day":"2026-09-07","sleep":57,"sleepMin":380,"deep":76,"rem":83,"hrv":54.5,"rhr":55.0,"bed":"23:52","ready":84,"temp":-0.09,"steps":10469,"kcal":471,"stress":72,"recovery":64,"cd":10,"phase":"follicular","ov":false},{"day":"2026-09-08","sleep":70,"sleepMin":419,"deep":87,"rem":97,"hrv":57.1,"rhr":49.0,"bed":"23:50","ready":84,"temp":-0.14,"steps":8851,"kcal":398,"stress":147,"recovery":97,"cd":11,"phase":"follicular","ov":false},{"day":"2026-09-09","sleep":76,"sleepMin":443,"deep":95,"rem":101,"hrv":57.2,"rhr":51.0,"bed":"23:15","ready":86,"temp":-0.14,"steps":8411,"kcal":378,"stress":126,"recovery":116,"cd":12,"phase":"follicular","ov":false},{"day":"2026-09-10","sleep":77,"sleepMin":466,"deep":89,"rem":110,"hrv":56.8,"rhr":53.0,"bed":"22:23","ready":85,"temp":-0.19,"steps":6300,"kcal":284,"stress":55,"recovery":90,"cd":13,"phase":"follicular","ov":false},{"day":"2026-09-11","sleep":78,"sleepMin":424,"deep":83,"rem":83,"hrv":51.2,"rhr":51.0,"bed":"22:23","ready":75,"temp":-0.16,"steps":8129,"kcal":366,"stress":65,"recovery":112,"cd":14,"phase":"ovulatory","ov":false},{"day":"2026-09-12","sleep":78,"sleepMin":452,"deep":80,"rem":89,"hrv":60.0,"rhr":54.0,"bed":"23:28","ready":84,"temp":-0.06,"steps":6385,"kcal":287,"stress":36,"recovery":64,"cd":15,"phase":"ovulatory","ov":false},{"day":"2026-09-13","sleep":77,"sleepMin":442,"deep":82,"rem":93,"hrv":46.0,"rhr":56.0,"bed":"23:19","ready":69,"temp":0.31,"steps":8962,"kcal":403,"stress":77,"recovery":63,"cd":16,"phase":"ovulatory","ov":false},{"day":"2026-09-14","sleep":65,"sleepMin":396,"deep":56,"rem":77,"hrv":42.3,"rhr":57.0,"bed":"22:19","ready":73,"temp":0.29,"steps":5640,"kcal":254,"stress":80,"recovery":133,"cd":17,"phase":"luteal","ov":false},{"day":"2026-09-15","sleep":75,"sleepMin":442,"deep":81,"rem":92,"hrv":45.0,"rhr":56.0,"bed":"23:10","ready":76,"temp":0.34,"steps":10469,"kcal":471,"stress":126,"recovery":143,"cd":18,"phase":"luteal","ov":true},{"day":"2026-09-16","sleep":80,"sleepMin":465,"deep":89,"rem":99,"hrv":55.7,"rhr":51.0,"bed":"22:53","ready":71,"temp":0.21,"steps":10633,"kcal":478,"stress":75,"recovery":55,"cd":19,"phase":"luteal","ov":true},{"day":"2026-09-17","sleep":74,"sleepMin":453,"deep":81,"rem":86,"hrv":49.4,"rhr":53.0,"bed":"22:39","ready":79,"temp":0.34,"steps":4834,"kcal":218,"stress":127,"recovery":119,"cd":20,"phase":"luteal","ov":true},{"day":"2026-09-18","sleep":76,"sleepMin":428,"deep":60,"rem":88,"hrv":43.5,"rhr":54.0,"bed":"22:37","ready":77,"temp":0.2,"steps":7681,"kcal":346,"stress":118,"recovery":144,"cd":21,"phase":"luteal","ov":true},{"day":"2026-09-19","sleep":67,"sleepMin":406,"deep":73,"rem":91,"hrv":56.0,"rhr":53.0,"bed":"23:57","ready":74,"temp":0.41,"steps":4608,"kcal":207,"stress":55,"recovery":63,"cd":22,"phase":"luteal","ov":true},{"day":"2026-09-20","sleep":68,"sleepMin":392,"deep":57,"rem":89,"hrv":39.0,"rhr":52.0,"bed":"23:30","ready":74,"temp":0.18,"steps":9346,"kcal":421,"stress":76,"recovery":82,"cd":23,"phase":"luteal","ov":true},{"day":"2026-09-21","sleep":48,"sleepMin":334,"deep":51,"rem":72,"hrv":40.2,"rhr":55.0,"bed":"22:37","ready":66,"temp":0.31,"steps":5920,"kcal":266,"stress":30,"recovery":112,"cd":24,"phase":"luteal","ov":true},{"day":"2026-09-22","sleep":59,"sleepMin":389,"deep":54,"rem":76,"hrv":42.8,"rhr":56.0,"bed":"23:00","ready":65,"temp":0.43,"steps":11000,"kcal":495,"stress":157,"recovery":114,"cd":25,"phase":"luteal","ov":true},{"day":"2026-09-23","sleep":57,"sleepMin":362,"deep":45,"rem":69,"hrv":43.8,"rhr":55.0,"bed":"23:48","ready":70,"temp":0.37,"steps":11119,"kcal":500,"stress":155,"recovery":46,"cd":26,"phase":"luteal","ov":true},{"day":"2026-09-24","sleep":63,"sleepMin":381,"deep":64,"rem":86,"hrv":43.2,"rhr":57.0,"bed":"23:16","ready":71,"temp":0.47,"steps":10942,"kcal":492,"stress":157,"recovery":158,"cd":27,"phase":"luteal","ov":true},{"day":"2026-09-25","sleep":66,"sleepMin":403,"deep":55,"rem":91,"hrv":44.0,"rhr":52.0,"bed":"23:19","ready":64,"temp":0.31,"steps":9372,"kcal":422,"stress":188,"recovery":79,"cd":28,"phase":"luteal","ov":true},{"day":"2026-09-26","sleep":71,"sleepMin":433,"deep":57,"rem":82,"hrv":48.0,"rhr":54.0,"bed":"00:09","ready":66,"temp":0.37,"steps":9167,"kcal":413,"stress":171,"recovery":157,"cd":29,"phase":"luteal","ov":true},{"day":"2026-09-27","sleep":67,"sleepMin":410,"deep":52,"rem":95,"hrv":46.2,"rhr":53.0,"bed":"23:26","ready":62,"temp":-0.13,"steps":5138,"kcal":231,"stress":107,"recovery":104,"cd":1,"phase":"menstrual","ov":false},{"day":"2026-09-28","sleep":75,"sleepMin":440,"deep":65,"rem":100,"hrv":45.0,"rhr":52.0,"bed":"23:50","ready":64,"temp":0.01,"steps":4474,"kcal":201,"stress":74,"recovery":146,"cd":2,"phase":"menstrual","ov":false},{"day":"2026-09-29","sleep":82,"sleepMin":440,"deep":78,"rem":94,"hrv":51.5,"rhr":52.0,"bed":"22:35","ready":69,"temp":-0.06,"steps":2677,"kcal":120,"stress":145,"recovery":109,"cd":3,"phase":"menstrual","ov":false},{"day":"2026-09-30","sleep":66,"sleepMin":409,"deep":69,"rem":93,"hrv":53.5,"rhr":50.0,"bed":"23:35","ready":71,"temp":-0.1,"steps":6294,"kcal":283,"stress":64,"recovery":78,"cd":4,"phase":"menstrual","ov":false},{"day":"2026-10-01","sleep":77,"sleepMin":454,"deep":69,"rem":93,"hrv":50.6,"rhr":53.0,"bed":"23:34","ready":74,"temp":-0.0,"steps":9539,"kcal":429,"stress":65,"recovery":66,"cd":5,"phase":"menstrual","ov":false},{"day":"2026-10-02","sleep":65,"sleepMin":402,"deep":83,"rem":86,"hrv":61.8,"rhr":54.0,"bed":"22:16","ready":84,"temp":-0.17,"steps":8066,"kcal":363,"stress":53,"recovery":122,"cd":6,"phase":"follicular","ov":false},{"day":"2026-10-03","sleep":73,"sleepMin":435,"deep":82,"rem":99,"hrv":54.4,"rhr":49.0,"bed":"23:28","ready":81,"temp":-0.11,"steps":7608,"kcal":342,"stress":99,"recovery":67,"cd":7,"phase":"follicular","ov":false},{"day":"2026-10-04","sleep":72,"sleepMin":431,"deep":85,"rem":93,"hrv":55.9,"rhr":46.0,"bed":"23:20","ready":83,"temp":-0.05,"steps":6857,"kcal":309,"stress":81,"recovery":47,"cd":8,"phase":"follicular","ov":false},{"day":"2026-10-05","sleep":63,"sleepMin":383,"deep":76,"rem":74,"hrv":50.3,"rhr":52.0,"bed":"23:08","ready":74,"temp":-0.07,"steps":6952,"kcal":313,"stress":111,"recovery":146,"cd":9,"phase":"follicular","ov":false},{"day":"2026-10-06","sleep":83,"sleepMin":495,"deep":101,"rem":113,"hrv":55.9,"rhr":52.0,"bed":"23:14","ready":89,"temp":-0.1,"steps":8008,"kcal":360,"stress":49,"recovery":158,"cd":10,"phase":"follicular","ov":false},{"day":"2026-10-07","sleep":79,"sleepMin":475,"deep":101,"rem":93,"hrv":45.8,"rhr":50.0,"bed":"22:25","ready":87,"temp":-0.15,"steps":7520,"kcal":338,"stress":144,"recovery":128,"cd":11,"phase":"follicular","ov":false},{"day":"2026-10-08","sleep":73,"sleepMin":437,"deep":88,"rem":89,"hrv":52.2,"rhr":52.0,"bed":"23:40","ready":78,"temp":-0.06,"steps":8101,"kcal":365,"stress":106,"recovery":150,"cd":12,"phase":"follicular","ov":false},{"day":"2026-10-09","sleep":56,"sleepMin":407,"deep":83,"rem":94,"hrv":57.5,"rhr":53.0,"bed":"22:56","ready":91,"temp":-0.1,"steps":7690,"kcal":346,"stress":121,"recovery":93,"cd":13,"phase":"follicular","ov":false},{"day":"2026-10-10","sleep":73,"sleepMin":422,"deep":82,"rem":96,"hrv":60.7,"rhr":50.0,"bed":"00:19","ready":87,"temp":-0.1,"steps":6268,"kcal":282,"stress":68,"recovery":56,"cd":14,"phase":"ovulatory","ov":false},{"day":"2026-10-11","sleep":84,"sleepMin":475,"deep":94,"rem":99,"hrv":56.0,"rhr":50.0,"bed":"00:35","ready":84,"temp":-0.19,"steps":7269,"kcal":327,"stress":115,"recovery":121,"cd":15,"phase":"ovulatory","ov":false},{"day":"2026-10-12","sleep":61,"sleepMin":356,"deep":57,"rem":69,"hrv":39.9,"rhr":54.0,"bed":"22:27","ready":76,"temp":0.31,"steps":8654,"kcal":389,"stress":119,"recovery":157,"cd":16,"phase":"ovulatory","ov":false},{"day":"2026-10-13","sleep":64,"sleepMin":389,"deep":73,"rem":92,"hrv":51.9,"rhr":54.0,"bed":"23:42","ready":70,"temp":0.3,"steps":9181,"kcal":413,"stress":87,"recovery":133,"cd":17,"phase":"luteal","ov":false},{"day":"2026-10-14","sleep":74,"sleepMin":425,"deep":78,"rem":96,"hrv":40.6,"rhr":54.0,"bed":"23:01","ready":80,"temp":0.3,"steps":4978,"kcal":224,"stress":136,"recovery":102,"cd":18,"phase":"luteal","ov":true},{"day":"2026-10-15","sleep":63,"sleepMin":383,"deep":56,"rem":91,"hrv":42.7,"rhr":57.0,"bed":"23:28","ready":79,"temp":0.26,"steps":6100,"kcal":274,"stress":31,"recovery":146,"cd":19,"phase":"luteal","ov":true},{"day":"2026-10-16","sleep":58,"sleepMin":365,"deep":57,"rem":81,"hrv":52.0,"rhr":56.0,"bed":"23:29","ready":72,"temp":0.41,"steps":4811,"kcal":216,"stress":132,"recovery":143,"cd":20,"phase":"luteal","ov":true},{"day":"2026-10-17","sleep":65,"sleepMin":381,"deep":64,"rem":87,"hrv":49.4,"rhr":53.0,"bed":"23:58","ready":69,"temp":0.17,"steps":6691,"kcal":301,"stress":104,"recovery":106,"cd":21,"phase":"luteal","ov":true},{"day":"2026-10-18","sleep":72,"sleepMin":403,"deep":60,"rem":80,"hrv":52.8,"rhr":54.0,"bed":"00:01","ready":81,"temp":0.31,"steps":4024,"kcal":181,"stress":65,"recovery":106,"cd":22,"phase":"luteal","ov":true},{"day":"2026-10-19","sleep":78,"sleepMin":438,"deep":72,"rem":95,"hrv":47.3,"rhr":57.0,"bed":"22:41","ready":74,"temp":0.38,"steps":7879,"kcal":355,"stress":146,"recovery":154,"cd":23,"phase":"luteal","ov":true},{"day":"2026-10-20","sleep":68,"sleepMin":424,"deep":60,"rem":87,"hrv":44.5,"rhr":60.0,"bed":"23:05","ready":67,"temp":0.26,"steps":5746,"kcal":259,"stress":95,"recovery":130,"cd":24,"phase":"luteal","ov":true},{"day":"2026-10-21","sleep":70,"sleepMin":433,"deep":71,"rem":102,"hrv":44.5,"rhr":53.0,"bed":"23:16","ready":63,"temp":0.42,"steps":4400,"kcal":198,"stress":193,"recovery":146,"cd":25,"phase":"luteal","ov":true},{"day":"2026-10-22","sleep":65,"sleepMin":391,"deep":58,"rem":76,"hrv":42.2,"rhr":53.0,"bed":"23:02","ready":63,"temp":0.36,"steps":4938,"kcal":222,"stress":106,"recovery":59,"cd":26,"phase":"luteal","ov":true},{"day":"2026-10-23","sleep":71,"sleepMin":409,"deep":61,"rem":84,"hrv":45.9,"rhr":52.0,"bed":"22:52","ready":75,"temp":0.39,"steps":8540,"kcal":384,"stress":128,"recovery":154,"cd":27,"phase":"luteal","ov":true},{"day":"2026-10-24","sleep":73,"sleepMin":443,"deep":65,"rem":95,"hrv":49.1,"rhr":55.0,"bed":"23:32","ready":68,"temp":0.36,"steps":5281,"kcal":238,"stress":168,"recovery":103,"cd":28,"phase":"luteal","ov":true},{"day":"2026-10-25","sleep":59,"sleepMin":354,"deep":59,"rem":77,"hrv":40.7,"rhr":53.0,"bed":"23:12","ready":68,"temp":0.42,"steps":2038,"kcal":120,"stress":147,"recovery":146,"cd":29,"phase":"luteal","ov":true},{"day":"2026-10-26","sleep":54,"sleepMin":340,"deep":43,"rem":73,"hrv":50.3,"rhr":53.0,"bed":"23:44","ready":64,"temp":-0.17,"steps":3922,"kcal":176,"stress":98,"recovery":57,"cd":1,"phase":"menstrual","ov":false},{"day":"2026-10-27","sleep":83,"sleepMin":431,"deep":61,"rem":93,"hrv":45.0,"rhr":51.0,"bed":"22:43","ready":65,"temp":-0.04,"steps":4188,"kcal":188,"stress":65,"recovery":54,"cd":2,"phase":"menstrual","ov":false},{"day":"2026-10-28","sleep":72,"sleepMin":424,"deep":64,"rem":94,"hrv":50.7,"rhr":53.0,"bed":"22:32","ready":70,"temp":-0.14,"steps":6360,"kcal":286,"stress":146,"recovery":81,"cd":3,"phase":"menstrual","ov":false},{"day":"2026-10-29","sleep":60,"sleepMin":400,"deep":70,"rem":83,"hrv":54.6,"rhr":52.0,"bed":"22:21","ready":75,"temp":-0.08,"steps":4092,"kcal":184,"stress":112,"recovery":119,"cd":4,"phase":"menstrual","ov":false},{"day":"2026-10-30","sleep":67,"sleepMin":407,"deep":57,"rem":79,"hrv":46.8,"rhr":54.0,"bed":"22:49","ready":71,"temp":-0.02,"steps":5647,"kcal":254,"stress":143,"recovery":77,"cd":5,"phase":"menstrual","ov":false},{"day":"2026-10-31","sleep":66,"sleepMin":406,"deep":80,"rem":94,"hrv":63.6,"rhr":51.0,"bed":"23:30","ready":80,"temp":-0.04,"steps":2658,"kcal":120,"stress":50,"recovery":150,"cd":6,"phase":"follicular","ov":false},{"day":"2026-11-01","sleep":73,"sleepMin":420,"deep":94,"rem":86,"hrv":62.2,"rhr":53.0,"bed":"23:36","ready":84,"temp":-0.15,"steps":2790,"kcal":126,"stress":55,"recovery":118,"cd":7,"phase":"follicular","ov":false},{"day":"2026-11-02","sleep":81,"sleepMin":457,"deep":101,"rem":109,"hrv":68.6,"rhr":52.0,"bed":"23:21","ready":77,"temp":-0.18,"steps":4760,"kcal":214,"stress":139,"recovery":97,"cd":8,"phase":"follicular","ov":false},{"day":"2026-11-03","sleep":72,"sleepMin":399,"deep":78,"rem":83,"hrv":68.4,"rhr":53.0,"bed":"23:00","ready":83,"temp":-0.16,"steps":5067,"kcal":228,"stress":84,"recovery":154,"cd":9,"phase":"follicular","ov":false},{"day":"2026-11-04","sleep":66,"sleepMin":442,"deep":80,"rem":95,"hrv":75.4,"rhr":50.0,"bed":"22:21","ready":80,"temp":-0.04,"steps":2955,"kcal":133,"stress":148,"recovery":113,"cd":10,"phase":"follicular","ov":false},{"day":"2026-11-05","sleep":61,"sleepMin":379,"deep":76,"rem":90,"hrv":65.0,"rhr":52.0,"bed":"23:08","ready":77,"temp":-0.07,"steps":4522,"kcal":203,"stress":134,"recovery":105,"cd":11,"phase":"follicular","ov":false},{"day":"2026-11-06","sleep":70,"sleepMin":422,"deep":84,"rem":87,"hrv":72.1,"rhr":54.0,"bed":"23:07","ready":82,"temp":-0.1,"steps":2479,"kcal":120,"stress":95,"recovery":58,"cd":12,"phase":"follicular","ov":false}],"periods":["2026-07-31","2026-08-29","2026-09-27","2026-10-26"],"record":{"generated_at":"2026-11-06T10:42:15.156209","first_day":"2026-08-09","last_day":"2026-11-06","lifestyle":{"weekly":[{"iso_week":"2026-W32","week_start":"2026-08-03","days":1,"sleep_min":473.0,"steps":5902.0,"hrv_ms":54.4,"stress_high_min":35.0},{"iso_week":"2026-W33","week_start":"2026-08-10","days":7,"sleep_min":428.6,"steps":7099.4,"hrv_ms":52.0,"stress_high_min":81.1},{"iso_week":"2026-W34","week_start":"2026-08-17","days":7,"sleep_min":409.0,"steps":7889.7,"hrv_ms":47.2,"stress_high_min":94.0},{"iso_week":"2026-W35","week_start":"2026-08-24","days":7,"sleep_min":407.1,"steps":7110.6,"hrv_ms":46.0,"stress_high_min":113.7},{"iso_week":"2026-W36","week_start":"2026-08-31","days":7,"sleep_min":432.4,"steps":7956.1,"hrv_ms":54.8,"stress_high_min":93.0},{"iso_week":"2026-W37","week_start":"2026-09-07","days":7,"sleep_min":432.3,"steps":8215.3,"hrv_ms":54.7,"stress_high_min":82.6},{"iso_week":"2026-W38","week_start":"2026-09-14","days":7,"sleep_min":426.0,"steps":7601.6,"hrv_ms":47.3,"stress_high_min":93.9},{"iso_week":"2026-W39","week_start":"2026-09-21","days":7,"sleep_min":387.4,"steps":8951.1,"hrv_ms":44.0,"stress_high_min":137.9},{"iso_week":"2026-W40","week_start":"2026-09-28","days":7,"sleep_min":430.1,"steps":6502.1,"hrv_ms":53.2,"stress_high_min":83.0},{"iso_week":"2026-W41","week_start":"2026-10-05","days":7,"sleep_min":442.0,"steps":7401.1,"hrv_ms":54.1,"stress_high_min":102.0},{"iso_week":"2026-W42","week_start":"2026-10-12","days":7,"sleep_min":386.0,"steps":6348.4,"hrv_ms":47.0,"stress_high_min":96.3},{"iso_week":"2026-W43","week_start":"2026-10-19","days":7,"sleep_min":413.1,"steps":5546.0,"hrv_ms":44.9,"stress_high_min":140.4},{"iso_week":"2026-W44","week_start":"2026-10-26","days":7,"sleep_min":404.0,"steps":4236.7,"hrv_ms":53.3,"stress_high_min":95.6},{"iso_week":"2026-W45","week_start":"2026-11-02","days":5,"sleep_min":419.8,"steps":3956.6,"hrv_ms":69.9,"stress_high_min":120.0}],"weekly_slopes":{"weeks_used":13,"notable":[],"sleep_min":-0.9,"steps":-279.8,"hrv_ms":0.6,"stress_high_min":2.1},"recent_slopes":{"weeks_used":4,"notable":["steps","hrv_ms"],"sleep_min":9.2,"steps":-848.5,"hrv_ms":7.7,"stress_high_min":2.6},"best_sleep_weekday":{"weekday":"Tuesday","nights":13,"sleep_min":434.7},"worst_sleep_weekday":{"weekday":"Sunday","nights":13,"sleep_min":383.8},"sleep_weekday_gap_min":50.9,"sleep_weekday_gap_is_notable":true,"heavy_day":{"stress_threshold_min":134.5,"heavy_days":22,"sleep_after_heavy_min":391.7,"sleep_after_other_min":425.6,"difference_min":33.9,"is_notable":true}},"by_phase":[{"phase":"menstrual","nights":15,"sleep_min":419.6,"hrv_ms":49.6,"readiness_score":69.4,"stress_high_min":87.6},{"phase":"follicular","nights":27,"sleep_min":425.9,"hrv_ms":58.9,"readiness_score":83.2,"stress_high_min":98.1},{"phase":"ovulatory","nights":9,"sleep_min":438.1,"hrv_ms":51.2,"readiness_score":79.2,"stress_high_min":78.8},{"phase":"luteal","nights":39,"sleep_min":405.7,"hrv_ms":46.1,"readiness_score":72.1,"stress_high_min":114.3}],"pre_period_sleep":{"window_days":5,"periods_counted":3,"pre_period_sleep_min":400.1,"other_nights_sleep_min":420.8,"drop_min":20.7,"is_notable":true},"regularity":{"logged_period_starts":["2026-07-31","2026-08-29","2026-09-27","2026-10-26"],"cycle_lengths_days":[29,29,29],"mean_length_days":29.0,"length_spread_days":0,"is_regular":true},"ovulation":{"completed_cycles":3,"confirmed_cycles":3,"confirmed_rate":1.0}}}</script>
+<script>
+"use strict";
+const SEED_RAW = JSON.parse(document.getElementById("seed").textContent);
+let SEED = Array.isArray(SEED_RAW) ? SEED_RAW : SEED_RAW.days;
+const RECORD = SEED_RAW.record || null;
+const LOGGED_PERIODS = SEED_RAW.periods || [];
+let TODAY = SEED.length ? SEED[SEED.length - 1].day : new Date().toISOString().slice(0, 10);
+let CYCLE_LEN = 29;
+const STORE_KEY = "bloom.v2";
+
+const PHASES = {
+  menstrual: { label: "Menstrual", short: "Period", token: "--ph-men", energy: "Lowest energy of the month. Iron and warmth help.", body: "Estrogen and progesterone are at their lowest. Cramps, fatigue, and lighter sleep are common in the first two days.", move: "Gentle movement, walks, restorative yoga.", eat: "Iron and vitamin C together: lentils, leafy greens, citrus." },
+  follicular: { label: "Follicular", short: "Rising", token: "--ph-fol", energy: "Energy and mood climb as estrogen rises.", body: "Estrogen rises steadily. Many women feel stronger and bounce back faster, so this is a great window for harder training.", move: "Strength and new skills. Push progressive load.", eat: "Fresh, fermented, and protein forward meals." },
+  ovulatory: { label: "Ovulatory", short: "Peak", token: "--ph-ovu", energy: "Peak energy, confidence, and social drive.", body: "Estrogen peaks and LH surges. Some women notice a small temperature rise and a dip in sleep right after.", move: "Intervals and your hardest session of the cycle.", eat: "Fiber-rich meals and plenty of veggies keep energy steady." },
+  luteal: { label: "Luteal", short: "Winding down", token: "--ph-lut", energy: "Energy tapers. Cravings and sleep disruption can show up late.", body: "Progesterone rises, body temperature runs about half a degree warmer, and resting heart rate climbs. Late luteal is when PMS shows up.", move: "Steady cardio, pilates, and lower intensity strength.", eat: "Complex carbs and magnesium: sweet potato, oats, pumpkin seeds, dark chocolate." },
+};
+const GOALS = [
+  { id: "sleep", title: "Sleep deeper", sub: "Fall asleep easier, wake rested" },
+  { id: "energy", title: "Steady energy", sub: "No 3 pm crash" },
+  { id: "pms", title: "Ease PMS", sub: "Fewer cramps, headaches, mood dips" },
+  { id: "pcos", title: "Balance hormones", sub: "PCOS, irregular cycles" },
+  { id: "strength", title: "Get stronger", sub: "Build muscle with my cycle" },
+  { id: "nutrition", title: "Eat for my cycle", sub: "Meals that match my phase" },
+  { id: "stress", title: "Calm my stress", sub: "Recover from busy weeks" },
+  { id: "fertility", title: "Plan a pregnancy", sub: "Understand my fertile window" },
+  { id: "gut", title: "Happier gut", sub: "Less bloating, more regular" },
+  { id: "heart", title: "Heart health", sub: "Blood pressure, cholesterol, cardio" },
+  { id: "burnout", title: "Recover from burnout", sub: "Rebuild energy and boundaries" },
+  { id: "move", title: "Move every day", sub: "Even on busy days" },
+];
+const FALLBACK_HABITS = {
+  sleep: [{ title: "Screens down by 10:15 pm", cue: "When your 10 pm alarm goes off", why: "Your Oura data shows later bedtimes cost you deep sleep." }, { title: "Morning light walk", cue: "Within an hour of waking", why: "Daylight anchors your body clock for an easier bedtime." }],
+  energy: [{ title: "Protein at breakfast", cue: "With your first coffee", why: "25 g of protein early steadies blood sugar through the afternoon." }, { title: "Water before coffee", cue: "As soon as you get up", why: "Mild dehydration feels like fatigue." }],
+  pms: [{ title: "Magnesium-rich snack", cue: "Mid-afternoon in luteal days", why: "Magnesium is linked to fewer cramps and better sleep before your period." }, { title: "10 minute wind-down stretch", cue: "Before bed", why: "Lowers the stress load that makes PMS symptoms louder." }],
+  pcos: [{ title: "10 minute walk after meals", cue: "Right after lunch and dinner", why: "Post-meal walks lower glucose spikes, which matters with PCOS." }, { title: "Fiber first at dinner", cue: "Start dinner with veggies", why: "Eating fiber first softens insulin response." }],
+  strength: [{ title: "3 strength sessions a week", cue: "Booked on your calendar", why: "Heavier days land in your follicular phase when recovery is fastest." }, { title: "Protein at every meal", cue: "Palm-sized portion", why: "Muscle needs protein spread through the day." }],
+  nutrition: [{ title: "Eat the phase plate", cue: "Check Today before lunch", why: "Your plan suggests one meal tuned to your phase." }, { title: "Two colors of veggies", cue: "At lunch and dinner", why: "Variety covers iron, folate, and magnesium across the month." }],
+  stress: [{ title: "Box breathing, 4 rounds", cue: "Before your first meeting", why: "Your stress minutes spike on heavy calendar days." }, { title: "Lunch away from your desk", cue: "When your calendar shows a gap", why: "Short recoveries add up to better HRV." }],
+  gut: [{ title: "30 plants a week", cue: "Count them in your log", why: "Plant variety feeds a more diverse gut." }, { title: "Slow first five bites", cue: "At every meal", why: "Eating slowly eases bloating." }],
+  heart: [{ title: "20 minute brisk walk", cue: "After lunch", why: "Daily brisk walking is one of the strongest levers for blood pressure." }, { title: "Salt check at dinner", cue: "Before you season", why: "Most sodium hides in sauces and packaged food." }],
+  burnout: [{ title: "Hard stop at 6 pm", cue: "When your last meeting ends", why: "Your stress minutes stay high on days without a clear end." }, { title: "Two minute body scan", cue: "Between meetings", why: "Short recoveries lift HRV across the week." }],
+  move: [{ title: "8,000 steps", cue: "Check at 5 pm", why: "Your average is close; a short evening walk closes the gap." }, { title: "Stretch while coffee brews", cue: "Every morning", why: "Tiny anchors make movement automatic." }],
+  fertility: [{ title: "Folate-rich food daily", cue: "Leafy greens or beans", why: "Folate supports early pregnancy." }, { title: "Note cervical signs", cue: "During your log", why: "Pairs with temperature to confirm ovulation." }],
+};
+const LIFE_STAGES = [
+  ["cycling", "Regular periods"], ["irregular", "Irregular periods"], ["hormonal_birth_control", "On hormonal birth control"],
+  ["pregnant_postpartum", "Pregnant or postpartum"], ["perimenopause_menopause", "Perimenopause or menopause"], ["prefer_not", "Prefer not to say"],
+];
+const AGE_BANDS = [
+  { max: 25, label: "18 to 25", focus: ["Iron and B12", "Bone building years", "Sleep regularity"], tip: "Your bones are still gaining density. Strength work and calcium now pay off for decades." },
+  { max: 34, label: "26 to 34", focus: ["Strength training", "Iron", "Stress and sleep"], tip: "Muscle and bone peak around now. Two strength sessions a week protects both." },
+  { max: 44, label: "35 to 44", focus: ["Protein and muscle", "Sleep quality", "Cycle changes"], tip: "Muscle loss starts quietly in your late 30s. Protein at each meal and lifting slow it." },
+  { max: 55, label: "45 to 55", focus: ["Sleep and night sweats", "Heart health", "Bone density"], tip: "Many women enter the menopause transition here. Sleep, strength, and heart health matter most." },
+  { max: 200, label: "56 and up", focus: ["Bone density", "Heart health", "Balance and strength"], tip: "After menopause, heart and bone risk rise. Daily walking and strength keep you independent." },
+];
+const ageBand = () => { const a = Number(state.profile.age) || 32; return AGE_BANDS.find((b) => a <= b.max); };
+const PERSONAS = {
+  maya: { profile: { name: "Maya", email: "maya@example.com", age: "32", gym: "gym", diet: ["Vegetarian"], conditions: ["Migraines"], lastPeriod: "", cycleLen: 29, lifeStage: "cycling" }, goals: ["pms", "sleep"], gaps: null, blurb: "32, migraines, regular cycles" },
+  ava: { profile: { name: "Ava", email: "ava@example.com", age: "24", gym: "gym", diet: [], conditions: [], lastPeriod: "", cycleLen: 29, lifeStage: "irregular" }, goals: ["stress", "energy"], gaps: [29, 30, 41, 52], blurb: "24, training hard, cycles stretching" },
+  priya: { profile: { name: "Priya", email: "priya@example.com", age: "29", gym: "none", diet: ["Halal"], conditions: [], lastPeriod: "", cycleLen: 30, lifeStage: "cycling" }, goals: ["stress", "energy"], gaps: [30, 31, 29], blurb: "29, no wearable, logs by voice", noWearable: true },
+  lena: { profile: { name: "Lena", email: "lena@example.com", age: "48", gym: "home", diet: ["Dairy free"], conditions: [], lastPeriod: "", cycleLen: 28, lifeStage: "irregular" }, goals: ["sleep", "heart"], gaps: [27, 36, 23, 64], blurb: "48, night sweats, cycles changing" },
+};
+const SEASONS = {
+  winter: { label: "Winter and peak flu season", months: [11, 0, 1], recs: [
+    { title: "Get your flu shot if you haven't", body: "The CDC recommends a yearly flu vaccine for everyone 6 months and older.", src: "CDC, Seasonal Flu Vaccines", habit: null },
+    { title: "Protect 7 hours of sleep", body: "People sleeping under 6 hours were about 4 times more likely to catch a cold after exposure.", src: "Prather et al., SLEEP, 2015", habit: { title: "In bed by 10:30 pm", cue: "Flu season, every night", why: "Short sleep raised cold risk about 4x in a controlled exposure study." } },
+    { title: "Morning daylight, even when it's gray", body: "Shorter days can lower mood and energy. Bright morning light is a first-line approach for winter blues.", src: "NIMH, Seasonal Affective Disorder", habit: { title: "10 minutes of morning light", cue: "Before 10 am, outside or by a window", why: "Winter daylight is short; morning light supports mood and sleep timing." } },
+  ] },
+  spring: { label: "Spring and allergy season", months: [2, 3, 4], recs: [
+    { title: "Track allergy days in your log", body: "Pollen peaks can disrupt sleep and look like low energy days.", src: "AAAAI, Seasonal Allergies", habit: null },
+    { title: "Use the longer evenings", body: "Adults need 150 minutes of moderate activity a week. Light evenings make an after-dinner walk easy.", src: "HHS Physical Activity Guidelines, 2nd ed.", habit: { title: "Evening walk, 20 minutes", cue: "After dinner", why: "Longer days make it easy to reach 150 active minutes a week." } },
+  ] },
+  summer: { label: "Summer heat", months: [5, 6, 7], recs: [
+    { title: "Hydrate ahead of the heat", body: "Drink water before you feel thirsty on hot days and plan workouts for the cooler part of the day.", src: "CDC, Heat and Your Health", habit: { title: "Water bottle refill by noon", cue: "Hot days", why: "Heat raises fluid needs before you feel thirsty." } },
+    { title: "Keep your bedroom cool", body: "Heat at night cuts deep sleep. A cooler, darker room helps.", src: "Okamoto-Mizuno and Mizuno, J Physiol Anthropol, 2012", habit: null },
+  ] },
+  fall: { label: "Fall and early flu season", months: [8, 9, 10], recs: [
+    { title: "Book your flu shot now", body: "The CDC suggests getting vaccinated by the end of October, before flu spreads widely.", src: "CDC, Seasonal Flu Vaccines", habit: null },
+    { title: "Protect 7 hours of sleep", body: "People sleeping under 6 hours were about 4 times more likely to catch a cold after exposure.", src: "Prather et al., SLEEP, 2015", habit: { title: "In bed by 10:30 pm", cue: "Flu season, every night", why: "Short sleep raised cold risk about 4x in a controlled exposure study." } },
+    { title: "Ask about vitamin D as days shorten", body: "Less sun means less vitamin D made in the skin. Food sources and a blood test are worth a conversation.", src: "NIH Office of Dietary Supplements, Vitamin D", habit: null },
+  ] },
+};
+const seasonNow = () => { const m = new Date(TODAY + "T12:00:00").getMonth(); return Object.entries(SEASONS).find(([, v]) => v.months.includes(m)); };
+const DIETS = ["Vegetarian", "Vegan", "Gluten free", "Dairy free", "Halal", "Nut allergy", "Low FODMAP"];
+const CONDITIONS = ["PCOS", "Endometriosis", "Thyroid", "Migraines", "PMDD", "Anemia", "Perimenopause", "None"];
+const RECIPES = [
+  { phase: "menstrual", tags: ["veg", "vegan", "gf", "df"], name: "Lemony red lentil and spinach dal", minutes: 25, why: "Iron from lentils and spinach, with lemon to help absorb it.", ingredients: ["1 cup red lentils", "2 handfuls spinach", "1 onion, garlic, ginger", "1 tsp turmeric, cumin", "1 lemon"], steps: ["Soften onion, garlic, and ginger in oil.", "Add spices, lentils, and 3 cups water. Simmer 18 minutes.", "Stir in spinach and lemon juice. Serve with rice."] },
+  { phase: "menstrual", tags: ["gf", "df"], name: "Beef and black bean chili", minutes: 35, why: "Heme iron plus warmth for heavy days.", ingredients: ["300 g lean ground beef", "1 can black beans", "1 can tomatoes", "1 bell pepper", "Chili, cumin, paprika"], steps: ["Brown beef with pepper.", "Add spices, tomatoes, beans. Simmer 20 minutes.", "Top with avocado."] },
+  { phase: "follicular", tags: ["veg", "vegan", "df"], name: "Tofu kimchi fried rice", minutes: 20, why: "Fermented food and plant protein while estrogen climbs.", ingredients: ["200 g firm tofu", "1 cup cooked rice", "1/2 cup kimchi", "2 scallions", "Soy sauce, sesame oil"], steps: ["Crisp crumbled tofu in a hot pan.", "Add rice and kimchi, fry 4 minutes.", "Finish with soy, sesame oil, scallions."] },
+  { phase: "follicular", tags: ["df", "gf"], name: "Miso salmon bowl with edamame", minutes: 25, why: "Omega 3s and protein to support harder training days.", ingredients: ["1 salmon fillet", "1 tbsp white miso", "1 cup rice", "1/2 cup edamame", "Cucumber, sesame"], steps: ["Brush salmon with miso, roast 12 minutes at 400 F.", "Build the bowl with rice, edamame, cucumber.", "Top with salmon and sesame."] },
+  { phase: "ovulatory", tags: ["veg", "vegan", "df"], name: "Chickpea quinoa tabbouleh", minutes: 20, why: "Fiber and protein keep your energy steady at your peak.", ingredients: ["1 cup quinoa", "1 can chickpeas", "Parsley, mint", "Cucumber, tomato", "Lemon, olive oil"], steps: ["Cook quinoa and cool.", "Chop herbs and veggies finely.", "Toss everything with lemon and oil."] },
+  { phase: "ovulatory", tags: ["gf", "df"], name: "Grilled chicken, mango, and broccoli slaw", minutes: 25, why: "Lean protein for your hardest session, plus fiber for steady energy.", ingredients: ["2 chicken thighs", "1 mango", "2 cups shredded broccoli", "Lime, cilantro", "Pumpkin seeds"], steps: ["Grill chicken 6 minutes per side.", "Toss slaw with lime and cilantro.", "Slice chicken on top, add seeds."] },
+  { phase: "luteal", tags: ["veg", "vegan", "gf", "df"], name: "Sweet potato and black bean tacos", minutes: 30, why: "Complex carbs and magnesium to steady cravings and sleep.", ingredients: ["2 sweet potatoes", "1 can black beans", "Corn tortillas", "Pumpkin seeds", "Lime crema or avocado"], steps: ["Roast cubed sweet potato 20 minutes at 425 F.", "Warm beans with cumin.", "Fill tortillas, top with seeds and avocado."] },
+  { phase: "luteal", tags: ["gf", "df"], name: "Turkey and veggie sheet pan", minutes: 35, why: "Tryptophan and slow carbs for calmer evenings.", ingredients: ["300 g turkey breast", "Butternut squash", "Red onion, zucchini", "Rosemary", "Olive oil"], steps: ["Chop veggies, toss in oil and rosemary.", "Add turkey, roast 25 minutes at 425 F.", "Rest 5 minutes before slicing."] },
+];
+const WORKOUTS = {
+  menstrual: { gym: ["Restorative flow and incline walk", 25, ["10 min incline walk at an easy pace", "15 min hip and low back mobility", "Stop if cramps get worse"]], home: ["Restorative yoga", 20, ["Child's pose, cat cow, supine twist", "Legs up the wall, 5 minutes", "Slow nasal breathing"]] },
+  follicular: { gym: ["Lower body strength", 40, ["Goblet squat 4 x 8", "Romanian deadlift 3 x 10", "Walking lunges 3 x 12", "Add 5 percent load from last week"]], home: ["Bodyweight power circuit", 30, ["Squat jumps, push ups, glute bridges", "4 rounds, 40 s on, 20 s off", "Finish with a 5 minute stretch"]] },
+  ovulatory: { gym: ["Interval ride or row", 30, ["8 min warm up", "6 x 1 min hard, 2 min easy", "Warm up well before the hard efforts"]], home: ["HIIT and core", 25, ["Mountain climbers, burpees, plank jacks", "5 rounds", "Core finisher: dead bug and side plank"]] },
+  luteal: { gym: ["Zone 2 cardio and upper body", 40, ["25 min steady bike, conversational pace", "Rows and presses 3 x 10 at moderate load", "Extra water: you run warmer now"]], home: ["Pilates core flow", 30, ["Hundred, roll ups, single leg stretch", "Side lying leg series", "Long exhale stretch to finish"]] },
+  ease: { gym: ["Walk and mobility", 25, ["20 min outdoor walk", "5 min hips and shoulders", "This counts. Rest is training."]], home: ["Walk and mobility", 25, ["20 min outdoor walk", "5 min hips and shoulders", "This counts. Rest is training."]] },
+};
+const CALENDAR = [
+  { start: "09:00", end: "09:30", title: "Team standup" },
+  { start: "10:00", end: "11:30", title: "Product review" },
+  { start: "13:30", end: "14:30", title: "1:1 with Priya" },
+  { start: "15:00", end: "16:30", title: "Quarterly planning" },
+  { start: "18:30", end: "20:00", title: "Dinner with Sam" },
+];
+const CATEGORIES = {
+  sleep: { label: "Sleep", token: "--ph-lut" },
+  movement: { label: "Movement", token: "--ph-fol" },
+  nutrition: { label: "Nutrition", token: "--ph-ovu" },
+  mood: { label: "Mood", token: "--ph-men" },
+  symptoms: { label: "Symptoms", token: "--warn" },
+};
+const MOODS = [
+  { id: "drained", label: "Drained", token: "--ph-lut" },
+  { id: "low", label: "Low", token: "--ph-men" },
+  { id: "okay", label: "Okay", token: "--muted" },
+  { id: "good", label: "Good", token: "--ph-fol" },
+  { id: "glowing", label: "Glowing", token: "--ph-ovu" },
+];
+const SAMPLE_RAMBLES = [
+  "Slept pretty badly, woke up at 3 and couldn't fall back asleep. Had oatmeal with berries and a big oat latte. Did a 20 minute walk at lunch. Headache started around 2 pm, and I've been feeling anxious about the planning meeting. Craving chocolate like crazy.",
+  "Great sleep last night, almost 8 hours. Lifted at the gym, squats felt strong. Salmon bowl for lunch and way too much coffee. Feeling really focused and happy today.",
+];
+
+function mulberry(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function hashStr(s) { let h = 2166136261; for (const c of s) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return h >>> 0; }
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+const clean = (s) => String(s ?? "").replace(/\s*[—–]\s*/g, ", ");
+const addDays = (iso, n) => { const d = new Date(iso + "T12:00:00"); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10); };
+const fmtDay = (iso, opts = { weekday: "short", month: "short", day: "numeric" }) => new Date(iso + "T12:00:00").toLocaleDateString("en-US", opts);
+const avg = (xs) => { const v = xs.filter(Number.isFinite); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : 0; };
+const num = (v, f = (x) => Math.round(x)) => Number.isFinite(v) ? f(v) : "--";
+const hm = (min) => `${Math.floor(min / 60)}h ${String(Math.round(min % 60)).padStart(2, "0")}m`;
+const cssVar = (token) => `var(${token})`;
+
+function phaseOf(cd, len = CYCLE_LEN) {
+  const ovulation = len - 14;
+  if (cd <= 5) return "menstrual";
+  if (cd < ovulation - 1) return "follicular";
+  if (cd <= ovulation + 1) return "ovulatory";
+  return "luteal";
+}
+
+/* Synthetic self-reports so the record has a 90 day history before her first log. */
+const HISTORY_SYMPTOMS = (() => {
+  const rng = mulberry(42);
+  const out = [];
+  for (const d of SEED) {
+    if (!d.cd) continue;
+    const late = d.cd >= CYCLE_LEN - 4;
+    if (late && rng() < 0.62) out.push({ day: d.day, cd: d.cd, name: "Headache" });
+    if (!late && rng() < 0.04) out.push({ day: d.day, cd: d.cd, name: "Headache" });
+    if (d.cd <= 2 && rng() < 0.8) out.push({ day: d.day, cd: d.cd, name: "Cramps" });
+    if (d.cd > 17 && rng() < 0.35) out.push({ day: d.day, cd: d.cd, name: "Bloating" });
+    if (late && rng() < 0.45) out.push({ day: d.day, cd: d.cd, name: "Low mood" });
+    if (d.cd >= 23 && rng() < 0.4) out.push({ day: d.day, cd: d.cd, name: "Cravings" });
+  }
+  return out;
+})();
+
+const defaultState = () => ({
+  step: "welcome", tab: "today",
+  profile: { name: "", email: "", age: "", gym: "gym", diet: [], conditions: [], lastPeriod: "", cycleLen: 29, lifeStage: "cycling" },
+  periods: [],
+  consent: { wearable: true, voice: true, cycle: true, share: false, research: false },
+  connected: { oura: false, calendar: false },
+  goals: [], habits: [], habitsSource: "", checkins: {}, checks: {}, logs: [], moods: [], booked: [],
+  previewCd: null, aiPlan: null, summary: null, lastMoodAt: 0,
+});
+let state = loadState();
+let ui = { thinking: false, recording: false, draft: "", sorted: null, syncing: null, moodOpen: false, lastKey: "", note: "" };
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw) {
+      const saved = JSON.parse(raw), base = defaultState();
+      return { ...base, ...saved, profile: { ...base.profile, ...saved.profile }, consent: { ...base.consent, ...saved.consent }, connected: { ...base.connected, ...saved.connected } };
+    }
+  } catch (e) {}
+  return defaultState();
+}
+let remoteDoc = null, remoteTimer = 0;
+function save() {
+  state.updatedAt = Date.now();
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {}
+  if (!remoteDoc) return;
+  clearTimeout(remoteTimer);
+  remoteTimer = setTimeout(() => remoteDoc.set({ json: JSON.stringify(state), updatedAt: state.updatedAt }).catch((e) => console.warn("[bloom] db save", e?.code)), 800);
+}
+async function connectRecord() {
+  if (!window.claude?.use) return;
+  const [db, user] = await Promise.all([window.claude.use("db"), window.claude.use("user")]);
+  const id = await user?.id?.();
+  if (!db || !id) return;
+  remoteDoc = db.collection("data/users/" + id).doc("bloom");
+  try {
+    const snap = await within(remoteDoc.get(), 8000);
+    const body = snap?.exists ? snap.data() : null;
+    if (body?.json && (body.updatedAt || 0) > (state.updatedAt || 0)) {
+      const saved = JSON.parse(body.json), base = defaultState();
+      state = { ...base, ...saved, profile: { ...base.profile, ...saved.profile }, consent: { ...base.consent, ...saved.consent }, connected: { ...base.connected, ...saved.connected } };
+      try { localStorage.setItem(STORE_KEY, body.json); } catch (e) {}
+    } else if (state.step === "app") save();
+    ui.cloud = true; render();
+  } catch (e) { console.warn("[bloom] db load", e?.code); }
+}
+function set(patch) { Object.assign(state, patch); save(); render(); }
+
+let samplePromise = null, skipAi = false;
+function getSample() {
+  if (!samplePromise) samplePromise = window.claude?.use ? window.claude.use("sample").catch(() => null) : Promise.resolve(null);
+  return samplePromise;
+}
+const within = (promise, ms) => Promise.race([promise, new Promise((resolve) => setTimeout(() => resolve(null), ms))]);
+async function askClaude(prompt, tier = "quick") {
+  const sample = await within(getSample(), 6000);
+  if (!sample) return null;
+  try { return await within(sample.json(prompt, { modelTier: tier }), tier === "quick" ? 20000 : 35000); } catch (e) { console.warn("[bloom] claude", e?.code, e?.message); return null; }
+}
+
+/* Today context: real today, or a day from her history when the judge scrubs the cycle. */
+/* Cycle comes from her own period log; Oura temperature only confirms it. */
+const estimatedCycle = () => !state.periods.length && hasWearable() && startsFromTemperature(SEED).length > 0;
+const periodStarts = () => state.periods.length ? state.periods : hasWearable() ? startsFromTemperature(SEED) : [];
+function cycleLength() {
+  const starts = [...periodStarts()].sort();
+  const gaps = starts.slice(1).map((d, i) => Math.round((new Date(d) - new Date(starts[i])) / 864e5)).filter((g) => g >= 20 && g <= 45);
+  return gaps.length ? Math.round(avg(gaps)) : Number(state.profile.cycleLen) || 29;
+}
+function currentCd() {
+  const last = [...periodStarts()].filter((d) => d <= TODAY).sort().pop();
+  if (!last) return 12;
+  const days = Math.round((new Date(TODAY) - new Date(last)) / 864e5);
+  return (days % CYCLE_LEN) + 1;
+}
+function seedPeriods() {
+  if (state.periods.length) return;
+  const lp = state.profile.lastPeriod;
+  if (!lp && hasWearable()) return;
+  if (lp) { const len = Number(state.profile.cycleLen) || 29; state.periods = [2, 1, 0].map((k) => addDays(lp, -k * len)); }
+  else state.periods = LOGGED_PERIODS.length ? LOGGED_PERIODS.filter((d) => d <= TODAY) : SEED.filter((d) => d.cd === 1).map((d) => d.day);
+}
+const SEED_DEMO = SEED;
+const hasWearable = () => state.connected.oura !== false || state.connected.ouraMode === "live";
+function demoCheckins() {
+  const rng = mulberry(29), out = {};
+  for (let i = 27; i >= 1; i--) {
+    const day = addDays(TODAY, -i), weekday = new Date(day + "T12:00:00").getDay(), busy = weekday >= 1 && weekday <= 4 && rng() < 0.5;
+    out[day] = { sleepH: Math.round((busy ? 6 : 7.2) * 2 + (rng() - 0.5) * 2) / 2, energy: busy ? 2 + Math.round(rng()) : 3 + Math.round(rng() * 2), stress: busy ? 4 : 2 + Math.round(rng()) };
+  }
+  return out;
+}
+function selfRows() {
+  return Object.entries(state.checkins || {}).sort(([a], [b]) => a.localeCompare(b)).map(([day, c]) => ({
+    day, sleepMin: c.sleepH * 60, sleep: Math.min(98, Math.round(c.sleepH / 8 * 82 + c.energy * 3)), ready: 30 + c.energy * 13 - c.stress * 3,
+    stress: c.stress * 32, recovery: (6 - c.stress) * 30, energySelf: c.energy, hrv: null, rem: null, temp: null, steps: null, self: true,
+  }));
+}
+function applyDataSource() {
+  if (hasWearable()) { if (state.connected.ouraMode !== "live") SEED = SEED_DEMO; return; }
+  const rows = selfRows();
+  SEED = annotateCycle(rows.length ? rows : [{ day: TODAY, sleepMin: null, sleep: null, ready: null, stress: null, recovery: null, self: true }]);
+  if (SEED[SEED.length - 1].day !== TODAY) SEED.push({ day: TODAY, self: true, pending: true });
+}
+/* No logged periods yet: estimate starts from the temperature drop that follows a warm luteal run. */
+function startsFromTemperature(rows) {
+  const starts = []; let warm = 0;
+  for (const r of rows) {
+    if (!Number.isFinite(r.temp)) continue;
+    if (r.temp >= 0.18) { warm++; continue; }
+    if (warm >= 8) starts.push(r.day);
+    warm = 0;
+  }
+  return starts;
+}
+
+/* Real Oura, through Bloom's local MCP server (owner, Claude desktop app). Everyone else keeps the demo persona. */
+const OURA_SERVER = "host:bloom_oura";
+const OURA_FIX = {
+  server_not_connected: "Open Bloom in the Claude desktop app with the Bloom Oura server running to use your ring.",
+  not_in_manifest: "Oura access is turned off for this page. Turn it on in the page's permissions.",
+  cancelled: "Oura sync was cancelled.",
+  not_granted: "This view can't reach connectors. Showing the demo data.",
+  capability_disabled: "This view can't reach connectors. Showing the demo data.",
+};
+function annotateCycle(rows) {
+  const starts = [...state.periods].sort();
+  for (const row of rows) {
+    const last = starts.filter((d) => d <= row.day).pop();
+    if (!last) continue;
+    row.cd = (Math.round((new Date(row.day) - new Date(last)) / 864e5) % CYCLE_LEN) + 1;
+    row.phase = phaseOf(row.cd);
+  }
+  return rows;
+}
+async function syncOura() {
+  const mcp = window.claude?.use ? await within(window.claude.use("mcp"), 6000) : null;
+  if (!mcp) return { mode: "demo", note: "Connectors aren't available in this view. Showing the demo data." };
+  try {
+    const res = await mcp.callTool(OURA_SERVER, "oura_daily", { days: 90 });
+    const payload = res.payload;
+    if (payload?.mode !== "live" || !payload.days?.length) return { mode: "demo", note: "No Oura token on this computer yet. Showing the demo data." };
+    SEED = annotateCycle(payload.days.map((d) => ({ ...d, day: String(d.day) })));
+    TODAY = SEED[SEED.length - 1].day;
+    return { mode: "live", note: `Synced ${SEED.length} nights from your Oura Ring` };
+  } catch (e) {
+    console.warn("[bloom] oura", e?.code, e?.message);
+    return { mode: "demo", note: OURA_FIX[e?.code] || "Oura didn't answer. Showing the demo data for now." };
+  }
+}
+function cycleSignal() {
+  const starts = [...new Set(state.periods)].sort();
+  if (starts.length < 2) return null;
+  const gaps = starts.slice(1).map((d, i) => Math.round((new Date(d) - new Date(starts[i])) / 864e5));
+  const sinceLast = Math.round((new Date(TODAY) - new Date(starts[starts.length - 1])) / 864e5);
+  const age = Number(state.profile.age) || 32;
+  const swings = gaps.slice(1).map((g, i) => Math.abs(g - gaps[i]));
+  const variable = swings.filter((x) => x >= 7).length >= 2;
+  const longGap = Math.max(...gaps, sinceLast) >= 60;
+  const stressUp = RECORD?.lifestyle?.heavy_day?.is_notable || (RECORD?.lifestyle?.recent_slopes?.stress_high_min ?? 0) > 2;
+  const base = { gaps, sinceLast };
+  if (sinceLast >= 90) return { ...base, level: "flag", title: "No period for 3 months", body: "That is worth a visit soon, whatever the reason. Pregnancy, stress, under-fueling, thyroid, and PCOS are all common causes.", ask: "My period stopped 3 months ago. What should we check first?" };
+  if (!variable && !longGap) return { ...base, level: "steady", title: "Your cycles look steady", body: `Recent cycles: ${gaps.join(", ")} days. A steady rhythm is a good sign your body has what it needs.` };
+  if (age < 40) return { ...base, level: "watch", title: "Your cycles are changing", body: `Recent cycles: ${gaps.join(", ")} days. At ${age}, this is not menopause. Common drivers are stress, short sleep, eating too little for your training, thyroid changes, and PCOS.${stressUp ? " Your stress load has climbed lately, which can delay ovulation." : ""}`, ask: "My cycles went from about 29 to over 40 days. Could stress, training, or my thyroid explain it?" };
+  if (age < 45) return { ...base, level: "watch", title: "Your cycles are changing", body: `Recent cycles: ${gaps.join(", ")} days. Early perimenopause is possible in your early 40s, but stress, thyroid, and other causes are just as likely.`, ask: "Is this the start of perimenopause, or something else we should rule out?" };
+  return { ...base, level: "watch", title: longGap ? "This pattern fits the later menopause transition" : "This pattern fits the early menopause transition", body: `Recent cycles: ${gaps.join(", ")} days.${longGap ? " A gap of 60 days or more" : " Cycle lengths shifting by 7 or more days"} is how clinicians describe this stage. Sleep, strength, and heart health become the big levers.`, ask: "My cycles are changing and my sleep is worse. What are my options for the transition?" };
+}
+function dayContext() {
+  const todayRow = SEED[SEED.length - 1] || {};
+  if (state.previewCd == null) return { row: todayRow, cd: currentCd(), preview: false };
+  const match = [...SEED].reverse().find((d) => d.cd === state.previewCd) || todayRow;
+  return { row: match, cd: state.previewCd, preview: true };
+}
+function baseline() {
+  const recent = SEED.slice(-30);
+  return { hrv: avg(recent.map((d) => d.hrv)), sleepMin: avg(recent.map((d) => d.sleepMin)), ready: avg(recent.map((d) => d.ready)) };
+}
+function easeReasons(ctx) {
+  const { row, cd } = ctx, base = baseline(), reasons = [];
+  if (cycleLens() && cd <= 2) reasons.push(`Day ${cd} of your period, when energy is lowest`);
+  if (cycleLens() && cd >= CYCLE_LEN - 4) reasons.push("Late luteal: progesterone is dropping, PMS window");
+  if (row.stress > row.recovery + 45) reasons.push(`${Math.round(row.stress)} high-stress minutes yesterday`);
+  if (Number.isFinite(row.ready) && row.ready < 72) reasons.push(`Readiness is ${row.ready}, below your usual ${Math.round(base.ready)}`);
+  if (Number.isFinite(row.hrv) && row.hrv < base.hrv * 0.9) reasons.push(`HRV ${Math.round(row.hrv)} ms, ${Math.round(100 - (100 * row.hrv) / base.hrv)}% under baseline`);
+  const meetingMin = CALENDAR.reduce((sum, e) => sum + toMin(e.end) - toMin(e.start), 0);
+  if (reasons.length && meetingMin >= 300) reasons.push(`${hm(meetingMin)} of meetings on your calendar`);
+  return reasons;
+}
+const toMin = (t) => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
+const toTime = (m) => `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
+function freeSlot(duration) {
+  const busy = [...CALENDAR, ...state.booked].map((e) => [toMin(e.start), toMin(e.end)]).sort((a, b) => a[0] - b[0]);
+  let cursor = toMin("07:00");
+  for (const [s, e] of busy) { if (s - cursor >= duration + 10) return toTime(cursor + 5); cursor = Math.max(cursor, e); }
+  return toTime(Math.max(cursor + 5, toMin("17:00")));
+}
+const cycleLens = () => ["cycling", "irregular"].includes(state.profile.lifeStage);
+const conditions = () => state.profile.conditions.filter((c) => c !== "None");
+function dietTags() {
+  const d = state.profile.diet;
+  return [d.includes("Vegan") && "vegan", d.includes("Vegetarian") && "veg", d.includes("Gluten free") && "gf", d.includes("Dairy free") && "df"].filter(Boolean);
+}
+function fallbackPlan(ctx, ease) {
+  const phase = cycleLens() ? phaseOf(ctx.cd) : ctx.row.ready >= 82 ? "follicular" : ctx.row.ready >= 74 ? "ovulatory" : "luteal";
+  const need = dietTags();
+  const options = RECIPES.filter((r) => r.phase === phase);
+  const recipe = options.find((r) => need.every((t) => r.tags.includes(t))) || RECIPES.find((r) => need.every((t) => r.tags.includes(t))) || options[0];
+  const gymKey = state.profile.gym === "gym" ? "gym" : "home";
+  const workoutSet = ease || state.profile.gym === "none" ? "ease" : phase;
+  const [name, minutes, steps] = WORKOUTS[workoutSet][gymKey];
+  const win = ease ? "Lights out 30 minutes earlier tonight"
+    : ctx.row.sleepMin < baseline().sleepMin - 15 ? "Get outside for 5 minutes of daylight before 10 am"
+    : cycleLens() && phase === "luteal" ? "A handful of pumpkin seeds at 3 pm"
+    : "Drink a full glass of water before your coffee";
+  const headline = cycleLens() ? PHASES[phase].energy : ctx.row.ready >= 80 ? "You recovered well. A good day to push a little." : "Steady day. Keep effort moderate and protect your evening.";
+  return { headline, smallWin: win, workout: { name, minutes, steps }, recipe, source: "library" };
+}
+
+/* ---------- rendering ---------- */
+const icon = {
+  today: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
+  log: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
+  cycle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3a9 9 0 1 1-9 9"/><circle cx="12" cy="12" r="3"/><path d="M3 12V5M3 5h7" /></svg>',
+  habits: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M3 9h18M8 2v4M16 2v4M8 14l2 2 5-4"/></svg>',
+  record: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/></svg>',
+  check: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>',
+  spark: '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.2 6.6L21 11l-6.8 2.4L12 20l-2.2-6.6L3 11l6.8-2.4z"/></svg>',
+  lock: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
+  eye: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+  trash: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M9 7V4h6v3M6 7l1 14h10l1-14"/></svg>',
+  share: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="12" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><path d="M8.6 10.6l6.8-3.2M8.6 13.4l6.8 3.2"/></svg>',
+  bowl: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 11h18a9 9 0 0 1-18 0zM8 7c0-2 2-2 2-4M13 7c0-2 2-2 2-4"/></svg>',
+  move: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="14" cy="4" r="2"/><path d="M9 21l3-6 3 3v3M6 12l3-4 5 1 2 4 3 1"/></svg>',
+  leaf: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 19C5 9 11 4 20 4c0 9-5 15-15 15zM5 19l8-8"/></svg>',
+  star: '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>',
+};
+const brandMark = '<svg class="brand-mark" viewBox="0 0 32 32"><g fill="var(--accent)"><ellipse cx="16" cy="9" rx="5" ry="8" opacity=".9"/><ellipse cx="16" cy="23" rx="5" ry="8" opacity=".5"/><ellipse cx="9" cy="16" rx="8" ry="5" opacity=".7"/><ellipse cx="23" cy="16" rx="8" ry="5" opacity=".6"/></g><circle cx="16" cy="16" r="3" fill="var(--surface)"/></svg>';
+
+function render() {
+  const app = document.getElementById("app");
+  CYCLE_LEN = cycleLength();
+  const ctx = dayContext();
+  app.dataset.phase = state.step === "app" ? (cycleLens() ? phaseOf(ctx.cd) : "follicular") : ["welcome", "account"].includes(state.step) ? "luteal" : "menstrual";
+  const key = state.step + ":" + state.tab;
+  const scroller = app.querySelector(".scroll");
+  const keepScroll = key === ui.lastKey && scroller ? scroller.scrollTop : 0;
+  app.classList.toggle("fresh", key !== ui.lastKey);
+  ui.lastKey = key;
+
+  const body = state.step === "app" ? renderApp(ctx) : renderOnboarding();
+  app.innerHTML = `<div class="glow"></div>${body}${ui.moodOpen ? renderMood() : ""}`;
+  const s = app.querySelector(".scroll");
+  if (s) s.scrollTop = keepScroll;
+  if (state.step === "welcome") startPetals();
+  requestAnimationFrame(() => app.querySelectorAll("[data-dash]").forEach((el) => el.style.strokeDashoffset = el.dataset.dash));
+}
+
+/* ---------- onboarding ---------- */
+const ONBOARD = ["account", "about", "privacy", "connect", "goals", "habits"];
+function progress() {
+  const i = ONBOARD.indexOf(state.step);
+  return `<div class="progress" aria-label="Step ${i + 1} of ${ONBOARD.length}">${ONBOARD.map((_, j) => `<span class="${j <= i ? "on" : ""}"></span>`).join("")}</div>`;
+}
+function renderOnboarding() {
+  const p = state.profile;
+  const views = {
+    welcome: () => `
+      <div class="hero-art rise"><canvas id="petals"></canvas></div>
+      <div class="stack rise"><span class="eyebrow">Bloom</span><h1>Walk into your next appointment with your whole story.</h1></div>
+      <p class="muted rise">Doctors see you for 15 minutes. Bloom keeps the record of everything in between: sleep, food, movement, mood, and your cycle. Then it helps you build habits that fit your body this week.</p>
+      <div class="stack rise">
+        <button class="btn block" data-go="account">Create my account</button>
+        <span class="eyebrow" style="margin-top:6px">Or explore a demo profile</span>
+        <div class="stack">${Object.entries(PERSONAS).map(([k, pr]) => `<button class="btn ghost block" data-persona="${k}" style="justify-content:space-between"><b>${pr.profile.name}</b><span class="muted" style="font-weight:500;font-size:13px">${pr.blurb}</span></button>`).join("")}</div>
+      </div>`,
+    account: () => `${progress()}
+      <div class="stack rise"><h1>Let's set you up</h1><p class="muted">Your record belongs to you. We'll ask only what changes your plan.</p></div>
+      <div class="field rise"><label for="f-name">First name</label><input class="input" id="f-name" data-bind="name" value="${esc(p.name)}" placeholder="Maya" autocomplete="given-name"></div>
+      <div class="field rise"><label for="f-email">Email</label><input class="input" id="f-email" data-bind="email" value="${esc(p.email)}" placeholder="maya@example.com" type="email" autocomplete="email"></div>
+      <div class="field rise"><label for="f-age">Age</label><input class="input" id="f-age" data-bind="age" value="${esc(p.age)}" placeholder="32" inputmode="numeric">${p.age ? `<span class="muted" style="font-size:12px">We tailor your plan for ages ${ageBand().label}: ${ageBand().focus.join(", ").toLowerCase()}.</span>` : ""}</div>
+      <button class="btn block rise" data-go="about">Continue</button>`,
+    about: () => `${progress()}
+      <div class="stack rise"><h1>A little about you</h1><p class="muted">This shapes your workouts, recipes, and what we watch for.</p></div>
+      <div class="field rise"><label>Where do you work out?</label>
+        <div class="seg">${[["gym", "Gym access"], ["home", "At home"], ["none", "Just walking"]].map(([v, l]) => `<button class="${p.gym === v ? "on" : ""}" data-gym="${v}">${l}</button>`).join("")}</div></div>
+      <div class="field rise"><label>Where are you in life right now?</label>
+        <div class="chips">${LIFE_STAGES.map(([v, l]) => `<button class="chip ${p.lifeStage === v ? "on" : ""}" data-stage="${v}">${l}</button>`).join("")}</div></div>
+      ${cycleLens() ? `<div class="grid2 rise"><div class="field"><label for="f-lp">Last period started</label><input class="input" type="date" id="f-lp" data-bind="lastPeriod" value="${esc(p.lastPeriod)}" max="${TODAY}"></div>
+        <div class="field"><label for="f-len">Usual cycle (days)</label><input class="input" id="f-len" data-bind="cycleLen" value="${esc(p.cycleLen)}" inputmode="numeric"></div></div>` : `<p class="muted rise" style="font-size:13px">Got it. Bloom will focus on sleep, food, movement, stress, and mood, and skip cycle tips.</p>`}
+      <div class="field rise"><label>Food preferences or restrictions</label>
+        <div class="chips">${DIETS.map((d) => `<button class="chip ${p.diet.includes(d) ? "on" : ""}" data-toggle="diet" data-val="${d}">${d}</button>`).join("")}</div></div>
+      <div class="field rise"><label>Conditions you're managing</label>
+        <div class="chips">${CONDITIONS.map((d) => `<button class="chip ${p.conditions.includes(d) ? "on" : ""}" data-toggle="conditions" data-val="${d}">${d}</button>`).join("")}</div></div>
+      <button class="btn block rise" data-go="privacy">Continue</button>`,
+    privacy: () => `${progress()}
+      <div class="stack rise"><span class="eyebrow">Your health privacy</span><h1>Your body. Your data. Your call.</h1></div>
+      <div class="card rise">
+        ${[[icon.lock, "Encrypted, never sold", "Your record lives in a private space only you can open. We never sell health data or use it for ads."],
+           [icon.eye, "Only you decide who sees it", "Nothing goes to a doctor, partner, or anyone else unless you share a summary yourself."],
+           [icon.leaf, "Cycle data stays private", "Period and fertility data is stored separately and excluded from any research by default."],
+           [icon.trash, "Delete everything, anytime", "Tap Restart at the top to erase every log right away, here and in your saved record."]]
+          .map(([ic, t, d]) => `<div class="promise"><div class="ic">${ic}</div><div><h3>${t}</h3><p class="muted">${d}</p></div></div>`).join("")}
+      </div>
+      <div class="card flat rise">
+        <h3>What you allow</h3>
+        ${[["wearable", "Read sleep, HRV, temperature, and activity from my wearable"], ["voice", "Turn my voice notes into log entries"], ["cycle", "Use my cycle to personalize my plan"], ["share", "Let me create a summary to share with my doctor"], ["research", "Contribute anonymized data to women's health research"]]
+          .map(([k, l]) => `<label class="row between" for="c-${k}"><span>${l}</span><input type="checkbox" class="toggle" id="c-${k}" data-consent="${k}" ${state.consent[k] ? "checked" : ""}></label>`).join("")}
+      </div>
+      <button class="btn block rise" data-go="connect">I agree, continue</button>`,
+    connect: () => `${progress()}
+      <div class="stack rise"><h1>Connect your signals</h1><p class="muted">Passive data means less logging for you.</p></div>
+      ${connectCard("oura", "O", "Oura Ring", "Sleep, HRV, readiness, temperature, activity", "90 nights synced")}
+      ${connectCard("calendar", "C", "Calendar", "Google, Outlook, or iCloud. We find gaps for workouts and spot heavy days.", "5 events today")}
+      <button class="btn block rise" data-go="goals">${state.connected.oura ? "Continue" : "Skip for now"}</button>`,
+    goals: () => `${progress()}
+      <div class="stack rise"><h1>Pick two goals</h1><p class="muted">Your whole life, not just your cycle. Claude will turn them into three small habits you can actually keep.</p></div>
+      <div class="grid2 rise">${GOALS.map((g) => `<button class="goal ${state.goals.includes(g.id) ? "on" : ""}" data-goal="${g.id}"><b>${g.title}</b><small>${g.sub}</small></button>`).join("")}</div>
+      <button class="btn block rise" data-action="make-habits" ${state.goals.length === 2 ? "" : "disabled"}>${state.goals.length === 2 ? "Build my habits" : `Choose ${2 - state.goals.length} more`}</button>`,
+    habits: () => `${progress()}
+      ${ui.thinking ? `<div class="thinking"><div class="orb"></div><h2>Reading your goals and your data</h2><p class="muted">Claude is picking three habits that fit ${esc(p.name || "you")}.</p><button class="link" data-action="skip-ai">Use Bloom's picks instead</button></div>` : `
+      <div class="stack rise"><span class="ai-badge">${icon.spark} ${state.habitsSource === "claude" ? "Picked by Claude" : "Picked for you"}</span><h1>Your three habits</h1><p class="muted">Small enough to do on a hard day. We'll track your consistency every week.</p></div>
+      ${state.habits.map((h, i) => `<div class="card rise"><div class="row"><span class="pill accent mono">${i + 1}</span><h3>${esc(h.title)}</h3></div><p><b>When:</b> ${esc(h.cue)}</p><p class="muted">${esc(h.why)}</p></div>`).join("")}
+      <button class="btn block rise" data-action="finish">Start my day</button>
+      <button class="link rise" data-action="make-habits">Suggest different habits</button>`}`,
+  };
+  return `<div class="scroll"><div class="screen">${views[state.step]()}</div></div>`;
+}
+function connectCard(id, letter, name, desc, done) {
+  const on = state.connected[id], syncing = ui.syncing === id;
+  return `<div class="card rise"><div class="connect"><div class="logo">${letter}</div><div><h3>${name}</h3><p class="muted" style="font-size:13px">${on ? `<span style="color:var(--good)">Connected, ${done}</span>` : desc}</p></div>
+    <button class="btn small ${on ? "soft" : ""}" data-connect="${id}" ${on || syncing ? "disabled" : ""}>${on ? "Done" : syncing ? "Syncing" : "Connect"}</button>
+    ${syncing ? `<div class="sync-bar"><i id="sync-${id}"></i></div>` : ""}</div></div>`;
+}
+
+/* ---------- app tabs ---------- */
+function renderApp(ctx) {
+  const tabs = { today: renderToday, habits: renderHabits, log: renderLog, cycle: renderCycle, record: renderRecord };
+  if (!cycleLens() && state.tab === "cycle") state.tab = "today";
+  const tabList = [["today", "Today"], ["habits", "Habits"], ["log", "Log"], ...(cycleLens() ? [["cycle", "Cycle"]] : []), ["record", "Record"]];
+  const phase = phaseOf(ctx.cd);
+  return `
+    <div class="topbar"><div class="brand">${brandMark}Bloom</div>
+      <div class="row">${!cycleLens() ? `<span class="pill accent mono">Ready ${ctx.row.ready ?? "--"}</span>` : periodStarts().length ? `<span class="pill accent"><span class="dot"></span>${PHASES[phase].label} · day ${ctx.cd}</span>` : `<button class="pill accent" data-tab="cycle">Log your period</button>`}<button class="pill" data-action="reset" title="Restart onboarding">Restart</button></div></div>
+    <div class="scroll"><div class="screen">${tabs[state.tab](ctx)}</div></div>
+    <nav class="tabbar" style="grid-template-columns:repeat(${tabList.length},1fr)">${tabList.map(([k, l]) => `<button class="${state.tab === k ? "on" : ""}" data-tab="${k}">${icon[k]}${l}</button>`).join("")}</nav>
+    ${ui.note ? `<div class="toast" role="status">${esc(ui.note)}</div>` : ""}`;
+}
+
+function ring(value, max, size = 116, stroke = 11, token = "--accent") {
+  const r = (size - stroke) / 2, c = 2 * Math.PI * r, off = c * (1 - value / max);
+  return `<svg viewBox="0 0 ${size} ${size}"><circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="var(--line)" stroke-width="${stroke}"/>
+    <circle class="ring-arc" cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="var(${token})" stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c}" data-dash="${off}"/></svg>`;
+}
+
+function energyOf(row, day) {
+  const mood = state.moods.filter((m) => m.day === day).pop();
+  const moodScore = { drained: 20, low: 40, okay: 60, good: 80, glowing: 95 }[mood?.mood];
+  const parts = [row.ready, row.sleep, moodScore, Number.isFinite(row.energySelf) ? row.energySelf * 19 : undefined].filter(Number.isFinite);
+  return parts.length ? Math.round(avg(parts)) : null;
+}
+function spark(values, token, w = 96, h = 28) {
+  const v = values.map((x) => Number.isFinite(x) ? x : null), fin = v.filter((x) => x !== null);
+  if (fin.length < 2) return `<svg width="${w}" height="${h}"></svg>`;
+  const lo = Math.min(...fin), hi = Math.max(...fin), x = (i) => (i / (v.length - 1)) * (w - 4) + 2, y = (val) => h - 3 - ((val - lo) / ((hi - lo) || 1)) * (h - 6);
+  let d = "", pen = false;
+  v.forEach((val, i) => { if (val === null) { pen = false; return; } d += `${pen ? "L" : "M"}${x(i).toFixed(1)} ${y(val).toFixed(1)}`; pen = true; });
+  const lastI = v.map((val, i) => val === null ? -1 : i).filter((i) => i >= 0).pop();
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><path d="${d}" fill="none" stroke="var(${token})" stroke-width="2" stroke-linejoin="round"/><circle cx="${x(lastI)}" cy="${y(v[lastI])}" r="3" fill="var(${token})"/></svg>`;
+}
+function mindCard(ctx) {
+  const rows = SEED.slice(-14), row = ctx.row;
+  const energy = rows.map((r) => energyOf(r, r.day)), stress = rows.map((r) => r.stress), rem = rows.map((r) => r.rem);
+  const remPct = Number.isFinite(row.rem) && row.sleepMin ? Math.round(100 * row.rem / row.sleepMin) : null;
+  const remUsual = Math.round(100 * avg(SEED.slice(-30).map((r) => r.rem / r.sleepMin)));
+  const lowMoods = state.moods.filter((m) => m.day >= addDays(TODAY, -13) && ["low", "drained"].includes(m.mood)).length;
+  const heavy = lowMoods >= 4 || avg(stress.slice(-5)) > 130;
+  const note = remPct !== null && remPct < remUsual - 2 ? `REM was ${remPct}% of your sleep, under your usual ${remUsual}%. REM sleep helps the brain process emotions, so a tense day can feel bigger after a short REM night.`
+    : avg(stress.slice(-3)) > avg(stress) + 15 ? "Your stress minutes have climbed the last few days. Short breaks between meetings help your nervous system reset."
+    : "Your stress and energy look balanced this week.";
+  return `<div class="card rise"><div class="row between"><h2>Mind and energy</h2><span class="eyebrow">14 days</span></div>
+    <div class="mind">
+      <div><span class="eyebrow">Energy</span><b class="mono">${num(energyOf(row, ctx.row.day || TODAY))}</b>${spark(energy, "--ph-ovu")}</div>
+      <div><span class="eyebrow">Stress</span><b class="mono">${num(row.stress)}${Number.isFinite(row.stress) ? "m" : ""}</b>${spark(stress, "--warn")}</div>
+      <div><span class="eyebrow">REM</span><b class="mono">${Number.isFinite(row.rem) ? hm(row.rem) : "--"}</b>${Number.isFinite(row.rem) ? spark(rem, "--ph-lut") : `<small class="muted">Needs a wearable</small>`}</div>
+    </div>
+    <p style="font-size:14px">${note}</p>
+    ${heavy ? `<div class="card flat" style="padding:12px"><h3>It's been a heavy stretch</h3><p class="muted" style="font-size:13px">You've logged ${lowMoods} low days in two weeks. That's worth sharing with someone you trust or your doctor. If you're in crisis, call or text <b class="mono">988</b> (Suicide and Crisis Lifeline, US).</p></div>` : ""}
+    <button class="link" data-action="mood" style="text-align:left">Log how you feel</button></div>`;
+}
+function checkinCard() {
+  const c = state.checkins?.[TODAY];
+  if (c && !ui.editCheckin) return `<div class="card rise"><div class="row between"><h2>Morning check-in</h2><button class="link" data-action="edit-checkin">Edit</button></div><p class="muted">Slept ${c.sleepH} h · energy ${c.energy}/5 · stress ${c.stress}/5. No wearable needed.</p></div>`;
+  const draft = ui.checkinDraft || { sleepH: 7, energy: 3, stress: 3 };
+  ui.checkinDraft = draft;
+  return `<div class="card rise"><span class="eyebrow">10 second check-in</span><h2>How did you sleep?</h2>
+    <label class="row between" for="ci-sleep"><span>Hours of sleep</span><b class="mono" id="ci-sleep-val">${draft.sleepH} h</b></label>
+    <input type="range" id="ci-sleep" min="3" max="11" step="0.5" value="${draft.sleepH}" data-ci="sleepH">
+    ${[["energy", "Energy"], ["stress", "Stress"]].map(([k, l]) => `<div class="row between"><span>${l}</span><div class="seg" style="width:62%">${[1, 2, 3, 4, 5].map((n) => `<button class="${draft[k] === n ? "on" : ""}" data-ci-set="${k}" data-val="${n}">${n}</button>`).join("")}</div></div>`).join("")}
+    <button class="btn block" data-action="save-checkin">Save check-in</button></div>`;
+}
+function seasonCard() {
+  const found = seasonNow(); if (!found) return "";
+  const [key, season] = found;
+  return `<div class="card rise"><div class="row between"><span class="eyebrow">This season</span><span class="pill">${key}</span></div><h2>${season.label}</h2>
+    ${season.recs.map((r, i) => `<div class="insight"><i style="background:var(--ph-fol)"></i><div class="stack" style="gap:4px"><b>${esc(r.title)}</b><p class="muted" style="font-size:13px">${esc(r.body)}</p>
+      <div class="row" style="flex-wrap:wrap"><span class="pill mono" style="font-size:11px">Source: ${esc(r.src)}</span>${r.habit ? (state.habits.some((h) => h.title === r.habit.title) ? `<span class="pill accent">In your habits</span>` : `<button class="btn small soft" data-season-habit="${i}">Add as habit</button>`) : ""}</div></div></div>`).join("")}
+  </div>`;
+}
+function pillars(ctx) {
+  const { row } = ctx;
+  const nourishLogs = state.logs.filter((l) => l.day === TODAY && l.category === "nutrition").length;
+  const moodToday = state.moods.filter((m) => m.day === TODAY).pop();
+  const moodScore = { drained: 25, low: 45, okay: 65, good: 82, glowing: 96 }[moodToday?.mood];
+  const list = [
+    { label: "Sleep", score: row.sleep || 0, token: "--ph-lut" },
+    { label: "Move", score: Math.min(100, Math.round((row.steps || 0) / 90)), token: "--ph-fol" },
+    { label: "Nourish", score: Math.min(100, 40 + nourishLogs * 20), token: "--ph-ovu" },
+    { label: "Mind", score: moodScore ?? Math.round(100 * (row.recovery || 1) / ((row.stress || 0) + (row.recovery || 1))), token: "--ph-men" },
+  ];
+  if (cycleLens()) list.push({ label: "Cycle", score: Math.round(100 * ctx.cd / CYCLE_LEN), token: PHASES[phaseOf(ctx.cd)].token });
+  return list;
+}
+function streak(h) {
+  let n = 0;
+  for (let i = 0; i < 200; i++) {
+    if (state.checks[`${h.id}|${addDays(TODAY, -i)}`]) n++;
+    else if (i > 0) break;
+  }
+  return n;
+}
+function swipeDeck() {
+  const pending = state.habits.filter((h) => !state.checks[`${h.id}|${TODAY}`] && !state.skips?.[`${h.id}|${TODAY}`]);
+  if (!pending.length) return `<div class="card rise deck-done"><div class="win"><div class="star">${icon.check}</div><div><h3>You're checked in for today</h3><p class="muted" style="font-size:13px">Swipe again tomorrow morning.</p></div></div></div>`;
+  return `<div class="deck rise" tabindex="0" aria-label="Habit check-in. Right arrow for done, left arrow for not today.">
+    ${pending.slice(0, 3).reverse().map((h, i, arr) => { const depth = arr.length - 1 - i; return `<div class="swipe-card" data-swipe="${h.id}" style="--depth:${depth}">
+      <span class="eyebrow">Check-in ${state.habits.indexOf(h) + 1} of ${state.habits.length}</span><h2>${esc(h.title)}</h2><p class="muted">${esc(h.cue)}</p>
+      <div class="stamp yes">Done</div><div class="stamp no">Not today</div></div>`; }).join("")}
+  </div>
+  <div class="row rise" style="justify-content:center;gap:14px"><button class="btn ghost" data-swipe-btn="left">Not today</button><button class="btn" data-swipe-btn="right">${icon.check} Done</button></div>
+  <p class="muted rise" style="text-align:center;font-size:12px;margin-top:-6px">Swipe right for done, left for not today</p>`;
+}
+function resolveSwipe(id, dir) {
+  if (dir === "right") state.checks[`${id}|${TODAY}`] = true;
+  else { state.skips = state.skips || {}; state.skips[`${id}|${TODAY}`] = true; }
+  save();
+  const card = document.querySelector(`[data-swipe="${id}"]`);
+  if (card) { card.style.transition = "transform .35s ease-in, opacity .35s"; card.style.transform = `translateX(${dir === "right" ? 140 : -140}%) rotate(${dir === "right" ? 18 : -18}deg)`; card.style.opacity = "0"; }
+  if (dir === "right" && card) confetti(card);
+  setTimeout(() => { render(); if (dir === "right") toast(`${streakText(id)}`); }, 320);
+}
+const streakText = (id) => { const h = state.habits.find((x) => x.id === id); const n = h ? streak(h) : 0; return n > 1 ? `${n} day streak. Nice.` : "Done. Streak started."; };
+let drag = null;
+document.addEventListener("pointerdown", (e) => {
+  const card = e.target.closest(".swipe-card"); if (!card || card.style.getPropertyValue("--depth") !== "0") return;
+  drag = { card, id: card.dataset.swipe, x0: e.clientX, dx: 0 }; card.setPointerCapture(e.pointerId); card.style.transition = "none";
+});
+document.addEventListener("pointermove", (e) => {
+  if (!drag) return; drag.dx = e.clientX - drag.x0;
+  drag.card.style.transform = `translateX(${drag.dx}px) rotate(${drag.dx / 14}deg)`;
+  drag.card.classList.toggle("lean-yes", drag.dx > 40); drag.card.classList.toggle("lean-no", drag.dx < -40);
+});
+const endDrag = () => {
+  if (!drag) return; const { card, id, dx } = drag; drag = null;
+  if (Math.abs(dx) > 90) resolveSwipe(id, dx > 0 ? "right" : "left");
+  else { card.style.transition = "transform .3s cubic-bezier(.2,.9,.3,1.3)"; card.style.transform = ""; card.classList.remove("lean-yes", "lean-no"); }
+};
+document.addEventListener("pointerup", endDrag);
+document.addEventListener("pointercancel", endDrag);
+document.addEventListener("keydown", (e) => {
+  if (!e.target.closest?.(".deck") || !["ArrowLeft", "ArrowRight"].includes(e.key)) return;
+  const top = document.querySelector('.swipe-card[style*="--depth:0"]'); if (top) resolveSwipe(top.dataset.swipe, e.key === "ArrowRight" ? "right" : "left");
+});
+function renderHabits() {
+  const weeks = [3, 2, 1, 0].map((w) => {
+    const days = Array.from({ length: 7 }, (_, i) => addDays(TODAY, -(w * 7) - 6 + i));
+    const done = state.habits.reduce((sum, h) => sum + days.filter((d) => state.checks[`${h.id}|${d}`]).length, 0);
+    return { label: w === 0 ? "This week" : w === 1 ? "Last week" : `${w} weeks ago`, start: days[0], pct: state.habits.length ? Math.round(100 * done / (state.habits.length * 7)) : 0 };
+  });
+  const todayDone = state.habits.filter((h) => state.checks[`${h.id}|${TODAY}`]).length;
+  return `
+    <div class="stack rise"><span class="eyebrow">Habit tracker</span><h1>${todayDone} of ${state.habits.length} done today</h1><p class="muted">Consistency beats intensity. Here is every week, at a glance.</p></div>
+    ${swipeDeck()}
+    <div class="card rise"><h2>Weekly consistency</h2>
+      <div class="weeks">${weeks.map((w) => `<div class="wk"><div class="bar"><i style="height:${Math.max(4, w.pct)}%"></i></div><b class="mono">${w.pct}%</b><span>${w.label}</span></div>`).join("")}</div>
+      <p class="muted" style="font-size:13px">${weeks[3].pct >= weeks[2].pct ? `Up ${weeks[3].pct - weeks[2].pct} points on last week. Keep it going.` : `A softer week. That happens; one check today restarts the climb.`}</p></div>
+    ${state.habits.map((h) => { const done = !!state.checks[`${h.id}|${TODAY}`]; return `
+      <div class="card rise"><div class="habit"><div><div class="habit-title">${esc(h.title)}</div><small class="muted">${esc(h.cue)}</small></div>
+        <button class="check ${done ? "on" : ""}" data-check="${h.id}" aria-pressed="${done}" aria-label="Mark ${esc(h.title)} done today">${icon.check}</button></div>
+        <p class="muted" style="font-size:13px">${esc(h.why)}</p>
+        <div class="row between"><span class="pill accent mono">${streak(h)} day streak</span><span class="mono muted" style="font-size:12px">${Array.from({ length: 28 }, (_, i) => state.checks[`${h.id}|${addDays(TODAY, -i)}`]).filter(Boolean).length}/28 days</span></div>
+        <div class="month">${Array.from({ length: 28 }, (_, i) => { const d = addDays(TODAY, i - 27); return `<i class="${state.checks[`${h.id}|${d}`] ? "on" : ""} ${d === TODAY ? "today" : ""}" title="${fmtDay(d)}"></i>`; }).join("")}</div>
+      </div>`; }).join("")}
+    <button class="btn ghost block rise" data-action="new-habits">${icon.spark} Ask Claude for fresh habits</button>`;
+}
+function weekDays() { return Array.from({ length: 7 }, (_, i) => addDays(TODAY, i - 6)); }
+function habitWeek(h) { return weekDays().map((d) => !!state.checks[`${h.id}|${d}`]); }
+
+function renderToday(ctx) {
+  const { row, cd } = ctx, phase = phaseOf(cd), info = PHASES[phase], base = baseline();
+  const reasons = easeReasons(ctx), ease = reasons.length > 0;
+  const plan = state.aiPlan && state.aiPlan.cd === cd && state.aiPlan.ease === ease ? state.aiPlan : fallbackPlan(ctx, ease);
+  const slot = freeSlot(plan.workout.minutes);
+  const name = state.profile.name || "there";
+  const hour = 8;
+  const items = [...CALENDAR.map((e) => ({ ...e, kind: "cal" })), ...state.booked.map((e) => ({ ...e, kind: "plan" }))].sort((a, b) => toMin(a.start) - toMin(b.start));
+  const booked = state.booked.some((b) => b.title === plan.workout.name);
+  const weekPct = state.habits.length ? Math.round(100 * state.habits.flatMap(habitWeek).filter(Boolean).length / (state.habits.length * 7)) : 0;
+  return `
+    <div class="stack rise"><span class="eyebrow">${ctx.preview ? "Previewing cycle day " + cd : fmtDay(TODAY, { weekday: "long", month: "long", day: "numeric" })}</span>
+      <h1>${hour < 12 ? "Good morning" : "Hi"}, ${esc(name)}.</h1><p class="muted">${esc(cycleLens() ? info.energy : plan.headline)}</p></div>
+
+    <div class="card rise"><div class="row between"><h2>Your day at a glance</h2><span class="eyebrow">5 pillars</span></div>
+      <div class="pillars">${pillars(ctx).map((pl) => `<div class="pillar"><div class="ring-wrap sm">${ring(pl.score, 100, 56, 6, pl.token)}<div class="val"><b>${pl.score}</b></div></div><span>${pl.label}</span></div>`).join("")}</div></div>
+
+    ${hasWearable() ? "" : checkinCard()}
+    ${mindCard(ctx)}
+    ${seasonCard()}
+
+    ${hasWearable() ? `<div class="card rise"><div class="ready">
+      <div class="ring-wrap">${ring(row.ready || 0, 100)}<div class="val"><div><b>${row.ready ?? "--"}</b><span class="eyebrow">Readiness</span></div></div></div>
+      <div class="grid2">
+        <div class="metric"><b>${hm(row.sleepMin || 0)}</b><span>Sleep ${row.sleepMin < base.sleepMin - 15 ? "· short" : ""}</span></div>
+        <div class="metric"><b>${num(row.hrv)} ms</b><span>HRV · base ${Math.round(base.hrv)}</span></div>
+        <div class="metric"><b>${row.temp > 0 ? "+" : ""}${(row.temp ?? 0).toFixed(2)}°</b><span>Temp vs normal</span></div>
+        <div class="metric"><b>${(row.steps || 0).toLocaleString()}</b><span>Steps yesterday</span></div>
+      </div></div>
+      <div class="row between"><span class="eyebrow">${state.connected.ouraMode === "live" ? "Live from your Oura Ring" : "Oura Ring · demo data"}</span><button class="link" data-action="oura-sync" style="font-size:13px">${ui.ouraBusy ? "Syncing..." : "Sync Oura"}</button></div>
+    </div>` : ""}
+
+    <div class="card rise"><div class="row between"><h2>Your habits today</h2><button class="link" data-tab="habits">${weekPct}% this week</button></div>
+      ${state.habits.map((h) => { const done = !!state.checks[`${h.id}|${TODAY}`]; return `<div class="habit"><div><div class="habit-title">${esc(h.title)}</div><small class="muted">${esc(h.cue)} · ${streak(h)} day streak</small></div>
+        <button class="check ${done ? "on" : ""}" data-check="${h.id}" aria-pressed="${done}" aria-label="Mark ${esc(h.title)} done today">${icon.check}</button></div>`; }).join("")}
+    </div>
+
+    ${ease ? `<div class="card ease rise"><span class="eyebrow">Your body is asking</span><h2>Ease off today.</h2>
+      <ul style="margin:0;padding-left:18px">${reasons.map((r) => `<li>${esc(r)}</li>`).join("")}</ul>
+      <p>We swapped your workout for a walk and moved your bedtime earlier. Resting today is part of the plan, not a break from it.</p></div>` : ""}
+
+    <div class="card flat rise"><div class="row between"><span class="eyebrow">For your ${ageBand().label}</span><span class="chips">${ageBand().focus.map((f) => `<span class="pill">${f}</span>`).join("")}</span></div><p style="font-size:14px">${ageBand().tip}</p></div>
+
+    <div class="card rise"><div class="win"><div class="star">${icon.star}</div><div><span class="eyebrow">One small win</span><h3>${esc(plan.smallWin)}</h3></div></div></div>
+
+    <div class="card rise">
+      <div class="row between"><h2>Today's plan</h2>${plan.source === "claude" ? `<span class="ai-badge">${icon.spark} Claude</span>` : ""}</div>
+      <p class="muted">${esc(plan.headline)}</p>
+      <div class="feature"><div class="art">${icon.move}</div><div class="stack">
+        <div><span class="eyebrow">Move · ${plan.workout.minutes} min</span><h3>${esc(plan.workout.name)}</h3></div>
+        <details><summary>See the session</summary><ol>${plan.workout.steps.map((s) => `<li>${esc(s)}</li>`).join("")}</ol></details>
+        <div class="row"><span class="muted" style="font-size:13px">${booked ? "Booked on your calendar" : `Your calendar is free at <b class="mono">${slot}</b>`}</span>
+        ${booked ? "" : `<button class="btn small soft" data-action="book" data-slot="${slot}" data-title="${esc(plan.workout.name)}" data-min="${plan.workout.minutes}">Book it</button>`}</div>
+      </div></div>
+      <div class="feature"><div class="art">${icon.bowl}</div><div class="stack">
+        <div><span class="eyebrow">Eat · ${plan.recipe.minutes} min</span><h3>${esc(plan.recipe.name)}</h3><p class="muted" style="font-size:13px">${esc(plan.recipe.why)}</p></div>
+        <details><summary>Get the recipe</summary><ul>${plan.recipe.ingredients.map((s) => `<li>${esc(s)}</li>`).join("")}</ul><ol>${plan.recipe.steps.map((s) => `<li>${esc(s)}</li>`).join("")}</ol></details>
+      </div></div>
+      <button class="btn soft block" data-action="ai-plan" ${ui.planning ? "disabled" : ""}>${icon.spark} ${ui.planning ? "Claude is planning your day..." : plan.source === "claude" ? "Try another plan" : "Personalize with Claude"}</button>
+    </div>
+
+    <div class="card rise"><div class="row between"><h2>Your day</h2><span class="eyebrow">Calendar</span></div>
+      <div class="timeline">${items.map((e, i) => `<div class="tl ${e.kind}"><span class="t">${e.start}</span><span class="rail"><i></i>${i < items.length - 1 ? "<s></s>" : ""}</span><div class="what"><b>${esc(e.title)}</b><small>${e.start} to ${e.end}${e.kind === "plan" ? " · added by Bloom" : ""}</small></div></div>`).join("")}</div>
+    </div>
+
+    ${cycleLens() ? `<div class="card flat rise scrub"><div class="row between"><label class="eyebrow" for="scrub">Demo: preview any day of her cycle</label><span class="pill accent mono" id="scrub-label">Day ${cd}: ${PHASES[phase].label}</span></div>
+      <input type="range" id="scrub" min="1" max="${CYCLE_LEN}" value="${cd}" data-scrub>
+      <div class="row between muted" style="font-size:12px"><span>Period</span><span>Follicular</span><span>Ovulation</span><span>Luteal</span></div>
+      ${ctx.preview ? `<button class="link" data-action="back-today">Back to today</button>` : ""}
+    </div>` : ""}
+    <button class="btn ghost block rise" data-action="mood">How are you feeling, really?</button>`;
+}
+
+function renderLog() {
+  const todays = state.logs.filter((l) => l.day === TODAY);
+  const sorted = ui.sorted;
+  return `
+    <div class="stack rise"><span class="eyebrow">Log composer</span><h1>Say it all at once.</h1><p class="muted">Ramble about your day. We'll sort it into sleep, movement, food, mood, and symptoms.</p></div>
+    <div class="card rise">
+      <div class="mic-zone">
+        <button class="mic ${ui.recording ? "live" : ""}" data-action="mic" aria-label="${ui.recording ? "Stop recording" : "Start recording"}">${ui.recording ? '<svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>' : icon.log.replace("<svg", '<svg width="38" height="38"')}</button>
+        <div class="wave ${ui.recording ? "live" : ""}">${Array.from({ length: 18 }, (_, i) => `<i style="animation-delay:${(i * 0.07).toFixed(2)}s"></i>`).join("")}</div>
+        <span class="muted" style="font-size:13px">${ui.recording ? "Listening. Tap to stop." : "Tap to talk, or type below"}</span>
+      </div>
+      <textarea class="input" id="draft" data-draft placeholder="Slept badly, had oatmeal and a latte, walked 20 minutes, headache after lunch...">${esc(ui.draft)}</textarea>
+      <div class="chips">${SAMPLE_RAMBLES.map((_, i) => `<button class="chip" data-ramble="${i}">Try sample ${i + 1}</button>`).join("")}</div>
+      <button class="btn block" data-action="sort" ${ui.thinking ? "disabled" : ""}>${ui.thinking ? "Sorting..." : `${icon.spark} Sort my log`}</button>
+    </div>
+    ${ui.thinking ? `<div class="thinking"><div class="orb"></div><p class="muted">Pulling apart sleep, food, movement, and feelings</p></div>` : ""}
+    ${sorted ? `<div class="stack rise"><div class="row between"><h2>Sorted</h2>${sorted.source === "claude" ? `<span class="ai-badge">${icon.spark} Claude</span>` : ""}</div>
+      ${renderBuckets(sorted.entries)}
+      <button class="btn block" data-action="save-log">Add ${sorted.entries.length} entries to my record</button></div>` : ""}
+    <div class="card rise"><div class="row between"><h2>Today's record</h2><span class="pill mono">${todays.length}</span></div>
+      ${todays.length ? renderBuckets(todays, false) : `<p class="muted">Nothing logged yet today. Your first voice note will show up here, sorted.</p>`}</div>`;
+}
+function renderBuckets(entries, animate = true) {
+  const cats = Object.keys(CATEGORIES).filter((c) => entries.some((e) => e.category === c));
+  let n = 0;
+  return `<div class="buckets">${cats.map((c, i) => `<div class="bucket ${cats.length % 2 && i === cats.length - 1 ? "wide" : ""}"><h3><i style="background:${cssVar(CATEGORIES[c].token)}"></i>${CATEGORIES[c].label}</h3>
+    ${entries.filter((e) => e.category === c).map((e) => `<div class="entry" style="${animate ? `animation-delay:${(n++ * 0.12).toFixed(2)}s` : "animation:none"}">${esc(e.text)}${e.detail ? `<small>${esc(e.detail)}</small>` : ""}</div>`).join("")}</div>`).join("")}</div>`;
+}
+
+function arcPath(cx, cy, r, a0, a1) {
+  const p = (a) => [cx + r * Math.cos((a - 90) * Math.PI / 180), cy + r * Math.sin((a - 90) * Math.PI / 180)];
+  const [x0, y0] = p(a0), [x1, y1] = p(a1);
+  return `M${x0.toFixed(2)} ${y0.toFixed(2)} A${r} ${r} 0 ${a1 - a0 > 180 ? 1 : 0} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`;
+}
+function renderCycle(ctx) {
+  const cd = ctx.cd, phase = phaseOf(cd), info = PHASES[phase];
+  const step = 360 / CYCLE_LEN, ovulation = CYCLE_LEN - 14;
+  const untilPeriod = CYCLE_LEN - cd + 1;
+  const nextPeriod = addDays(TODAY, untilPeriod);
+  const fertileStart = addDays(TODAY, ovulation - 5 - cd), fertileEnd = addDays(TODAY, ovulation + 1 - cd);
+  const marker = (() => { const a = (cd - 0.5) * step - 90; return [150 + 118 * Math.cos(a * Math.PI / 180), 150 + 118 * Math.sin(a * Math.PI / 180)]; })();
+  const segs = Array.from({ length: CYCLE_LEN }, (_, i) => {
+    const d = i + 1, ph = phaseOf(d), fertile = d >= ovulation - 5 && d <= ovulation + 1;
+    return `<path class="seg-arc" style="animation-delay:${(i * 0.02).toFixed(2)}s" d="${arcPath(150, 150, 118, i * step + 1, (i + 1) * step - 1)}" stroke="var(${PHASES[ph].token})" stroke-width="${d === cd ? 30 : 22}" fill="none" opacity="${d === cd ? 1 : d < cd ? 0.85 : 0.35}"/>${fertile ? `<circle cx="${150 + 92 * Math.cos(((i + 0.5) * step - 90) * Math.PI / 180)}" cy="${150 + 92 * Math.sin(((i + 0.5) * step - 90) * Math.PI / 180)}" r="2.6" fill="var(--ph-ovu)"/>` : ""}`;
+  }).join("");
+  const today = state.logs.filter((l) => l.day === TODAY && l.category === "symptoms").map((l) => l.text.toLowerCase());
+  return `
+    ${estimatedCycle() ? `<div class="card flat rise"><span class="eyebrow">Estimated</span><h3>Phases predicted from your temperature</h3><p class="muted" style="font-size:13px">You haven't logged a period, so Bloom used Oura's temperature pattern to estimate your last ${startsFromTemperature(SEED).length} cycle starts. Log a period below to make it exact.</p></div>` : ""}
+    ${periodStarts().length ? "" : `<div class="card ease rise"><h2>No period logged yet</h2><p>Log your last period start below and Bloom will predict your phases. On the pill or in perimenopause? Bloom still tracks sleep, food, mood, and symptoms; phase tips just stay off.</p></div>`}
+    <div class="stack rise"><span class="eyebrow">Cycle${ctx.preview ? " · previewing day " + cd : ""}</span><h1>${info.label} phase</h1><p class="muted">${esc(info.body)}</p></div>
+    <div class="cycle-ring rise"><svg viewBox="0 0 300 300" role="img" aria-label="Cycle day ${cd} of ${CYCLE_LEN}">${segs}
+      <circle cx="${marker[0].toFixed(1)}" cy="${marker[1].toFixed(1)}" r="9" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/></svg>
+      <div class="center"><div><span class="eyebrow">Day</span><b>${cd}</b><span class="muted" style="font-size:13px">Period in ${untilPeriod} day${untilPeriod === 1 ? "" : "s"}</span></div></div></div>
+    <div class="legend rise">${Object.values(PHASES).map((p) => `<div><i style="background:var(${p.token})"></i>${p.label}</div>`).join("")}<div><i style="background:var(--ph-ovu);border-radius:50%;transform:scale(.5)"></i>Fertile window</div></div>
+    <div class="grid2 rise">
+      <div class="tile"><span>Next period</span><b>${fmtDay(nextPeriod, { month: "short", day: "numeric" })}</b><span>From ${state.periods.length} periods you logged</span></div>
+      <div class="tile"><span>Fertile window</span><b style="font-size:20px">${fmtDay(fertileStart, { month: "short", day: "numeric" })} to ${fmtDay(fertileEnd, { day: "numeric" })}</b><span>${cd > ovulation + 1 ? "Passed this cycle" : "Estimated"}</span></div>
+    </div>
+    ${signalCard()}
+    <div class="card rise"><div class="row between"><h2>Period tracker</h2><span class="eyebrow">Logged by you</span></div>
+      <div class="row" style="flex-wrap:wrap">${state.periods.includes(TODAY)
+        ? `<span class="pill accent"><span class="dot"></span>Period logged today</span><button class="link" data-action="period-undo">Undo</button>`
+        : `<button class="btn small" data-action="period-today">My period started today</button>`}
+        <label class="row muted" for="period-date" style="font-size:13px">or on <input class="input" type="date" id="period-date" data-period-date max="${TODAY}" style="width:auto;padding:6px 10px"></label></div>
+      <div class="stack">${[...state.periods].sort().reverse().slice(0, 4).map((d, i, arr) => `<div class="row between" style="font-size:14px"><span>${fmtDay(d, { month: "long", day: "numeric" })}</span><span class="mono muted">${arr[i + 1] ? Math.round((new Date(d) - new Date(arr[i + 1])) / 864e5) + " day cycle" : "first logged"}</span></div>`).join("")}</div>
+      <p class="muted" style="font-size:12px">Your log drives the predictions. Oura's temperature trail below double checks ovulation.</p></div>
+    <div class="card rise"><h2>What helps this phase</h2>
+      <div class="insight"><i style="background:var(--ph-fol)"></i><div><b>Move</b><p class="muted">${esc(info.move)}</p></div></div>
+      <div class="insight"><i style="background:var(--ph-ovu)"></i><div><b>Eat</b><p class="muted">${esc(info.eat)}</p></div></div>
+    </div>
+    ${hasWearable() ? `<div class="card rise"><div class="row between"><h2>Temperature trail</h2><span class="eyebrow">Oura confirms</span></div>
+      ${tempChart()}
+      <p class="muted" style="font-size:13px">Your temperature rises after ovulation and drops right before your period. Bloom uses that shift to confirm ovulation and flag a cycle that looks different from your log.</p></div>` : ""}
+    <div class="card rise"><h2>How do you feel today?</h2>
+      <div class="chips">${["Cramps", "Headache", "Bloating", "Tender breasts", "Acne", "Cravings", "Low mood", "Spotting", "Heavy flow"].map((s) => `<button class="chip ${today.includes(s.toLowerCase()) ? "on" : ""}" data-symptom="${s}">${s}</button>`).join("")}</div></div>`;
+}
+function tempChart() {
+  const rows = SEED.slice(-60), W = 340, H = 130, pad = 26, lo = -0.3, hi = 0.6;
+  const x = (i) => pad + (i / (rows.length - 1)) * (W - pad - 6), y = (v) => 8 + (hi - v) / (hi - lo) * (H - 28);
+  const bands = rows.map((d, i) => d.cd && d.cd <= 5 ? `<rect x="${x(i) - 2.5}" y="8" width="5.6" height="${H - 28}" fill="var(--ph-men)" opacity=".16"/>` : "").join("");
+  const line = rows.map((d, i) => `${i ? "L" : "M"}${x(i).toFixed(1)} ${y(d.temp).toFixed(1)}`).join("");
+  const last = rows.length - 1;
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}">${bands}
+    ${[0.4, 0, -0.2].map((v) => `<line x1="${pad}" x2="${W - 6}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-dasharray="${v ? "3 3" : ""}"/><text x="0" y="${y(v) + 3}">${v > 0 ? "+" : ""}${v.toFixed(1)}</text>`).join("")}
+    <path d="${line} L${x(last)} ${y(lo)} L${x(0)} ${y(lo)} Z" fill="var(--accent)" opacity=".1"/>
+    <path d="${line}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/>
+    <circle cx="${x(last)}" cy="${y(rows[last].temp)}" r="4" fill="var(--accent)"/>
+    <text x="${pad}" y="${H - 4}">${fmtDay(rows[0].day, { month: "short", day: "numeric" })}</text><text x="${W - 40}" y="${H - 4}">Today</text>
+    <rect x="${W - 116}" y="${H - 12}" width="8" height="8" fill="var(--ph-men)" opacity=".35"/><text x="${W - 104}" y="${H - 4}">period</text></svg>`;
+}
+
+function phaseStats() {
+  return Object.keys(PHASES).map((ph) => {
+    const rows = SEED.filter((d) => d.phase === ph);
+    return { ph, n: rows.length, sleep: avg(rows.map((d) => d.sleepMin)), hrv: avg(rows.map((d) => d.hrv)), ready: avg(rows.map((d) => d.ready)), stress: avg(rows.map((d) => d.stress)) };
+  });
+}
+function allSymptoms() {
+  const logged = state.logs.filter((l) => l.category === "symptoms").map((l) => ({ day: l.day, cd: (SEED.find((d) => d.day === l.day) || {}).cd, name: l.symptom || l.text }));
+  return [...HISTORY_SYMPTOMS, ...logged];
+}
+function lifestyleInsights() {
+  const L = RECORD?.lifestyle;
+  if (!hasWearable()) {
+    const rows = SEED.filter((r) => Number.isFinite(r.stress));
+    const tense = rows.filter((r) => r.stress >= 120), calm = rows.filter((r) => r.stress < 120);
+    return rows.length >= 7 ? [`On high-stress days she sleeps ${Math.round(avg(calm.map((r) => r.sleepMin)) - avg(tense.map((r) => r.sleepMin)))} min less and rates energy ${(avg(calm.map((r) => r.energySelf)) - avg(tense.map((r) => r.energySelf))).toFixed(1)} points lower.`, `${rows.length} self check-ins in the last month, no wearable needed.`] : [];
+  }
+  if (!L) return [];
+  const out = [];
+  const hd = L.heavy_day;
+  if (hd?.is_notable) out.push(`After high-stress days (${hd.heavy_days} in 90), she sleeps ${Math.round(hd.difference_min)} min less that night.`);
+  if (L.sleep_weekday_gap_is_notable && L.worst_sleep_weekday) out.push(`${L.worst_sleep_weekday.weekday} nights are her shortest (${hm(L.worst_sleep_weekday.sleep_min)}), ${Math.round(L.sleep_weekday_gap_min)} min less than ${L.best_sleep_weekday.weekday} nights.`);
+  const full = (L.weekly || []).filter((w) => w.days >= 4).slice(-5);
+  if (L.recent_slopes?.notable?.includes("steps") && full.length >= 2) out.push(`Daily steps fell from ${Math.round(full[0].steps).toLocaleString()} to ${Math.round(full[full.length - 1].steps).toLocaleString()} over the last month.`);
+  if (L.recent_slopes?.notable?.includes("hrv_ms")) out.push(`HRV is up over the last two weeks (about ${L.recent_slopes.hrv_ms.toFixed(1)} ms a week).`);
+  return out;
+}
+function insights() { return [...lifestyleInsights(), ...(cycleLens() ? cycleInsights() : [])]; }
+function weeklyTrends() {
+  if (!hasWearable()) return `<p class="muted">Weekly wearable trends appear once a ring or watch is connected.</p>`;
+  const weeks = RECORD?.lifestyle?.weekly || [];
+  if (!weeks.length) return "";
+  const series = [["sleep_min", "Sleep", "--ph-lut", (v) => hm(v)], ["steps", "Steps", "--ph-fol", (v) => Math.round(v).toLocaleString()], ["hrv_ms", "HRV", "--ph-men", (v) => Math.round(v) + " ms"], ["stress_high_min", "Stress", "--warn", (v) => Math.round(v) + "m"]];
+  return `<div class="trends">${series.map(([key, label, token, fmt]) => {
+    const vals = weeks.map((w) => w[key] ?? 0), max = Math.max(...vals), min = Math.min(...vals) * 0.9;
+    const last = weeks[weeks.length - 1];
+    return `<div class="trend"><div class="row between"><span class="eyebrow">${label}</span><b class="mono">${fmt(last[key] ?? 0)}</b></div>
+      <div class="spark">${weeks.map((w, i) => `<i title="${w.iso_week}: ${fmt(w[key] ?? 0)}" style="height:${Math.max(6, 100 * ((w[key] ?? 0) - min) / ((max - min) || 1))}%;background:var(${token});opacity:${w.days >= 4 ? (i === weeks.length - 1 ? 1 : 0.55) : 0.2};animation-delay:${i * 0.04}s"></i>`).join("")}</div></div>`;
+  }).join("")}</div><p class="muted" style="font-size:11px">Weekly averages, ${weeks.length} weeks. Faded bars are partial weeks.</p>`;
+}
+function cycleInsights() {
+  const stats = phaseStats(), sym = allSymptoms(), cycled = SEED.filter((d) => d.cd);
+  const lateDays = cycled.filter((d) => d.cd >= CYCLE_LEN - 4), otherDays = cycled.length - lateDays.length;
+  const headLate = new Set(sym.filter((s) => s.name === "Headache" && s.cd >= CYCLE_LEN - 4).map((s) => s.day)).size;
+  const headOther = new Set(sym.filter((s) => s.name === "Headache" && s.cd < CYCLE_LEN - 4).map((s) => s.day)).size;
+  const fol = stats.find((s) => s.ph === "follicular"), lut = stats.find((s) => s.ph === "luteal");
+  const lateSleep = avg(lateDays.map((d) => d.sleepMin)), restSleep = avg(cycled.filter((d) => d.cd < CYCLE_LEN - 4).map((d) => d.sleepMin));
+  const habitDays = Object.keys(state.checks).length, possible = state.habits.length * 28;
+  return [
+    `Headaches on ${headLate} of ${lateDays.length} late luteal days, versus ${headOther} of ${otherDays} other days. Headaches cluster in the 5 days before her period.`,
+    `Sleep runs ${Math.round(RECORD?.pre_period_sleep?.drop_min ?? (restSleep - lateSleep))} min shorter in the 5 days before each period.`,
+    `HRV drops from ${Math.round(fol.hrv)} ms (follicular) to ${Math.round(lut.hrv)} ms (luteal); resting heart rate rises in step.`,
+    `Cycle is ${RECORD?.regularity?.is_regular === false ? "irregular" : "regular"}: ${CYCLE_LEN} days across ${state.periods.length} logged periods.${RECORD?.ovulation?.completed_cycles ? ` Oura temperature confirmed ovulation in ${RECORD.ovulation.confirmed_cycles} of ${RECORD.ovulation.completed_cycles} cycles.` : ""}`,
+    possible ? `Habit consistency ${Math.round(100 * habitDays / possible)}% over 4 weeks (${state.habits.map((h) => h.title).join(", ")}).` : "",
+  ].filter(Boolean);
+}
+function renderRecord() {
+  const stats = phaseStats(), sym = allSymptoms(), p = state.profile;
+  const names = ["Headache", "Cramps", "Bloating", "Low mood", "Cravings"];
+  const counts = names.map((n) => Array.from({ length: CYCLE_LEN }, (_, i) => sym.filter((s) => s.name === n && s.cd === i + 1).length));
+  const maxCount = Math.max(1, ...counts.flat());
+  const logged = state.logs.length + HISTORY_SYMPTOMS.length;
+  return `
+    <div class="stack rise"><span class="eyebrow">Lifestyle record</span><h1>The story your doctor never gets.</h1><p class="muted">90 days of how you sleep, move, eat, stress, and feel${cycleLens() ? ", plus your cycle" : ""}. Ready to bring to your appointment.</p></div>
+    <div class="tiles rise">
+      <div class="tile"><b class="mono">${SEED.length}</b><span>${hasWearable() ? "nights from Oura" : "days checked in"}</span></div>
+      <div class="tile"><b class="mono">${logged}</b><span>self-reported entries</span></div>
+      <div class="tile"><b class="mono">${hm(avg(SEED.map((d) => d.sleepMin)))}</b><span>average sleep</span></div>
+      <div class="tile"><b class="mono">${hasWearable() ? Math.round(avg(SEED.map((d) => d.steps))).toLocaleString() : (avg(SEED.map((d) => d.energySelf)) || 0).toFixed(1) + "/5"}</b><span>${hasWearable() ? "average daily steps" : "average energy"}</span></div>
+    </div>
+    <div class="doc rise">
+      <div class="doc-head"><div><span class="eyebrow">Patient-provided summary</span><h2>${esc(p.name || "Maya")}${p.age ? `, ${esc(p.age)}` : ""}</h2>
+        <p class="muted" style="font-size:13px">${p.conditions.filter((c) => c !== "None").length ? "Managing: " + esc(p.conditions.filter((c) => c !== "None").join(", ")) : "No conditions reported"}${p.diet.length ? " · " + esc(p.diet.join(", ")) : ""}</p></div>
+        <span class="mono muted" style="font-size:11px;text-align:right">${fmtDay(addDays(TODAY, -89), { month: "short", day: "numeric" })} to<br>${fmtDay(TODAY, { month: "short", day: "numeric", year: "numeric" })}</span></div>
+      <h3>Lifestyle patterns</h3>
+      ${lifestyleInsights().map((t) => `<div class="insight"><i></i><p>${esc(t)}</p></div>`).join("") || `<p class="muted">Not enough data yet. Patterns appear after about two weeks.</p>`}
+      ${cycleSignal() && cycleSignal().level !== "steady" ? `<h3>Cycle changes</h3><div class="insight"><i style="background:var(--warn)"></i><p>${esc(cycleSignal().title)}. ${esc(cycleSignal().body)}</p></div>` : ""}
+      <h3>Week by week</h3>
+      ${weeklyTrends()}
+      ${cycleLens() ? `<h3>Cycle patterns</h3>
+      ${cycleInsights().map((t) => `<div class="insight"><i style="background:var(--ph-lut)"></i><p>${esc(t)}</p></div>`).join("")}
+      <h3>By cycle phase</h3>
+      <div style="overflow-x:auto"><table><thead><tr><th>Phase</th><th>Sleep</th><th>HRV</th><th>Ready</th><th>Stress</th></tr></thead><tbody>
+        ${stats.map((s) => `<tr><td><span class="dot" style="color:var(${PHASES[s.ph].token})"></span> ${PHASES[s.ph].label}</td><td>${hm(s.sleep)}</td><td>${Math.round(s.hrv)}</td><td>${Math.round(s.ready)}</td><td>${Math.round(s.stress)}m</td></tr>`).join("")}
+      </tbody></table></div>
+      <h3>Symptoms by cycle day</h3>
+      <div style="overflow-x:auto"><div class="heat" style="min-width:330px">
+        ${names.map((n, r) => `<span style="aspect-ratio:auto;background:none;font-size:11px">${n}</span>${counts[r].map((c, i) => `<span title="${n}, day ${i + 1}: ${c}" style="background:${c ? `color-mix(in oklab, var(${PHASES[phaseOf(i + 1)].token}) ${Math.round(25 + 75 * c / maxCount)}%, var(--surface-2))` : "var(--surface-2)"}"></span>`).join("")}`).join("")}
+        <span style="background:none"></span>${Array.from({ length: CYCLE_LEN }, (_, i) => `<span style="background:none;font-size:8px;text-align:center" class="muted mono">${(i + 1) % 7 === 1 ? i + 1 : ""}</span>`).join("")}
+      </div></div>` : ""}
+      ${state.summary ? `<h3>For your doctor</h3><div class="narrative">${state.summary.split(/\n+/).map((t) => `<p>${esc(t)}</p>`).join("")}</div>` : ""}
+      <p class="muted" style="font-size:11px">${ui.cloud ? "Saved to your private Bloom record, visible only to you. " : ""}Self-reported and wearable data. A lifestyle record to support a conversation with a clinician, not a diagnosis.</p>
+    </div>
+    <button class="btn block rise" data-action="summary" ${ui.thinking ? "disabled" : ""}>${icon.spark} ${ui.thinking ? "Writing..." : state.summary ? "Rewrite doctor summary" : "Write my doctor summary"}</button>
+    <button class="btn ghost block rise" data-action="copy">${icon.share} Copy to share with my doctor</button>`;
+}
+
+function signalCard() {
+  const sig = cycleSignal();
+  if (!sig) return "";
+  return `<div class="card rise ${sig.level === "steady" ? "" : "ease"}"><span class="eyebrow">${sig.level === "flag" ? "Worth a visit" : sig.level === "watch" ? "Pattern to discuss" : "Cycle rhythm"}</span><h2>${esc(sig.title)}</h2>
+    <div class="gapbars">${sig.gaps.map((g) => `<div><i style="height:${Math.min(100, g * 1.4)}%;background:var(${g > 35 || g < 21 ? "--warn" : "--ph-fol"})"></i><span class="mono">${g}d</span></div>`).join("")}</div>
+    <p style="font-size:14px">${esc(sig.body)}</p>
+    ${sig.ask ? `<div class="card flat" style="padding:12px"><span class="eyebrow">Question to bring</span><p>"${esc(sig.ask)}"</p></div>` : ""}
+    <p class="muted" style="font-size:11px">A pattern from your own log, not a diagnosis. Sources in Bloom's research notes.</p></div>`;
+}
+function renderMood() {
+  return `<div class="sheet-back" data-action="mood-close"><div class="sheet" data-stop>
+    <div class="stack"><span class="eyebrow">Quick check-in</span><h2>How's your heart today, ${esc(state.profile.name || "friend")}?</h2><p class="muted">One tap. It goes into your record next to your sleep and cycle.</p></div>
+    <div class="moods">${MOODS.map((m, i) => `<button class="mood" data-mood="${m.id}"><div class="blob" style="background:var(${m.token})">${face(i)}</div>${m.label}</button>`).join("")}</div>
+    <button class="link" data-action="mood-close">Not now</button></div></div>`;
+}
+function face(i) {
+  const mouth = ["M8 17q4-3 8 0", "M8 16.5q4-1.5 8 0", "M8 16h8", "M8 15q4 3 8 0", "M7 14q5 5 10 0"][i];
+  return `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--surface)" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="10" r="1" fill="var(--surface)"/><circle cx="15" cy="10" r="1" fill="var(--surface)"/><path d="${mouth}"/></svg>`;
+}
+
+/* ---------- petals canvas on welcome ---------- */
+let petalRaf = 0;
+function startPetals() {
+  cancelAnimationFrame(petalRaf);
+  const c = document.getElementById("petals"); if (!c) return;
+  const ctx2 = c.getContext("2d"), dpr = window.devicePixelRatio || 1;
+  const w = c.clientWidth, h = c.clientHeight; c.width = w * dpr; c.height = h * dpr; ctx2.scale(dpr, dpr);
+  const styles = getComputedStyle(document.documentElement);
+  const colors = ["--ph-men", "--ph-fol", "--ph-ovu", "--ph-lut"].map((t) => styles.getPropertyValue(t).trim());
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const draw = (t) => {
+    ctx2.clearRect(0, 0, w, h);
+    const cx = w / 2, cy = h / 2 + 6;
+    for (let ring = 0; ring < 4; ring++) {
+      const n = 7 + ring * 2;
+      for (let i = 0; i < n; i++) {
+        const a = (i / n) * Math.PI * 2 + t * 0.00012 * (ring % 2 ? -1 : 1) + ring;
+        const len = 46 + ring * 20 + Math.sin(t * 0.0012 + i) * 5;
+        ctx2.save(); ctx2.translate(cx, cy); ctx2.rotate(a);
+        ctx2.globalAlpha = 0.5 - ring * 0.08; ctx2.fillStyle = colors[(i + ring) % 4];
+        ctx2.beginPath(); ctx2.ellipse(len * 0.55 + ring * 8, 0, len * 0.5, 11 + ring * 2, 0, 0, Math.PI * 2); ctx2.fill(); ctx2.restore();
+      }
+    }
+    if (!reduce && document.getElementById("petals")) petalRaf = requestAnimationFrame(draw);
+  };
+  draw(performance.now());
+}
+
+/* ---------- actions ---------- */
+function toast(msg) { ui.note = msg; render(); clearTimeout(toast.t); toast.t = setTimeout(() => { ui.note = ""; render(); }, 2800); }
+function confetti(el) {
+  const app = document.getElementById("app"), r = el.getBoundingClientRect(), a = app.getBoundingClientRect();
+  const colors = ["--ph-men", "--ph-fol", "--ph-ovu", "--ph-lut"];
+  for (let i = 0; i < 16; i++) {
+    const p = document.createElement("i"); p.className = "confetti";
+    p.style.left = r.left - a.left + r.width / 2 + "px"; p.style.top = r.top - a.top + r.height / 2 + "px";
+    p.style.background = `var(${colors[i % 4]})`; p.style.setProperty("--dx", (Math.random() * 140 - 70) + "px"); p.style.setProperty("--dy", (Math.random() * -110 - 20) + "px");
+    app.appendChild(p); setTimeout(() => p.remove(), 900);
+  }
+}
+function seedHabitHistory(habits) {
+  const checks = {};
+  for (const h of habits) {
+    const rng = mulberry(hashStr(h.id));
+    for (let i = 1; i < 28; i++) if (rng() < 0.68) checks[`${h.id}|${addDays(TODAY, -i)}`] = true;
+  }
+  return checks;
+}
+async function makeHabits() {
+  ui.thinking = true; set({ step: "habits" });
+  const ctx = dayContext(), p = state.profile;
+  const goals = state.goals.map((g) => GOALS.find((x) => x.id === g).title);
+  const prompt = `You are a women's health coach. Suggest exactly 3 small daily habits for this person.
+Profile: age ${p.age || "unknown"}, workouts: ${p.gym}, food: ${p.diet.join(", ") || "no restrictions"}, conditions: ${conditions().join(", ") || "none"}.
+Goals: ${goals.join(" and ")}. Life stage: ${p.lifeStage}. Age band ${ageBand().label}, priorities: ${ageBand().focus.join(", ")}. Season: ${seasonNow()?.[1].label}. ${cycleLens() ? `Currently cycle day ${ctx.cd} of ${CYCLE_LEN} (${phaseOf(ctx.cd)} phase).` : "Do not mention menstrual cycle phases."} Oura: avg sleep ${hm(baseline().sleepMin)}, HRV ${Math.round(baseline().hrv)} ms.
+Rules: each habit doable in under 10 minutes, specific, tied to her goals and lifestyle data first. American English. No em dashes. Lifestyle suggestions only, never medical advice.
+Return JSON only: {"habits":[{"title":"max 6 words","cue":"when or where it happens, max 8 words","why":"one sentence, max 20 words, mention her data"}]}`;
+  skipAi = false;
+  const ai = await Promise.race([askClaude(prompt, "quick"), new Promise((resolve) => { const iv = setInterval(() => { if (skipAi) { clearInterval(iv); resolve(null); } }, 200); setTimeout(() => clearInterval(iv), 30000); })]);
+  let habits, source;
+  if (ai?.habits?.length >= 3) { habits = ai.habits.slice(0, 3).map((h) => ({ title: clean(h.title), cue: clean(h.cue), why: clean(h.why) })); source = "claude"; }
+  else { const [a, b] = state.goals.filter((g) => FALLBACK_HABITS[g]).length === 2 ? state.goals : ["sleep", "energy"]; habits = [FALLBACK_HABITS[a][0], FALLBACK_HABITS[b][0], FALLBACK_HABITS[a][1]]; source = "library"; }
+  habits = habits.map((h, i) => ({ ...h, id: `h${Date.now().toString(36)}${i}` }));
+  ui.thinking = false;
+  set({ habits, habitsSource: source, checks: seedHabitHistory(habits) });
+}
+async function aiPlan() {
+  const ctx = dayContext(), ease = easeReasons(ctx).length > 0, phase = phaseOf(ctx.cd), p = state.profile;
+  ui.planning = true; render();
+  const prompt = `Season: ${seasonNow()?.[1].label} (reflect it, for example flu season sleep and immunity). Plan today for a woman aged ${p.age || "32"} (priorities: ${ageBand().focus.join(", ")}). Life stage: ${p.lifeStage}. ${cycleLens() ? `Cycle day ${ctx.cd} of ${CYCLE_LEN} (${phase} phase), use as one input among many.` : "No cycle context."} Readiness ${ctx.row.ready}, sleep ${hm(ctx.row.sleepMin)}, HRV ${Math.round(ctx.row.hrv)} ms (baseline ${Math.round(baseline().hrv)}).
+${ease ? "Her body signals say ease off today: keep movement gentle and restorative." : "She can train normally for this phase."}
+Workout access: ${p.gym}. Food: ${p.diet.join(", ") || "no restrictions"}. Conditions: ${conditions().join(", ") || "none"}. Goals: ${state.goals.join(", ")}.
+American English, warm and practical, no em dashes, lifestyle guidance only.
+Return JSON only: {"headline":"one sentence about today's energy","smallWin":"one tiny action, max 10 words","workout":{"name":"max 6 words","minutes":number,"steps":["3 short steps"]},"recipe":{"name":"max 7 words","minutes":number,"why":"one sentence tied to her day","ingredients":["5 items"],"steps":["3 steps"]}}`;
+  const ai = await askClaude(prompt, "default");
+  ui.planning = false;
+  if (!ai?.recipe || !ai?.workout) { render(); toast("Claude is unavailable here, so this plan comes from Bloom's phase library"); return; }
+  const fix = (v) => Array.isArray(v) ? v.map(clean) : clean(v);
+  state.aiPlan = { cd: ctx.cd, ease, source: "claude", headline: clean(ai.headline), smallWin: clean(ai.smallWin),
+    workout: { name: clean(ai.workout.name), minutes: Number(ai.workout.minutes) || 30, steps: fix(ai.workout.steps || []) },
+    recipe: { name: clean(ai.recipe.name), minutes: Number(ai.recipe.minutes) || 25, why: clean(ai.recipe.why), ingredients: fix(ai.recipe.ingredients || []), steps: fix(ai.recipe.steps || []) } };
+  save(); toast("Plan updated for your phase");
+}
+const KEYWORDS = {
+  symptoms: /headache|migraine|cramp|bloat|acne|nausea|pain|tender|spotting|flow|dizzy|sore/i,
+  sleep: /slept|sleep|nap|bed|woke|insomnia|tired|rest(ed)?\b/i,
+  movement: /walk|run|gym|yoga|pilates|workout|steps|swim|bike|lift|squat|stretch|hike|class|danc/i,
+  nutrition: /ate|eat|breakfast|lunch|dinner|coffee|latte|tea|water|snack|oatmeal|salad|food|drank|sugar|chocolate|crav|bowl|salmon|meal|wine/i,
+  mood: /feel|anxious|happy|sad|stress|calm|irritab|mood|overwhelm|focus|angry|grateful|lonely/i,
+};
+function localSort(text) {
+  return text.split(/[.;!?\n]+|,\s*|\band then\b|\bthen\b|\balso\b|\band\b(?= (?:did|had|went|feeling|i|my|a|walked|ate|slept))/i)
+    .map((s) => s.trim()).filter((s) => s.length > 2)
+    .map((s) => ({ category: Object.keys(KEYWORDS).find((k) => KEYWORDS[k].test(s)) || "mood", text: s.charAt(0).toUpperCase() + s.slice(1), detail: "" }));
+}
+async function sortLog() {
+  const text = ui.draft.trim(); if (!text) { toast("Say or type a few things about your day first"); return; }
+  ui.thinking = true; ui.sorted = null; render();
+  const prompt = `Sort this woman's spoken daily health log into structured entries.
+Categories: sleep, movement, nutrition, mood, symptoms. Split compound statements so each entry is one fact. Keep her words short and clean.
+For each entry add a brief "detail" with any quantity you can infer (duration, portion, time of day, intensity), or an empty string.
+Log: """${text}"""
+Return JSON only: {"entries":[{"category":"sleep|movement|nutrition|mood|symptoms","text":"max 8 words","detail":"max 8 words"}]}`;
+  const ai = await askClaude(prompt, "quick");
+  const valid = ai?.entries?.filter((e) => CATEGORIES[e.category] && e.text);
+  ui.thinking = false;
+  ui.sorted = valid?.length ? { source: "claude", entries: valid.map((e) => ({ category: e.category, text: clean(e.text), detail: clean(e.detail || "") })) } : { source: "local", entries: localSort(text) };
+  render();
+}
+let recognizer = null, typer = 0;
+function toggleMic() {
+  if (ui.recording) { stopMic(); return; }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  ui.recording = true; render();
+  if (SR) {
+    try {
+      recognizer = new SR(); recognizer.continuous = true; recognizer.interimResults = true; recognizer.lang = "en-US";
+      const before = ui.draft ? ui.draft.trim() + " " : "";
+      recognizer.onresult = (e) => { ui.draft = before + Array.from(e.results).map((r) => r[0].transcript).join(" "); const t = document.getElementById("draft"); if (t) t.value = ui.draft; };
+      recognizer.onerror = () => { recognizer = null; simulateDictation(); };
+      recognizer.onend = () => { if (ui.recording && recognizer) stopMic(); };
+      recognizer.start(); return;
+    } catch (e) { recognizer = null; }
+  }
+  simulateDictation();
+}
+function simulateDictation() {
+  if (!ui.recording) return;
+  toast("Mic isn't available in this preview, so here's a sample voice note");
+  const text = SAMPLE_RAMBLES[0]; let i = 0; ui.draft = "";
+  clearInterval(typer);
+  typer = setInterval(() => {
+    i = Math.min(text.length, i + 3); ui.draft = text.slice(0, i);
+    const t = document.getElementById("draft"); if (t) t.value = ui.draft;
+    if (i >= text.length) stopMic();
+  }, 30);
+}
+function stopMic() { clearInterval(typer); try { recognizer?.stop(); } catch (e) {} recognizer = null; ui.recording = false; render(); }
+async function writeSummary() {
+  ui.thinking = true; render();
+  const p = state.profile, stats = phaseStats();
+  const prompt = `Write a concise patient-provided lifestyle summary that a woman will hand to her doctor. 3 short paragraphs, plain text, no headings, no bullet points, no em dashes, American English.
+Paragraph 1: who she is and why she is coming in (conditions: ${conditions().join(", ") || "none reported"}; goals: ${state.goals.join(", ")}).
+Paragraph 2: the patterns in her data. Paragraph 3: questions she may want to ask. Do not diagnose; describe patterns and suggest questions.
+Data (90 days, Oura ring plus self-reports): ${insights().join(" ")}
+By phase: ${stats.map((s) => `${s.ph}: sleep ${Math.round(s.sleep)} min, HRV ${Math.round(s.hrv)}, readiness ${Math.round(s.ready)}`).join("; ")}.
+Recent self logs: ${state.logs.slice(-12).map((l) => `${l.category}: ${l.text}`).join("; ") || "none"}.
+Return JSON only: {"summary":"the three paragraphs separated by \\n\\n"}`;
+  const ai = await askClaude(prompt, "default");
+  ui.thinking = false;
+  const name = p.name || "Maya";
+  state.summary = ai?.summary ? clean(ai.summary) :
+    `${name} is tracking her sleep, activity, cycle, and symptoms with an Oura ring and daily voice notes${conditions().length ? `, and is managing ${conditions().join(", ")}` : ""}. She would like help understanding recurring symptoms that seem tied to her cycle.\n\nOver 90 days her cycle has been regular at ${CYCLE_LEN} days. Headaches cluster in the five days before her period, when her sleep is also shorter and her HRV is lower. In her follicular phase she sleeps longer and recovers faster.\n\nQuestions she may want to ask: could these be menstrual migraines, and would timing treatment to the late luteal phase help? Are there sleep or nutrition changes worth trying in that window? Which of these patterns should she keep tracking before the next visit?`;
+  save(); render();
+}
+
+document.addEventListener("click", (e) => {
+  const t = e.target.closest("button, [data-action], [data-stop]"); if (!t) return;
+  if (t.hasAttribute("data-stop") && !t.matches("button")) return;
+  const d = t.dataset;
+  if (d.go) { set({ step: d.go }); return; }
+  if (d.tab) { set({ tab: d.tab }); return; }
+  if (d.gym) { state.profile.gym = d.gym; set({}); return; }
+  if (d.persona) {
+    const pr = PERSONAS[d.persona];
+    Object.assign(state, { profile: { ...pr.profile }, connected: { oura: !pr.noWearable, calendar: !pr.noWearable }, goals: [...pr.goals], periods: [], checkins: pr.noWearable ? demoCheckins() : {} });
+    applyDataSource();
+    if (pr.gaps) { let day = addDays(TODAY, -(pr.gaps.reduce((a, b) => a + b, 0) + 6)); state.periods = [day]; for (const g of pr.gaps) { day = addDays(day, g); state.periods.push(day); } }
+    else seedPeriods();
+    makeHabits(); return;
+  }
+  if (d.stage) { state.profile.lifeStage = d.stage; set({}); return; }
+  if (d.toggle) { const list = state.profile[d.toggle]; const i = list.indexOf(d.val); i >= 0 ? list.splice(i, 1) : list.push(d.val); set({}); return; }
+  if (d.goal) { const g = state.goals; const i = g.indexOf(d.goal); if (i >= 0) g.splice(i, 1); else { g.push(d.goal); if (g.length > 2) g.shift(); } set({}); return; }
+  if (d.connect) {
+    ui.syncing = d.connect; render(); let pct = 0;
+    const real = d.connect === "oura" ? syncOura() : Promise.resolve(null);
+    const iv = setInterval(() => { pct += 7; const bar = document.getElementById("sync-" + d.connect); if (bar) bar.style.width = Math.min(100, pct) + "%";
+      if (pct >= 100) { clearInterval(iv); real.then((r) => { ui.syncing = null; state.connected[d.connect] = true; if (r) state.connected.ouraMode = r.mode; set({}); toast(r ? r.note : "Calendar connected"); }); } }, 70);
+    return;
+  }
+  if (d.check) {
+    const k = `${d.check}|${TODAY}`; const on = !state.checks[k];
+    if (on) state.checks[k] = true; else delete state.checks[k];
+    set({});
+    if (on) confetti(document.querySelector(`[data-check="${d.check}"]`));
+    if (on && state.habits.every((h) => state.checks[`${h.id}|${TODAY}`])) toast("All three done today. That's a streak builder.");
+    return;
+  }
+  if (d.swipeBtn) { const top = document.querySelector('.swipe-card[style*="--depth:0"]'); if (top) resolveSwipe(top.dataset.swipe, d.swipeBtn); return; }
+  if (d.ciSet) { ui.checkinDraft[d.ciSet] = Number(d.val); render(); return; }
+  if (d.seasonHabit != null) {
+    const rec = seasonNow()[1].recs[Number(d.seasonHabit)];
+    const habit = { ...rec.habit, id: "s" + Date.now().toString(36) };
+    state.habits.push(habit); save(); render(); toast(`Added "${habit.title}" to your habits`); return;
+  }
+  if (d.ramble != null) { ui.draft = SAMPLE_RAMBLES[+d.ramble]; render(); return; }
+  if (d.symptom) {
+    const i = state.logs.findIndex((l) => l.day === TODAY && l.symptom === d.symptom);
+    if (i >= 0) state.logs.splice(i, 1); else state.logs.push({ id: Date.now(), day: TODAY, category: "symptoms", text: d.symptom, symptom: d.symptom, detail: `Cycle day ${dayContext().cd}` });
+    set({}); return;
+  }
+  if (d.mood) {
+    state.moods.push({ day: TODAY, ts: Date.now(), mood: d.mood });
+    state.logs.push({ id: Date.now(), day: TODAY, category: "mood", text: `Feeling ${MOODS.find((m) => m.id === d.mood).label.toLowerCase()}`, detail: "Check-in" });
+    ui.moodOpen = false; state.lastMoodAt = Date.now(); save(); toast("Logged. Thank you for checking in."); return;
+  }
+  switch (d.action) {
+    case "demo":
+      Object.assign(state, { profile: { name: "Maya", email: "maya@example.com", age: "32", gym: "gym", diet: ["Vegetarian"], conditions: ["Migraines"], lastPeriod: "", cycleLen: 29 }, connected: { oura: true, calendar: true }, goals: ["pms", "sleep"], periods: [] });
+      seedPeriods();
+      makeHabits(); break;
+    case "make-habits": makeHabits(); break;
+    case "new-habits": makeHabits().then(() => set({ step: "app", tab: "habits" })); break;
+    case "skip-ai": skipAi = true; break;
+    case "finish": seedPeriods(); set({ step: "app", tab: "today" }); scheduleMood(25000); break;
+    case "reset": try { localStorage.removeItem(STORE_KEY); } catch (err) {} remoteDoc?.delete?.().catch(() => {}); state = defaultState(); ui = { ...ui, sorted: null, draft: "", moodOpen: false }; render(); break;
+    case "ai-plan": aiPlan(); break;
+    case "book": state.booked.push({ start: d.slot, end: toTime(toMin(d.slot) + Number(d.min)), title: d.title }); save(); toast(`Booked ${d.slot} on your calendar`); break;
+    case "back-today": set({ previewCd: null }); break;
+    case "save-checkin": state.checkins = { ...(state.checkins || {}), [TODAY]: { ...ui.checkinDraft } }; ui.editCheckin = false; applyDataSource(); save(); render(); toast("Check-in saved to your record"); break;
+    case "edit-checkin": ui.editCheckin = true; ui.checkinDraft = { ...state.checkins[TODAY] }; render(); break;
+    case "oura-sync": ui.ouraBusy = true; render(); syncOura().then((r) => { ui.ouraBusy = false; state.connected.ouraMode = r.mode; save(); render(); toast(r.note); }); break;
+    case "period-today": state.periods.push(TODAY); state.previewCd = null; save(); toast("Period logged. Predictions updated."); break;
+    case "period-undo": state.periods = state.periods.filter((d) => d !== TODAY); set({}); break;
+    case "mood": ui.moodOpen = true; render(); break;
+    case "mood-close": if (e.target.closest("[data-stop]") && !t.matches("button")) return; ui.moodOpen = false; render(); break;
+    case "mic": toggleMic(); break;
+    case "sort": sortLog(); break;
+    case "save-log":
+      for (const en of ui.sorted.entries) state.logs.push({ id: Date.now() + Math.random(), day: TODAY, ...en });
+      ui.sorted = null; ui.draft = ""; save(); toast("Added to your record"); scheduleMood(4000); break;
+    case "summary": writeSummary(); break;
+    case "copy": {
+      const text = `${state.profile.name || "Maya"}: Bloom lifestyle record\n\n${insights().map((i) => "- " + i).join("\n")}\n\n${state.summary || ""}`;
+      navigator.clipboard?.writeText(text).then(() => toast("Copied. Paste it into your patient portal message."), () => toast("Copy is blocked here. Select the summary text instead."));
+      break;
+    }
+  }
+});
+document.addEventListener("input", (e) => {
+  const t = e.target;
+  if (t.dataset.bind) { state.profile[t.dataset.bind] = t.value; save(); }
+  if (t.dataset.consent) { state.consent[t.dataset.consent] = t.checked; save(); }
+  if (t.hasAttribute("data-draft")) ui.draft = t.value;
+  if (t.dataset.ci) { ui.checkinDraft[t.dataset.ci] = Number(t.value); const v = document.getElementById("ci-sleep-val"); if (v) v.textContent = t.value + " h"; }
+  if (t.hasAttribute("data-scrub")) { const label = document.getElementById("scrub-label"); if (label) label.textContent = `Day ${t.value}: ${PHASES[phaseOf(Number(t.value))].label}`; }
+});
+document.addEventListener("change", (e) => {
+  const t = e.target;
+  if (t.hasAttribute("data-period-date") && t.value && !state.periods.includes(t.value)) { state.periods.push(t.value); state.previewCd = null; save(); toast(`Period on ${fmtDay(t.value, { month: "short", day: "numeric" })} logged. Predictions updated.`); return; }
+  if (t.hasAttribute("data-scrub")) { state.previewCd = Number(t.value) === currentCd() ? null : Number(t.value); save(); render(); document.getElementById("scrub")?.focus(); }
+});
+function scheduleMood(ms) {
+  clearTimeout(scheduleMood.t);
+  scheduleMood.t = setTimeout(() => { if (state.step === "app" && !ui.moodOpen && Date.now() - state.lastMoodAt > 90000) { ui.moodOpen = true; render(); } }, ms);
+}
+if (state.step === "app") seedPeriods();
+applyDataSource();
+render();
+connectRecord().then(() => { if (state.connected.ouraMode === "live") syncOura().then((r) => { state.connected.ouraMode = r.mode; render(); }); });
+if (state.step === "app") scheduleMood(30000);
+</script>

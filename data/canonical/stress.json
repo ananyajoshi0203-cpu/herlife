@@ -1,0 +1,632 @@
+[
+ {
+  "day": "2026-08-09",
+  "source": "oura",
+  "stress_high_min": 35,
+  "recovery_high_min": 111,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-08-10",
+  "source": "oura",
+  "stress_high_min": 68,
+  "recovery_high_min": 107,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-08-11",
+  "source": "oura",
+  "stress_high_min": 115,
+  "recovery_high_min": 48,
+  "summary": "stressful"
+ },
+ {
+  "day": "2026-08-12",
+  "source": "oura",
+  "stress_high_min": 100,
+  "recovery_high_min": 75,
+  "summary": "normal"
+ },
+ {
+  "day": "2026-08-13",
+  "source": "oura",
+  "stress_high_min": 80,
+  "recovery_high_min": 91,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-08-14",
+  "source": "oura",
+  "stress_high_min": 91,
+  "recovery_high_min": 79,
+  "summary": "normal"
+ },
+ {
+  "day": "2026-08-15",
+  "source": "oura",
+  "stress_high_min": 58,
+  "recovery_high_min": 118,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-08-16",
+  "source": "oura",
+  "stress_high_min": 56,
+  "recovery_high_min": 101,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-08-17",
+  "source": "oura",
+  "stress_high_min": 105,
+  "recovery_high_min": 155,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-08-18",
+  "source": "oura",
+  "stress_high_min": 83,
+  "recovery_high_min": 146,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-08-19",
+  "source": "oura",
+  "stress_high_min": 91,
+  "recovery_high_min": 140,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-08-20",
+  "source": "oura",
+  "stress_high_min": 137,
+  "recovery_high_min": 97,
+  "summary": "normal"
+ },
+ {
+  "day": "2026-08-21",
+  "source": "oura",
+  "stress_high_min": 81,
+  "recovery_high_min": 83,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-08-22",
+  "source": "oura",
+  "stress_high_min": 98,
+  "recovery_high_min": 157,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-08-23",
+  "source": "oura",
+  "stress_high_min": 63,
+  "recovery_high_min": 46,
+  "summary": "normal"
+ },
+ {
+  "day": "2026-08-24",
+  "source": "oura",
+  "stress_high_min": 163,
+  "recovery_high_min": 67,
+  "summary": "stressful"
+ },
+ {
+  "day": "2026-08-25",
+  "source": "oura",
+  "stress_high_min": 121,
+  "recovery_high_min": 82,
+  "summary": "normal"
+ },
+ {
+  "day": "2026-08-26",
+  "source": "oura",
+  "stress_high_min": 189,
+  "recovery_high_min": 131,
+  "summary": "stressful"
+ },
+ {
+  "day": "2026-08-27",
+  "source": "oura",
+  "stress_high_min": 80,
+  "recovery_high_min": 57,
+  "summary": "normal"
+ },
+ {
+  "day": "2026-08-28",
+  "source": "oura",
+  "stress_high_min": 138,
+  "recovery_high_min": 148,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-08-29",
+  "source": "oura",
+  "stress_high_min": 55,
+  "recovery_high_min": 79,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-08-30",
+  "source": "oura",
+  "stress_high_min": 50,
+  "recovery_high_min": 40,
+  "summary": "normal"
+ },
+ {
+  "day": "2026-08-31",
+  "source": "oura",
+  "stress_high_min": 43,
+  "recovery_high_min": 46,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-09-01",
+  "source": "oura",
+  "stress_high_min": 46,
+  "recovery_high_min": 61,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-09-02",
+  "source": "oura",
+  "stress_high_min": 101,
+  "recovery_high_min": 51,
+  "summary": "stressful"
+ },
+ {
+  "day": "2026-09-03",
+  "source": "oura",
+  "stress_high_min": 138,
+  "recovery_high_min": 144,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-09-04",
+  "source": "oura",
+  "stress_high_min": 129,
+  "recovery_high_min": 45,
+  "summary": "stressful"
+ },
+ {
+  "day": "2026-09-05",
+  "source": "oura",
+  "stress_high_min": 60,
+  "recovery_high_min": 110,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-09-06",
+  "source": "oura",
+  "stress_high_min": 134,
+  "recovery_high_min": 64,
+  "summary": "stressful"
+ },
+ {
+  "day": "2026-09-07",
+  "source": "oura",
+  "stress_high_min": 72,
+  "recovery_high_min": 64,
+  "summary": "normal"
+ },
+ {
+  "day": "2026-09-08",
+  "source": "oura",
+  "stress_high_min": 147,
+  "recovery_high_min": 97,
+  "summary": "stressful"
+ },
+ {
+  "day": "2026-09-09",
+  "source": "oura",
+  "stress_high_min": 126,
+  "recovery_high_min": 116,
+  "summary": "normal"
+ },
+ {
+  "day": "2026-09-10",
+  "source": "oura",
+  "stress_high_min": 55,
+  "recovery_high_min": 90,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-09-11",
+  "source": "oura",
+  "stress_high_min": 65,
+  "recovery_high_min": 112,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-09-12",
+  "source": "oura",
+  "stress_high_min": 36,
+  "recovery_high_min": 64,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-09-13",
+  "source": "oura",
+  "stress_high_min": 77,
+  "recovery_high_min": 63,
+  "summary": "normal"
+ },
+ {
+  "day": "2026-09-14",
+  "source": "oura",
+  "stress_high_min": 80,
+  "recovery_high_min": 133,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-09-15",
+  "source": "oura",
+  "stress_high_min": 126,
+  "recovery_high_min": 143,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-09-16",
+  "source": "oura",
+  "stress_high_min": 75,
+  "recovery_high_min": 55,
+  "summary": "normal"
+ },
+ {
+  "day": "2026-09-17",
+  "source": "oura",
+  "stress_high_min": 127,
+  "recovery_high_min": 119,
+  "summary": "normal"
+ },
+ {
+  "day": "2026-09-18",
+  "source": "oura",
+  "stress_high_min": 118,
+  "recovery_high_min": 144,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-09-19",
+  "source": "oura",
+  "stress_high_min": 55,
+  "recovery_high_min": 63,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-09-20",
+  "source": "oura",
+  "stress_high_min": 76,
+  "recovery_high_min": 82,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-09-21",
+  "source": "oura",
+  "stress_high_min": 30,
+  "recovery_high_min": 112,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-09-22",
+  "source": "oura",
+  "stress_high_min": 157,
+  "recovery_high_min": 114,
+  "summary": "stressful"
+ },
+ {
+  "day": "2026-09-23",
+  "source": "oura",
+  "stress_high_min": 155,
+  "recovery_high_min": 46,
+  "summary": "stressful"
+ },
+ {
+  "day": "2026-09-24",
+  "source": "oura",
+  "stress_high_min": 157,
+  "recovery_high_min": 158,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-09-25",
+  "source": "oura",
+  "stress_high_min": 188,
+  "recovery_high_min": 79,
+  "summary": "stressful"
+ },
+ {
+  "day": "2026-09-26",
+  "source": "oura",
+  "stress_high_min": 171,
+  "recovery_high_min": 157,
+  "summary": "normal"
+ },
+ {
+  "day": "2026-09-27",
+  "source": "oura",
+  "stress_high_min": 107,
+  "recovery_high_min": 104,
+  "summary": "normal"
+ },
+ {
+  "day": "2026-09-28",
+  "source": "oura",
+  "stress_high_min": 74,
+  "recovery_high_min": 146,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-09-29",
+  "source": "oura",
+  "stress_high_min": 145,
+  "recovery_high_min": 109,
+  "summary": "normal"
+ },
+ {
+  "day": "2026-09-30",
+  "source": "oura",
+  "stress_high_min": 64,
+  "recovery_high_min": 78,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-10-01",
+  "source": "oura",
+  "stress_high_min": 65,
+  "recovery_high_min": 66,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-10-02",
+  "source": "oura",
+  "stress_high_min": 53,
+  "recovery_high_min": 122,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-10-03",
+  "source": "oura",
+  "stress_high_min": 99,
+  "recovery_high_min": 67,
+  "summary": "normal"
+ },
+ {
+  "day": "2026-10-04",
+  "source": "oura",
+  "stress_high_min": 81,
+  "recovery_high_min": 47,
+  "summary": "normal"
+ },
+ {
+  "day": "2026-10-05",
+  "source": "oura",
+  "stress_high_min": 111,
+  "recovery_high_min": 146,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-10-06",
+  "source": "oura",
+  "stress_high_min": 49,
+  "recovery_high_min": 158,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-10-07",
+  "source": "oura",
+  "stress_high_min": 144,
+  "recovery_high_min": 128,
+  "summary": "normal"
+ },
+ {
+  "day": "2026-10-08",
+  "source": "oura",
+  "stress_high_min": 106,
+  "recovery_high_min": 150,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-10-09",
+  "source": "oura",
+  "stress_high_min": 121,
+  "recovery_high_min": 93,
+  "summary": "normal"
+ },
+ {
+  "day": "2026-10-10",
+  "source": "oura",
+  "stress_high_min": 68,
+  "recovery_high_min": 56,
+  "summary": "normal"
+ },
+ {
+  "day": "2026-10-11",
+  "source": "oura",
+  "stress_high_min": 115,
+  "recovery_high_min": 121,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-10-12",
+  "source": "oura",
+  "stress_high_min": 119,
+  "recovery_high_min": 157,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-10-13",
+  "source": "oura",
+  "stress_high_min": 87,
+  "recovery_high_min": 133,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-10-14",
+  "source": "oura",
+  "stress_high_min": 136,
+  "recovery_high_min": 102,
+  "summary": "normal"
+ },
+ {
+  "day": "2026-10-15",
+  "source": "oura",
+  "stress_high_min": 31,
+  "recovery_high_min": 146,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-10-16",
+  "source": "oura",
+  "stress_high_min": 132,
+  "recovery_high_min": 143,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-10-17",
+  "source": "oura",
+  "stress_high_min": 104,
+  "recovery_high_min": 106,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-10-18",
+  "source": "oura",
+  "stress_high_min": 65,
+  "recovery_high_min": 106,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-10-19",
+  "source": "oura",
+  "stress_high_min": 146,
+  "recovery_high_min": 154,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-10-20",
+  "source": "oura",
+  "stress_high_min": 95,
+  "recovery_high_min": 130,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-10-21",
+  "source": "oura",
+  "stress_high_min": 193,
+  "recovery_high_min": 146,
+  "summary": "stressful"
+ },
+ {
+  "day": "2026-10-22",
+  "source": "oura",
+  "stress_high_min": 106,
+  "recovery_high_min": 59,
+  "summary": "stressful"
+ },
+ {
+  "day": "2026-10-23",
+  "source": "oura",
+  "stress_high_min": 128,
+  "recovery_high_min": 154,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-10-24",
+  "source": "oura",
+  "stress_high_min": 168,
+  "recovery_high_min": 103,
+  "summary": "stressful"
+ },
+ {
+  "day": "2026-10-25",
+  "source": "oura",
+  "stress_high_min": 147,
+  "recovery_high_min": 146,
+  "summary": "normal"
+ },
+ {
+  "day": "2026-10-26",
+  "source": "oura",
+  "stress_high_min": 98,
+  "recovery_high_min": 57,
+  "summary": "stressful"
+ },
+ {
+  "day": "2026-10-27",
+  "source": "oura",
+  "stress_high_min": 65,
+  "recovery_high_min": 54,
+  "summary": "normal"
+ },
+ {
+  "day": "2026-10-28",
+  "source": "oura",
+  "stress_high_min": 146,
+  "recovery_high_min": 81,
+  "summary": "stressful"
+ },
+ {
+  "day": "2026-10-29",
+  "source": "oura",
+  "stress_high_min": 112,
+  "recovery_high_min": 119,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-10-30",
+  "source": "oura",
+  "stress_high_min": 143,
+  "recovery_high_min": 77,
+  "summary": "stressful"
+ },
+ {
+  "day": "2026-10-31",
+  "source": "oura",
+  "stress_high_min": 50,
+  "recovery_high_min": 150,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-11-01",
+  "source": "oura",
+  "stress_high_min": 55,
+  "recovery_high_min": 118,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-11-02",
+  "source": "oura",
+  "stress_high_min": 139,
+  "recovery_high_min": 97,
+  "summary": "stressful"
+ },
+ {
+  "day": "2026-11-03",
+  "source": "oura",
+  "stress_high_min": 84,
+  "recovery_high_min": 154,
+  "summary": "restored"
+ },
+ {
+  "day": "2026-11-04",
+  "source": "oura",
+  "stress_high_min": 148,
+  "recovery_high_min": 113,
+  "summary": "normal"
+ },
+ {
+  "day": "2026-11-05",
+  "source": "oura",
+  "stress_high_min": 134,
+  "recovery_high_min": 105,
+  "summary": "normal"
+ },
+ {
+  "day": "2026-11-06",
+  "source": "oura",
+  "stress_high_min": 95,
+  "recovery_high_min": 58,
+  "summary": "normal"
+ }
+]

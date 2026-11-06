@@ -1,0 +1,905 @@
+{
+ "data": [
+  {
+   "id": "f28c105d-1fb1-7c23-90c1-92cfd3ac94af",
+   "day": "2026-08-09",
+   "score": 84,
+   "contributors": {
+    "total_sleep": 94,
+    "efficiency": 96
+   },
+   "timestamp": "2026-08-09T00:00:00+00:00"
+  },
+  {
+   "id": "7731af10-506b-f2ef-c6f8-77186d76b07e",
+   "day": "2026-08-10",
+   "score": 58,
+   "contributors": {
+    "total_sleep": 72,
+    "efficiency": 95
+   },
+   "timestamp": "2026-08-10T00:00:00+00:00"
+  },
+  {
+   "id": "98289fcd-59a5-4a7b-b1fe-e08f57124242",
+   "day": "2026-08-11",
+   "score": 66,
+   "contributors": {
+    "total_sleep": 85,
+    "efficiency": 91
+   },
+   "timestamp": "2026-08-11T00:00:00+00:00"
+  },
+  {
+   "id": "df1582b0-eab4-77d2-6415-479c65dc9f50",
+   "day": "2026-08-12",
+   "score": 62,
+   "contributors": {
+    "total_sleep": 80,
+    "efficiency": 91
+   },
+   "timestamp": "2026-08-12T00:00:00+00:00"
+  },
+  {
+   "id": "b0c4312d-2020-3626-f3fe-39c0519088f5",
+   "day": "2026-08-13",
+   "score": 89,
+   "contributors": {
+    "total_sleep": 100,
+    "efficiency": 95
+   },
+   "timestamp": "2026-08-13T00:00:00+00:00"
+  },
+  {
+   "id": "4093f6de-a268-aa87-2607-679d6050914a",
+   "day": "2026-08-14",
+   "score": 78,
+   "contributors": {
+    "total_sleep": 91,
+    "efficiency": 94
+   },
+   "timestamp": "2026-08-14T00:00:00+00:00"
+  },
+  {
+   "id": "84b5a818-42d8-7208-d86f-40f6b239f3c7",
+   "day": "2026-08-15",
+   "score": 76,
+   "contributors": {
+    "total_sleep": 83,
+    "efficiency": 95
+   },
+   "timestamp": "2026-08-15T00:00:00+00:00"
+  },
+  {
+   "id": "fcf00fec-b91e-e9e5-efe0-9f07cefe2a1f",
+   "day": "2026-08-16",
+   "score": 69,
+   "contributors": {
+    "total_sleep": 87,
+    "efficiency": 93
+   },
+   "timestamp": "2026-08-16T00:00:00+00:00"
+  },
+  {
+   "id": "6555abfe-b8c9-817a-f8be-8831f237e45a",
+   "day": "2026-08-17",
+   "score": 53,
+   "contributors": {
+    "total_sleep": 66,
+    "efficiency": 90
+   },
+   "timestamp": "2026-08-17T00:00:00+00:00"
+  },
+  {
+   "id": "3606defc-dfb8-5c0d-d37e-e91531dec4f4",
+   "day": "2026-08-18",
+   "score": 77,
+   "contributors": {
+    "total_sleep": 90,
+    "efficiency": 93
+   },
+   "timestamp": "2026-08-18T00:00:00+00:00"
+  },
+  {
+   "id": "243d3570-2c1e-ea1f-2659-74a7cc966f46",
+   "day": "2026-08-19",
+   "score": 78,
+   "contributors": {
+    "total_sleep": 90,
+    "efficiency": 91
+   },
+   "timestamp": "2026-08-19T00:00:00+00:00"
+  },
+  {
+   "id": "7a609683-ceaf-4915-8885-64e88216858f",
+   "day": "2026-08-20",
+   "score": 76,
+   "contributors": {
+    "total_sleep": 83,
+    "efficiency": 92
+   },
+   "timestamp": "2026-08-20T00:00:00+00:00"
+  },
+  {
+   "id": "18189af4-f3d7-4f82-bf26-8ea03836e865",
+   "day": "2026-08-21",
+   "score": 61,
+   "contributors": {
+    "total_sleep": 72,
+    "efficiency": 93
+   },
+   "timestamp": "2026-08-21T00:00:00+00:00"
+  },
+  {
+   "id": "0a227385-459c-945c-43fc-052715850a03",
+   "day": "2026-08-22",
+   "score": 71,
+   "contributors": {
+    "total_sleep": 83,
+    "efficiency": 96
+   },
+   "timestamp": "2026-08-22T00:00:00+00:00"
+  },
+  {
+   "id": "8d959c31-fe8a-d4a1-56d2-a68c02f4b342",
+   "day": "2026-08-23",
+   "score": 75,
+   "contributors": {
+    "total_sleep": 85,
+    "efficiency": 96
+   },
+   "timestamp": "2026-08-23T00:00:00+00:00"
+  },
+  {
+   "id": "1b35411b-7272-3b9c-ef44-c0d53ee4da5a",
+   "day": "2026-08-24",
+   "score": 58,
+   "contributors": {
+    "total_sleep": 73,
+    "efficiency": 91
+   },
+   "timestamp": "2026-08-24T00:00:00+00:00"
+  },
+  {
+   "id": "99498ac4-482c-c78e-f88e-de10aba8b9b3",
+   "day": "2026-08-25",
+   "score": 59,
+   "contributors": {
+    "total_sleep": 76,
+    "efficiency": 87
+   },
+   "timestamp": "2026-08-25T00:00:00+00:00"
+  },
+  {
+   "id": "64dbc8d3-0aaa-af81-9638-92a766465d28",
+   "day": "2026-08-26",
+   "score": 78,
+   "contributors": {
+    "total_sleep": 95,
+    "efficiency": 92
+   },
+   "timestamp": "2026-08-26T00:00:00+00:00"
+  },
+  {
+   "id": "d5be785a-9187-df42-811e-7616c0bbe6ed",
+   "day": "2026-08-27",
+   "score": 53,
+   "contributors": {
+    "total_sleep": 68,
+    "efficiency": 87
+   },
+   "timestamp": "2026-08-27T00:00:00+00:00"
+  },
+  {
+   "id": "408fc146-794e-c926-bc9e-28eabee80626",
+   "day": "2026-08-28",
+   "score": 70,
+   "contributors": {
+    "total_sleep": 87,
+    "efficiency": 89
+   },
+   "timestamp": "2026-08-28T00:00:00+00:00"
+  },
+  {
+   "id": "37bac233-b133-0c3f-197a-14e2ac084ba5",
+   "day": "2026-08-29",
+   "score": 68,
+   "contributors": {
+    "total_sleep": 81,
+    "efficiency": 92
+   },
+   "timestamp": "2026-08-29T00:00:00+00:00"
+  },
+  {
+   "id": "823d11ed-a1b5-01d6-d1f9-bdfe9a762d54",
+   "day": "2026-08-30",
+   "score": 71,
+   "contributors": {
+    "total_sleep": 88,
+    "efficiency": 94
+   },
+   "timestamp": "2026-08-30T00:00:00+00:00"
+  },
+  {
+   "id": "64950dc2-10a2-5b19-5f49-f0fc40d28406",
+   "day": "2026-08-31",
+   "score": 64,
+   "contributors": {
+    "total_sleep": 80,
+    "efficiency": 90
+   },
+   "timestamp": "2026-08-31T00:00:00+00:00"
+  },
+  {
+   "id": "bb7b738e-eef7-95cd-0caa-761214a0b00b",
+   "day": "2026-09-01",
+   "score": 78,
+   "contributors": {
+    "total_sleep": 89,
+    "efficiency": 94
+   },
+   "timestamp": "2026-09-01T00:00:00+00:00"
+  },
+  {
+   "id": "5534a034-e800-9d90-73f6-e53d3853933d",
+   "day": "2026-09-02",
+   "score": 76,
+   "contributors": {
+    "total_sleep": 88,
+    "efficiency": 95
+   },
+   "timestamp": "2026-09-02T00:00:00+00:00"
+  },
+  {
+   "id": "d93ff716-dce4-7b21-ca51-e152a12f3a94",
+   "day": "2026-09-03",
+   "score": 72,
+   "contributors": {
+    "total_sleep": 89,
+    "efficiency": 92
+   },
+   "timestamp": "2026-09-03T00:00:00+00:00"
+  },
+  {
+   "id": "f8cd9ec3-85b9-c09a-26ed-f1bd27855798",
+   "day": "2026-09-04",
+   "score": 63,
+   "contributors": {
+    "total_sleep": 73,
+    "efficiency": 92
+   },
+   "timestamp": "2026-09-04T00:00:00+00:00"
+  },
+  {
+   "id": "02ad9d2b-004b-7fd0-99df-209bca5d5e7d",
+   "day": "2026-09-05",
+   "score": 82,
+   "contributors": {
+    "total_sleep": 96,
+    "efficiency": 95
+   },
+   "timestamp": "2026-09-05T00:00:00+00:00"
+  },
+  {
+   "id": "01ba985a-32b5-58fd-6577-bb54aebcb0aa",
+   "day": "2026-09-06",
+   "score": 72,
+   "contributors": {
+    "total_sleep": 87,
+    "efficiency": 92
+   },
+   "timestamp": "2026-09-06T00:00:00+00:00"
+  },
+  {
+   "id": "0f650638-b5b9-4af3-0d45-6be06a56aac3",
+   "day": "2026-09-07",
+   "score": 57,
+   "contributors": {
+    "total_sleep": 76,
+    "efficiency": 94
+   },
+   "timestamp": "2026-09-07T00:00:00+00:00"
+  },
+  {
+   "id": "d252a617-c4cb-a038-5b4c-0d7361502dee",
+   "day": "2026-09-08",
+   "score": 70,
+   "contributors": {
+    "total_sleep": 83,
+    "efficiency": 94
+   },
+   "timestamp": "2026-09-08T00:00:00+00:00"
+  },
+  {
+   "id": "9df24d5e-f429-c622-f52b-254955c0a74d",
+   "day": "2026-09-09",
+   "score": 76,
+   "contributors": {
+    "total_sleep": 88,
+    "efficiency": 96
+   },
+   "timestamp": "2026-09-09T00:00:00+00:00"
+  },
+  {
+   "id": "26bc9858-c5d6-d5e9-b12e-1de2d2a0169d",
+   "day": "2026-09-10",
+   "score": 77,
+   "contributors": {
+    "total_sleep": 93,
+    "efficiency": 92
+   },
+   "timestamp": "2026-09-10T00:00:00+00:00"
+  },
+  {
+   "id": "75ff199d-6ab6-114f-2207-c6c03bf449fd",
+   "day": "2026-09-11",
+   "score": 78,
+   "contributors": {
+    "total_sleep": 84,
+    "efficiency": 93
+   },
+   "timestamp": "2026-09-11T00:00:00+00:00"
+  },
+  {
+   "id": "798a0d59-0126-64f6-1a32-7537097a5942",
+   "day": "2026-09-12",
+   "score": 78,
+   "contributors": {
+    "total_sleep": 90,
+    "efficiency": 93
+   },
+   "timestamp": "2026-09-12T00:00:00+00:00"
+  },
+  {
+   "id": "414205c6-fff7-ba0d-3437-ccaa0b4e7f7c",
+   "day": "2026-09-13",
+   "score": 77,
+   "contributors": {
+    "total_sleep": 88,
+    "efficiency": 94
+   },
+   "timestamp": "2026-09-13T00:00:00+00:00"
+  },
+  {
+   "id": "4ff6f2c5-0d25-f954-f404-2f1e6af7ea31",
+   "day": "2026-09-14",
+   "score": 65,
+   "contributors": {
+    "total_sleep": 79,
+    "efficiency": 93
+   },
+   "timestamp": "2026-09-14T00:00:00+00:00"
+  },
+  {
+   "id": "2bf39775-8124-7dd4-bcbc-58a35eef9b8b",
+   "day": "2026-09-15",
+   "score": 75,
+   "contributors": {
+    "total_sleep": 88,
+    "efficiency": 94
+   },
+   "timestamp": "2026-09-15T00:00:00+00:00"
+  },
+  {
+   "id": "d8aa7be3-9d5e-e2f9-678c-4cb99efd55d2",
+   "day": "2026-09-16",
+   "score": 80,
+   "contributors": {
+    "total_sleep": 93,
+    "efficiency": 96
+   },
+   "timestamp": "2026-09-16T00:00:00+00:00"
+  },
+  {
+   "id": "7260ca26-5e11-3423-a8a9-ea6263a366aa",
+   "day": "2026-09-17",
+   "score": 74,
+   "contributors": {
+    "total_sleep": 90,
+    "efficiency": 91
+   },
+   "timestamp": "2026-09-17T00:00:00+00:00"
+  },
+  {
+   "id": "c086ee53-0de4-4e65-1478-c7b982f0779d",
+   "day": "2026-09-18",
+   "score": 76,
+   "contributors": {
+    "total_sleep": 85,
+    "efficiency": 94
+   },
+   "timestamp": "2026-09-18T00:00:00+00:00"
+  },
+  {
+   "id": "f6de2fbe-8091-5aaf-4110-b8bc24c1276c",
+   "day": "2026-09-19",
+   "score": 67,
+   "contributors": {
+    "total_sleep": 81,
+    "efficiency": 91
+   },
+   "timestamp": "2026-09-19T00:00:00+00:00"
+  },
+  {
+   "id": "a1390385-8923-b7f6-fe32-45fe40852477",
+   "day": "2026-09-20",
+   "score": 68,
+   "contributors": {
+    "total_sleep": 78,
+    "efficiency": 95
+   },
+   "timestamp": "2026-09-20T00:00:00+00:00"
+  },
+  {
+   "id": "6aed8872-6ea6-d05e-a028-80569db59658",
+   "day": "2026-09-21",
+   "score": 48,
+   "contributors": {
+    "total_sleep": 66,
+    "efficiency": 93
+   },
+   "timestamp": "2026-09-21T00:00:00+00:00"
+  },
+  {
+   "id": "450f002a-c83b-6269-aa5c-6817df0c92b9",
+   "day": "2026-09-22",
+   "score": 59,
+   "contributors": {
+    "total_sleep": 77,
+    "efficiency": 90
+   },
+   "timestamp": "2026-09-22T00:00:00+00:00"
+  },
+  {
+   "id": "a48792c5-9bab-5340-84ac-8fe63313a101",
+   "day": "2026-09-23",
+   "score": 57,
+   "contributors": {
+    "total_sleep": 72,
+    "efficiency": 92
+   },
+   "timestamp": "2026-09-23T00:00:00+00:00"
+  },
+  {
+   "id": "d867c466-f15e-a89d-b1f2-ad8becd87a48",
+   "day": "2026-09-24",
+   "score": 63,
+   "contributors": {
+    "total_sleep": 76,
+    "efficiency": 89
+   },
+   "timestamp": "2026-09-24T00:00:00+00:00"
+  },
+  {
+   "id": "894e9f37-faa0-9f65-d76d-e60baa4cebf2",
+   "day": "2026-09-25",
+   "score": 66,
+   "contributors": {
+    "total_sleep": 80,
+    "efficiency": 91
+   },
+   "timestamp": "2026-09-25T00:00:00+00:00"
+  },
+  {
+   "id": "10d5fe14-0bf3-d0a7-bc9d-f599115d27cf",
+   "day": "2026-09-26",
+   "score": 71,
+   "contributors": {
+    "total_sleep": 86,
+    "efficiency": 92
+   },
+   "timestamp": "2026-09-26T00:00:00+00:00"
+  },
+  {
+   "id": "6c7be37e-5625-e671-51b3-15ec4b61b0fd",
+   "day": "2026-09-27",
+   "score": 67,
+   "contributors": {
+    "total_sleep": 82,
+    "efficiency": 91
+   },
+   "timestamp": "2026-09-27T00:00:00+00:00"
+  },
+  {
+   "id": "c31e4b97-49d0-4ce5-33b8-93a58607bfbf",
+   "day": "2026-09-28",
+   "score": 75,
+   "contributors": {
+    "total_sleep": 88,
+    "efficiency": 94
+   },
+   "timestamp": "2026-09-28T00:00:00+00:00"
+  },
+  {
+   "id": "e3f1bdf6-e44f-bd3e-6504-7845edb27a0f",
+   "day": "2026-09-29",
+   "score": 82,
+   "contributors": {
+    "total_sleep": 88,
+    "efficiency": 95
+   },
+   "timestamp": "2026-09-29T00:00:00+00:00"
+  },
+  {
+   "id": "c5ffd933-b066-5350-7055-114e76917752",
+   "day": "2026-09-30",
+   "score": 66,
+   "contributors": {
+    "total_sleep": 81,
+    "efficiency": 91
+   },
+   "timestamp": "2026-09-30T00:00:00+00:00"
+  },
+  {
+   "id": "fbdc773b-26a5-5215-625d-165b3207d5a3",
+   "day": "2026-10-01",
+   "score": 77,
+   "contributors": {
+    "total_sleep": 90,
+    "efficiency": 93
+   },
+   "timestamp": "2026-10-01T00:00:00+00:00"
+  },
+  {
+   "id": "6bd0cd12-a5ae-f8a6-bfc5-056e96619afb",
+   "day": "2026-10-02",
+   "score": 65,
+   "contributors": {
+    "total_sleep": 80,
+    "efficiency": 91
+   },
+   "timestamp": "2026-10-02T00:00:00+00:00"
+  },
+  {
+   "id": "a78ca31e-e4fd-960e-2edd-27f7df7c758b",
+   "day": "2026-10-03",
+   "score": 73,
+   "contributors": {
+    "total_sleep": 87,
+    "efficiency": 92
+   },
+   "timestamp": "2026-10-03T00:00:00+00:00"
+  },
+  {
+   "id": "c3406a1a-8387-e0e4-647a-6c082f0db088",
+   "day": "2026-10-04",
+   "score": 72,
+   "contributors": {
+    "total_sleep": 86,
+    "efficiency": 92
+   },
+   "timestamp": "2026-10-04T00:00:00+00:00"
+  },
+  {
+   "id": "cc63858a-cf40-2339-11a3-199dc6cfbfe5",
+   "day": "2026-10-05",
+   "score": 63,
+   "contributors": {
+    "total_sleep": 76,
+    "efficiency": 93
+   },
+   "timestamp": "2026-10-05T00:00:00+00:00"
+  },
+  {
+   "id": "5ba46881-47fd-7d46-cc85-8ee3b8c730cd",
+   "day": "2026-10-06",
+   "score": 83,
+   "contributors": {
+    "total_sleep": 99,
+    "efficiency": 94
+   },
+   "timestamp": "2026-10-06T00:00:00+00:00"
+  },
+  {
+   "id": "c6bbf658-2f87-a429-3bcf-ecf9daab2302",
+   "day": "2026-10-07",
+   "score": 79,
+   "contributors": {
+    "total_sleep": 95,
+    "efficiency": 92
+   },
+   "timestamp": "2026-10-07T00:00:00+00:00"
+  },
+  {
+   "id": "8ea4dc66-7e3a-46a3-7926-5fef23abac2e",
+   "day": "2026-10-08",
+   "score": 73,
+   "contributors": {
+    "total_sleep": 87,
+    "efficiency": 93
+   },
+   "timestamp": "2026-10-08T00:00:00+00:00"
+  },
+  {
+   "id": "5498c004-ffbd-8d4a-ee76-53c9bc8df872",
+   "day": "2026-10-09",
+   "score": 56,
+   "contributors": {
+    "total_sleep": 81,
+    "efficiency": 93
+   },
+   "timestamp": "2026-10-09T00:00:00+00:00"
+  },
+  {
+   "id": "81a5008a-df7a-9c99-458d-ff2dfbfa3797",
+   "day": "2026-10-10",
+   "score": 73,
+   "contributors": {
+    "total_sleep": 84,
+    "efficiency": 95
+   },
+   "timestamp": "2026-10-10T00:00:00+00:00"
+  },
+  {
+   "id": "60446ef6-9c9a-ffde-8b2c-a282e8ea1b43",
+   "day": "2026-10-11",
+   "score": 84,
+   "contributors": {
+    "total_sleep": 95,
+    "efficiency": 93
+   },
+   "timestamp": "2026-10-11T00:00:00+00:00"
+  },
+  {
+   "id": "a44ab3ad-90fb-2d7d-6e40-b885053869eb",
+   "day": "2026-10-12",
+   "score": 61,
+   "contributors": {
+    "total_sleep": 71,
+    "efficiency": 90
+   },
+   "timestamp": "2026-10-12T00:00:00+00:00"
+  },
+  {
+   "id": "f7629cb0-fc94-fa42-1f25-d23dab5b95f4",
+   "day": "2026-10-13",
+   "score": 64,
+   "contributors": {
+    "total_sleep": 77,
+    "efficiency": 92
+   },
+   "timestamp": "2026-10-13T00:00:00+00:00"
+  },
+  {
+   "id": "a6941c22-e222-0a7f-03c5-51160f8044a8",
+   "day": "2026-10-14",
+   "score": 74,
+   "contributors": {
+    "total_sleep": 85,
+    "efficiency": 96
+   },
+   "timestamp": "2026-10-14T00:00:00+00:00"
+  },
+  {
+   "id": "47a7fde0-4ad9-f598-5579-85e0911ae38d",
+   "day": "2026-10-15",
+   "score": 63,
+   "contributors": {
+    "total_sleep": 76,
+    "efficiency": 95
+   },
+   "timestamp": "2026-10-15T00:00:00+00:00"
+  },
+  {
+   "id": "0ad3f2d6-c878-9ae0-e32e-f1eac3693486",
+   "day": "2026-10-16",
+   "score": 58,
+   "contributors": {
+    "total_sleep": 73,
+    "efficiency": 91
+   },
+   "timestamp": "2026-10-16T00:00:00+00:00"
+  },
+  {
+   "id": "caaa8e50-0266-0c0a-c04a-4a4c961d8bc0",
+   "day": "2026-10-17",
+   "score": 65,
+   "contributors": {
+    "total_sleep": 76,
+    "efficiency": 94
+   },
+   "timestamp": "2026-10-17T00:00:00+00:00"
+  },
+  {
+   "id": "ddca8b0c-5fc1-1cc0-7e46-da13ff44abde",
+   "day": "2026-10-18",
+   "score": 72,
+   "contributors": {
+    "total_sleep": 80,
+    "efficiency": 95
+   },
+   "timestamp": "2026-10-18T00:00:00+00:00"
+  },
+  {
+   "id": "2e44accb-fe9f-0bb4-3374-05bf56be6d2a",
+   "day": "2026-10-19",
+   "score": 78,
+   "contributors": {
+    "total_sleep": 87,
+    "efficiency": 94
+   },
+   "timestamp": "2026-10-19T00:00:00+00:00"
+  },
+  {
+   "id": "f11425e4-09e3-c3c3-2c10-514f38c2c39e",
+   "day": "2026-10-20",
+   "score": 68,
+   "contributors": {
+    "total_sleep": 84,
+    "efficiency": 94
+   },
+   "timestamp": "2026-10-20T00:00:00+00:00"
+  },
+  {
+   "id": "3d0b8c43-70fe-98a0-2b27-df8761307c05",
+   "day": "2026-10-21",
+   "score": 70,
+   "contributors": {
+    "total_sleep": 86,
+    "efficiency": 89
+   },
+   "timestamp": "2026-10-21T00:00:00+00:00"
+  },
+  {
+   "id": "2e242fc8-0e85-9f16-bc6e-9d5f38be1ce3",
+   "day": "2026-10-22",
+   "score": 65,
+   "contributors": {
+    "total_sleep": 78,
+    "efficiency": 90
+   },
+   "timestamp": "2026-10-22T00:00:00+00:00"
+  },
+  {
+   "id": "f87fcf8e-339d-7cf8-c13d-e7cf41febb34",
+   "day": "2026-10-23",
+   "score": 71,
+   "contributors": {
+    "total_sleep": 81,
+    "efficiency": 89
+   },
+   "timestamp": "2026-10-23T00:00:00+00:00"
+  },
+  {
+   "id": "d7e730ed-2358-d99f-2e41-77ed92435409",
+   "day": "2026-10-24",
+   "score": 73,
+   "contributors": {
+    "total_sleep": 88,
+    "efficiency": 90
+   },
+   "timestamp": "2026-10-24T00:00:00+00:00"
+  },
+  {
+   "id": "7e365e8a-f215-9ff5-dd50-38a4a3a15d24",
+   "day": "2026-10-25",
+   "score": 59,
+   "contributors": {
+    "total_sleep": 70,
+    "efficiency": 90
+   },
+   "timestamp": "2026-10-25T00:00:00+00:00"
+  },
+  {
+   "id": "0fab53e5-e5e6-1cd7-c056-3eed93892b39",
+   "day": "2026-10-26",
+   "score": 54,
+   "contributors": {
+    "total_sleep": 68,
+    "efficiency": 91
+   },
+   "timestamp": "2026-10-26T00:00:00+00:00"
+  },
+  {
+   "id": "de9943a6-59c7-75be-1a55-552271b7e67c",
+   "day": "2026-10-27",
+   "score": 83,
+   "contributors": {
+    "total_sleep": 86,
+    "efficiency": 96
+   },
+   "timestamp": "2026-10-27T00:00:00+00:00"
+  },
+  {
+   "id": "0d4da084-f0f8-8227-f872-266665483c3c",
+   "day": "2026-10-28",
+   "score": 72,
+   "contributors": {
+    "total_sleep": 84,
+    "efficiency": 93
+   },
+   "timestamp": "2026-10-28T00:00:00+00:00"
+  },
+  {
+   "id": "65a52d10-f83e-0220-6bb4-d3fd23b02845",
+   "day": "2026-10-29",
+   "score": 60,
+   "contributors": {
+    "total_sleep": 80,
+    "efficiency": 90
+   },
+   "timestamp": "2026-10-29T00:00:00+00:00"
+  },
+  {
+   "id": "e6c38898-8387-0307-ebca-6ca9f4c1f93e",
+   "day": "2026-10-30",
+   "score": 67,
+   "contributors": {
+    "total_sleep": 81,
+    "efficiency": 95
+   },
+   "timestamp": "2026-10-30T00:00:00+00:00"
+  },
+  {
+   "id": "3e046328-07ed-25f3-4f7d-39dad19e2a95",
+   "day": "2026-10-31",
+   "score": 66,
+   "contributors": {
+    "total_sleep": 81,
+    "efficiency": 92
+   },
+   "timestamp": "2026-10-31T00:00:00+00:00"
+  },
+  {
+   "id": "39a48c48-855b-9df9-1bf7-6e53c349dc1a",
+   "day": "2026-11-01",
+   "score": 73,
+   "contributors": {
+    "total_sleep": 84,
+    "efficiency": 91
+   },
+   "timestamp": "2026-11-01T00:00:00+00:00"
+  },
+  {
+   "id": "fe304b6f-f676-49bc-65c2-20e77f7545c0",
+   "day": "2026-11-02",
+   "score": 81,
+   "contributors": {
+    "total_sleep": 91,
+    "efficiency": 95
+   },
+   "timestamp": "2026-11-02T00:00:00+00:00"
+  },
+  {
+   "id": "16829005-3b60-3d92-94e2-9546608302a7",
+   "day": "2026-11-03",
+   "score": 72,
+   "contributors": {
+    "total_sleep": 79,
+    "efficiency": 93
+   },
+   "timestamp": "2026-11-03T00:00:00+00:00"
+  },
+  {
+   "id": "02a83c34-f2a9-91f8-73fc-117459e2221f",
+   "day": "2026-11-04",
+   "score": 66,
+   "contributors": {
+    "total_sleep": 88,
+    "efficiency": 94
+   },
+   "timestamp": "2026-11-04T00:00:00+00:00"
+  },
+  {
+   "id": "b09c724a-4b7f-e9b1-e4fe-ad80a7eac1c8",
+   "day": "2026-11-05",
+   "score": 61,
+   "contributors": {
+    "total_sleep": 75,
+    "efficiency": 93
+   },
+   "timestamp": "2026-11-05T00:00:00+00:00"
+  },
+  {
+   "id": "03f3f20d-9611-3b67-1937-1cb1d797a9ee",
+   "day": "2026-11-06",
+   "score": 70,
+   "contributors": {
+    "total_sleep": 84,
+    "efficiency": 92
+   },
+   "timestamp": "2026-11-06T00:00:00+00:00"
+  }
+ ],
+ "next_token": null
+}
