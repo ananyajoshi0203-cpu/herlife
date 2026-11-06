@@ -55,6 +55,8 @@ GOOGLE_STATE_COOKIE = "bloom_google_state"
 DEV_OURA_TOKEN = os.environ.get("BLOOM_DEV_OURA_TOKEN") or os.environ.get("DEV_OURA_TOKEN")
 SECURE_COOKIES = os.environ.get("BLOOM_SECURE_COOKIES", "0") == "1"
 MODELS: dict[str, str] = {"quick": "claude-haiku-5-5", "default": "claude-sonnet-5-5", "complex": "claude-opus-5-5"}
+# The models think before answering; 1,500 tokens could be spent entirely on thinking, leaving no text.
+MAX_OUTPUT_TOKENS = 4000
 MAX_PROMPT_CHARS = 12_000
 MAX_STATE_BYTES = 512_000
 OURA_DAYS_MAX = 120
@@ -114,7 +116,7 @@ def ai_json(body: AiRequest) -> object:
     try:
         message = client.messages.create(
             model=MODELS[body.tier],
-            max_tokens=1500,
+            max_tokens=MAX_OUTPUT_TOKENS,
             system="You are HerLife's assistant for a women's lifestyle app. Reply with JSON only, no prose, no code fences.",
             messages=[{"role": "user", "content": body.prompt}],
         )
