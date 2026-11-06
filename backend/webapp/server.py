@@ -258,4 +258,4 @@ def calendar_create(request: Request, event: gcal.NewEvent) -> gcal.CalendarEven
 
 @app.get("/healthz")
 def healthz() -> dict[str, str]:
-    return {"status": "ok"}
+    return {"status": "ok", "database": store.DB_URL.split(":", 1)[0].split("+", 1)[0]}
