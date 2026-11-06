@@ -23,7 +23,8 @@ SEEDS = range(10)
 LUTEAL_LENGTH = 14
 FOLLICULAR_TEMP_C = -0.08
 # Mirrors startsFromTemperature in web/index.html, the app's estimate when no period is logged.
-ESTIMATE_WARM_C = 0.18
+ESTIMATE_WARM_ABOVE_MEDIAN_C = 0.12
+ESTIMATE_MIN_NIGHTS = 20
 ESTIMATE_MIN_WARM_NIGHTS = 8
 START_TOLERANCE = timedelta(days=1)
 MIN_LUTEAL_NIGHTS_SEEN = 5
@@ -148,18 +149,29 @@ def period_logs(nights: Sequence[PlantedNight], persona: CyclePersona, rng: rand
 
 
 def starts_from_temperature(readiness: Sequence[Readiness]) -> list[PeriodLog]:
-    """A period starts on the first cool night after a run of warm (luteal) nights."""
+    """After 8+ nights warmer than her own median, a period starts on the first of two cool nights in a row."""
+    ordered = sorted(
+        (row for row in readiness if row.temperature_deviation_c is not None), key=lambda reading: reading.day
+    )
+    temperatures = sorted(row.temperature_deviation_c for row in ordered if row.temperature_deviation_c is not None)
+    if len(temperatures) < ESTIMATE_MIN_NIGHTS:
+        return []
+    warm_at = temperatures[len(temperatures) // 2] + ESTIMATE_WARM_ABOVE_MEDIAN_C
+
     starts: list[PeriodLog] = []
     warm_nights = 0
-    for row in sorted(readiness, key=lambda reading: reading.day):
-        if row.temperature_deviation_c is None:
-            continue
-        if row.temperature_deviation_c >= ESTIMATE_WARM_C:
+    first_cool_day: date | None = None
+    for row in ordered:
+        if (row.temperature_deviation_c or 0) >= warm_at:
             warm_nights += 1
-            continue
-        if warm_nights >= ESTIMATE_MIN_WARM_NIGHTS:
-            starts.append(PeriodLog(start_day=row.day, flow=Flow.MEDIUM))
-        warm_nights = 0
+            first_cool_day = None
+        elif warm_nights >= ESTIMATE_MIN_WARM_NIGHTS and first_cool_day is not None:
+            starts.append(PeriodLog(start_day=first_cool_day, flow=Flow.MEDIUM))
+            warm_nights, first_cool_day = 0, None
+        elif warm_nights >= ESTIMATE_MIN_WARM_NIGHTS:
+            first_cool_day = row.day
+        else:
+            warm_nights = 0
     return starts
 
 

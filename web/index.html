@@ -553,12 +553,15 @@ function applyDataSource() {
   if (SEED[SEED.length - 1].day !== TODAY) SEED.push({ day: TODAY, self: true, pending: true });
 }
 /* No logged periods yet: estimate starts from the temperature drop that follows a warm luteal run.
-   Warm is relative to her own median so small perimenopausal shifts still register, and a start
-   needs two cool nights in a row so one noisy night inside a warm run is not read as a period. */
+   Warm is the midpoint of her own 25th and 75th percentile, not the median: in cycles of 28 days
+   or less the warm half holds most nights and the median lands inside it. No spread means no
+   shift (for example on the pill). A start needs two cool nights so one noisy night is not a period. */
 function startsFromTemperature(rows) {
   const temps = rows.map((r) => r.temp).filter(Number.isFinite).sort((a, b) => a - b);
   if (temps.length < 20) return [];
-  const warmAt = temps[Math.floor(temps.length / 2)] + 0.12;
+  const lo = temps[Math.floor(temps.length / 4)], hi = temps[Math.floor(3 * temps.length / 4)];
+  if (hi - lo < 0.15) return [];
+  const warmAt = (lo + hi) / 2;
   const starts = []; let warm = 0, coolDay = null;
   for (const r of rows) {
     if (!Number.isFinite(r.temp)) continue;
