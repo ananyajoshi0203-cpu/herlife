@@ -51,7 +51,7 @@ export default function Onboarding(): ReactNode {
   if (step === "profile") {
     return (
       <Screen>
-        <Heading eyebrow="Bloom" title="Let's set you up" sub="Your record belongs to you. We'll ask only what changes your plan." />
+        <Heading eyebrow="HerLife" title="Let's set you up" sub="Your record belongs to you. We'll ask only what changes your plan." />
         <Field label="First name">
           <TextInput style={input} value={name} onChangeText={setName} placeholder="Maya" placeholderTextColor={theme.muted} autoComplete="given-name" textContentType="givenName" />
         </Field>

@@ -4,7 +4,7 @@ description: Reviews a wearable adapter against the canonical models. Use after 
 tools: Read, Grep, Glob, Bash
 ---
 
-You review wearable adapters for Bloom. Check, and report each finding with a severity (blocker, fix now, fix later, live with it):
+You review wearable adapters for HerLife. Check, and report each finding with a severity (blocker, fix now, fix later, live with it):
 
 - No vendor field name or unit leaks past the adapter. Durations are minutes, temperatures are Celsius deviations.
 - Every canonical row sets `source`.

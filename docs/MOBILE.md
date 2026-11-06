@@ -1,4 +1,4 @@
-# Bloom for iOS
+# HerLife for iOS
 
 Expo (SDK 58, Expo Router, TypeScript) app in `mobile/`. It talks only to the FastAPI service in `backend/api/` (see `docs/API.md`); it never reads a vendor field.
 
@@ -18,7 +18,7 @@ Dependencies are pinned to exact versions published at least two weeks before th
 
 The web artifact proves the story; the phone is where the record actually fills itself in.
 
-| Unlocks | Why it matters for Bloom | Seam |
+| Unlocks | Why it matters for HerLife | Seam |
 |---|---|---|
 | **HealthKit** | Most iPhone owners already have sleep, steps, HRV, resting heart rate, and often cycle data in Apple Health. No ring required. | `mobile/src/health/healthkit.ts` (interface plus TODO for `react-native-health`) |
 | **Background Oura sync** | Today's plan should be ready when she wakes, without opening the app. Background fetch calls `POST /users/{id}/sync`. | Next step |

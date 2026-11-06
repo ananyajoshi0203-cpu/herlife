@@ -1,6 +1,6 @@
-/* Bloom web platform shim.
+/* HerLife web platform shim.
    The app was written against claude.ai's `window.claude.use(name)` runtime. On the hosted
-   web app this file answers the same calls with Bloom's own server, so the UI is identical
+   web app this file answers the same calls with HerLife's own server, so the UI is identical
    in both places. Errors reject with `{code}` exactly like the claude.ai runtime does, so the
    page's existing fallbacks keep working. */
 (() => {

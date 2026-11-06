@@ -1,5 +1,5 @@
 /**
- * Typed client for the Bloom FastAPI service (backend/api/app.py).
+ * Typed client for the HerLife FastAPI service (backend/api/app.py).
  * Types mirror backend/api/schemas.py, backend/canonical/models.py, and backend/insights.py.
  * Keep them in step by hand until we generate them from the OpenAPI schema at /openapi.json.
  */
@@ -222,7 +222,7 @@ export class ApiError extends Error {
     readonly status: number,
     readonly detail: string,
   ) {
-    super(`Bloom API ${status}: ${detail}`);
+    super(`HerLife API ${status}: ${detail}`);
   }
 }
 

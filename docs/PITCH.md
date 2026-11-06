@@ -10,7 +10,7 @@
 her migraines cluster in the luteal phase, whether she has actually been eating enough protein, whether
 stress spikes on days her calendar is stacked.
 
-**Bloom builds that record without asking her to become a data-entry clerk.**
+**HerLife builds that record without asking her to become a data-entry clerk.**
 1. Passive: Oura ring sleep, HRV, temperature, activity flow in through a canonical adapter (any wearable next).
 2. Effortless: one voice ramble a day, Claude sorts it into sleep, food, movement, mood, symptoms.
 3. Motivating: cycle-aware daily plan, 3 habits picked by Claude from her 2 goals, one small win, and permission to ease off.

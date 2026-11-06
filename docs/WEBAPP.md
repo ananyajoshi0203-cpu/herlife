@@ -1,10 +1,10 @@
-# Bloom web app
+# HerLife web app
 
 One UI, two hosts. `web/index.html` runs as the claude.ai artifact (judges) and as a real web app
 served by `backend/webapp/server.py`. On the web app, `backend/webapp/static/bloom-platform.js`
-answers the page's `window.claude.use(...)` calls with Bloom's own server:
+answers the page's `window.claude.use(...)` calls with HerLife's own server:
 
-| Page asks for | claude.ai artifact | Bloom web app |
+| Page asks for | claude.ai artifact | HerLife web app |
 |---|---|---|
 | `sample` (Claude) | claude.ai sampling | `POST /api/ai/json`, Anthropic SDK (haiku for quick, sonnet for default) |
 | `db` + `user` (saved record) | artifact private store | `GET/PUT/DELETE /api/state`, SQLite, per-browser person cookie |
@@ -21,7 +21,7 @@ open http://localhost:8080
 
 | Env var | For | Notes |
 |---|---|---|
-| `ANTHROPIC_API_KEY` | Claude habits, log sorting, plan, summary | Without it every feature uses Bloom's built-in fallback |
+| `ANTHROPIC_API_KEY` | Claude habits, log sorting, plan, summary | Without it every feature uses HerLife's built-in fallback |
 | `OURA_CLIENT_ID`, `OURA_CLIENT_SECRET` | Oura sign in | Register at cloud.ouraring.com/oauth/applications, redirect `http://localhost:8080/oura/callback` |
 | `OURA_REDIRECT_URI` | Oura | Set to `https://<host>/oura/callback` when deployed |
 | `BLOOM_DEV_OURA_TOKEN` | Local only | Your own Oura token, read for every visitor. Never set on a shared deploy |

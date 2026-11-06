@@ -1,4 +1,4 @@
-"""End to end: Oura + Bloom period log -> canonical tables -> SQLite + web seed.
+"""End to end: Oura + HerLife period log -> canonical tables -> SQLite + web seed.
 
 Oura supplies sleep, readiness, activity, and stress. The cycle comes from the
 self-reported period log, with Oura temperature used only to confirm ovulation.

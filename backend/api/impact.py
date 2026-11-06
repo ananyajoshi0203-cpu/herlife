@@ -61,7 +61,7 @@ LEVER_WORDS: tuple[tuple[Lever, tuple[str, ...]], ...] = (
     (Lever.NUTRITION, ("protein", "water", "vegetable", "meal", "breakfast", "lunch", "dinner", "eat", "energy")),
     (Lever.MOOD, ("mood", "friend", "write", "journal", "happy")),
 )
-INSUFFICIENT_SUMMARY = f"Not enough days yet to compare. Bloom needs at least {MIN_DAYS_PER_SIDE} days on each side."
+INSUFFICIENT_SUMMARY = f"Not enough days yet to compare. HerLife needs at least {MIN_DAYS_PER_SIDE} days on each side."
 
 type OutcomeSeries = Mapping[OutcomeMetric, Mapping[date, float]]
 

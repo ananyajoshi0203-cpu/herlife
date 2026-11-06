@@ -1,4 +1,4 @@
-"""Bloom API.
+"""HerLife API.
 
 .venv/bin/uvicorn backend.api.app:app --reload
 """
@@ -114,7 +114,7 @@ def oura_access_token(session: Session, user_id: uuid.UUID) -> str | None:
 
 
 def create_app(database: Database | None = None) -> FastAPI:
-    app = FastAPI(title="Bloom API", description="Lifestyle record for women. Not a medical device.")
+    app = FastAPI(title="HerLife API", description="Lifestyle record for women. Not a medical device.")
     app.state.database = database or Database()
 
     @app.post("/users", status_code=status.HTTP_201_CREATED)

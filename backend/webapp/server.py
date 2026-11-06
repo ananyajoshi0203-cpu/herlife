@@ -1,4 +1,4 @@
-"""Bloom as a real web app: serves the UI and the backend that replaces claude.ai's runtime.
+"""HerLife as a real web app: serves the UI and the backend that replaces claude.ai's runtime.
 
 The page talks to `window.claude.use(...)`. On claude.ai the platform answers; here
 static/bloom-platform.js answers the same calls with this server, so one UI ships to both.
@@ -52,7 +52,7 @@ OAUTH_STATE_COOKIE = "bloom_oura_state"
 GOOGLE_STATE_COOKIE = "bloom_google_state"
 # Single-person local development only: lets you see your own ring before registering an
 # Oura OAuth app. Never set it on a shared deployment, or every visitor reads your ring.
-DEV_OURA_TOKEN = os.environ.get("BLOOM_DEV_OURA_TOKEN")
+DEV_OURA_TOKEN = os.environ.get("BLOOM_DEV_OURA_TOKEN") or os.environ.get("DEV_OURA_TOKEN")
 SECURE_COOKIES = os.environ.get("BLOOM_SECURE_COOKIES", "0") == "1"
 MODELS: dict[str, str] = {"quick": "claude-haiku-5-5", "default": "claude-sonnet-5-5", "complex": "claude-opus-5-5"}
 MAX_PROMPT_CHARS = 12_000
@@ -60,7 +60,7 @@ MAX_STATE_BYTES = 512_000
 OURA_DAYS_MAX = 120
 JSON_FENCE = re.compile(r"^```(?:json)?\s*|\s*```$", re.MULTILINE)
 
-app = FastAPI(title="Bloom web")
+app = FastAPI(title="HerLife web")
 app.mount("/static", StaticFiles(directory=STATIC), name="static")
 
 
@@ -115,7 +115,7 @@ def ai_json(body: AiRequest) -> object:
         message = client.messages.create(
             model=MODELS[body.tier],
             max_tokens=1500,
-            system="You are Bloom's assistant for a women's lifestyle app. Reply with JSON only, no prose, no code fences.",
+            system="You are HerLife's assistant for a women's lifestyle app. Reply with JSON only, no prose, no code fences.",
             messages=[{"role": "user", "content": body.prompt}],
         )
     except anthropic.APIError as error:

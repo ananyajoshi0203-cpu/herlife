@@ -1,4 +1,4 @@
-"""Synthetic Bloom period log for persona Maya, aligned with the Oura generator.
+"""Synthetic HerLife period log for persona Maya, aligned with the Oura generator.
 
 Starts use the same cycle length and offset as `oura_generator`, so her logged
 periods land exactly where the ring sees the temperature drop. One log precedes

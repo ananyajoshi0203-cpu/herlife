@@ -33,11 +33,11 @@ TRANSITION_AGE = 45
 EXPECTED_PATTERN_NOTES: dict[LifeStage, tuple[str, str]] = {
     LifeStage.PREGNANT_POSTPARTUM: (
         "Cycle changes are expected right now",
-        "Bloom has paused cycle-change notes while you are pregnant or postpartum.",
+        "HerLife has paused cycle-change notes while you are pregnant or postpartum.",
     ),
     LifeStage.HORMONAL_BIRTH_CONTROL: (
         "Your bleeding pattern reflects your method",
-        "Hormonal birth control shapes your bleeding, so Bloom does not read changes as a cycle signal.",
+        "Hormonal birth control shapes your bleeding, so HerLife does not read changes as a cycle signal.",
     ),
 }
 

@@ -93,7 +93,7 @@ def ask_structured[T: BaseModel](system: str, prompt: str, schema: type[T]) -> T
     return response.parsed_output
 
 
-VOICE_SYSTEM = """You sort a woman's spoken daily log for Bloom, a lifestyle record she shares with her doctor.
+VOICE_SYSTEM = """You sort a woman's spoken daily log for HerLife, a lifestyle record she shares with her doctor.
 Split the transcript into separate facts. Give each one a category: sleep, movement, nutrition, mood, or symptoms.
 `text` is the fact in her own words, lightly cleaned up. `detail` is the concrete specifics (amounts, times,
 durations, intensity) or an empty string. Never add facts she did not say, never diagnose, and never use em dashes."""
@@ -185,7 +185,7 @@ def sort_voice_log(text: str) -> Answer[VoiceSort]:
     return Answer(sort_voice_log_by_rules(text), used_ai=False)
 
 
-HABITS_SYSTEM = f"""You suggest exactly {HABIT_COUNT} small daily habits for a woman using Bloom, a lifestyle app.
+HABITS_SYSTEM = f"""You suggest exactly {HABIT_COUNT} small daily habits for a woman using HerLife, a lifestyle app.
 Tie every habit to one of her two goals and put that goal, verbatim, in `goal`. Fit them to her gym access, diet,
 conditions, recent wearable numbers, the priorities of her age band, and the season. `title` is a short action
 she can check off today. `why` is one warm sentence on why it helps her, citing her own data when it is
@@ -318,7 +318,7 @@ def suggest_habits(profile: User, recent: LifestyleAverages, season: Season) -> 
     return Answer(suggest_habits_by_rules(profile, recent), used_ai=False)
 
 
-PLAN_SYSTEM = """You write today's plan for a woman using Bloom, a lifestyle app. You get her profile, her age band
+PLAN_SYSTEM = """You write today's plan for a woman using HerLife, a lifestyle app. You get her profile, her age band
 priorities, the season, and a draft plan built from her own data. Rewrite the four lines (`sleep`, `move`, `eat`,
 `mind`) so each is one or two warm, specific sentences that reflect her season and age band where it fits. Keep every
 concrete time, food, and amount from the draft. When the draft says to ease off, keep the plan gentle. Only mention

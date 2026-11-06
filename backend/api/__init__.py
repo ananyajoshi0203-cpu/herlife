@@ -1,1 +1,1 @@
-"""Bloom's HTTP service: onboarding, Oura sync, period log, voice logs, habits, plan, doctor record."""
+"""HerLife's HTTP service: onboarding, Oura sync, period log, voice logs, habits, plan, doctor record."""

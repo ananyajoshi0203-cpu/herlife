@@ -104,7 +104,7 @@ def events_between(access_token: str, start: datetime, end: datetime) -> list[Ca
 def create_event(access_token: str, event: NewEvent) -> CalendarEvent:
     response = httpx.post(
         EVENTS_URL,
-        json={"summary": event.title, "description": "Booked by Bloom from your plan for today.",
+        json={"summary": event.title, "description": "Booked by HerLife from your plan for today.",
               "start": {"dateTime": event.start.isoformat()}, "end": {"dateTime": event.end.isoformat()}},
         headers={"Authorization": f"Bearer {access_token}"},
         timeout=TIMEOUT.total_seconds(),

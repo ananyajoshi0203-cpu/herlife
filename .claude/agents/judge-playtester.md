@@ -1,6 +1,6 @@
 ---
 name: judge-playtester
-description: Plays through the published Bloom artifact like a hackathon judge and reports dead ends. Use after publishing, with the artifact URL.
+description: Plays through the published HerLife artifact like a hackathon judge and reports dead ends. Use after publishing, with the artifact URL.
 tools: Read, Grep
 ---
 

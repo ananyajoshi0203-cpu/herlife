@@ -1,10 +1,10 @@
-# Bloom: women's lifestyle record
+# HerLife: women's lifestyle record
 
 Hackathon build (1h45m, 2026-11-06). Judges play through a published claude.ai artifact.
 
 ## The problem we pitch
 Women walk into a doctor's office with no lifestyle record. The doctor sees a 15 minute
-snapshot and starts standard treatment. Bloom builds the "cookie trail" (sleep, food,
+snapshot and starts standard treatment. HerLife builds the "cookie trail" (sleep, food,
 movement, mood, cycle) every day with near-zero effort, and hands the doctor a one-page
 summary. See `docs/PITCH.md`.
 
@@ -12,7 +12,7 @@ summary. See `docs/PITCH.md`.
 - `backend/connectors/oura.py`: Oura API v2 client. Live with `OURA_TOKEN`, otherwise mock mode reading `data/raw/`.
 - `backend/canonical/models.py`: vendor-neutral pydantic models. Everything downstream reads only these.
 - `backend/canonical/oura_adapter.py`: raw Oura -> canonical sleep, readiness, activity, stress. Produces no cycle rows: Oura does not sync periods.
-- `backend/canonical/cycle.py`: `build_cycle(periods, readiness)`. Cycle day and phase come from Bloom's self-reported period log; Oura temperature only sets `ovulation_confirmed`. `_phase_for` must match `phaseOf` in `web/index.html`.
+- `backend/canonical/cycle.py`: `build_cycle(periods, readiness)`. Cycle day and phase come from HerLife's self-reported period log; Oura temperature only sets `ovulation_confirmed`. `_phase_for` must match `phaseOf` in `web/index.html`.
 - `backend/synthetic/oura_generator.py`: 90 days of Oura-shaped payloads with a real cycle signal (persona "Maya").
 - `backend/synthetic/period_log_generator.py`: Maya's period log (`data/raw/bloom_period_log.json`), aligned with the Oura generator's cycle.
 - `backend/pipeline.py`: generate -> adapt Oura + load period log -> build cycle -> `data/health.db` + `data/canonical/*.json` (incl. `periods`, `cycle`) + `web/seed.json`.

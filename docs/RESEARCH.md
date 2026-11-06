@@ -1,6 +1,6 @@
-# Bloom research notes: cycles, wearables, life stages
+# HerLife research notes: cycles, wearables, life stages
 
-Bloom is a lifestyle-record app, not a medical device. Everything below is written so the app can describe patterns and suggest questions for a clinician. Nothing here supports a diagnosis. Each claim carries a numbered citation; see References. Where a threshold is a Bloom product choice rather than a published cutoff, it is labeled **product heuristic**.
+HerLife is a lifestyle-record app, not a medical device. Everything below is written so the app can describe patterns and suggest questions for a clinician. Nothing here supports a diagnosis. Each claim carries a numbered citation; see References. Where a threshold is a HerLife product choice rather than a published cutoff, it is labeled **product heuristic**.
 
 ---
 
@@ -8,14 +8,14 @@ Bloom is a lifestyle-record app, not a medical device. Everything below is writt
 
 **Plain answer.** In the follicular phase, FSH rises and drives follicle growth, and estradiol climbs as the selected follicle matures; this is the phase that varies most in length [4]. Estradiol peaks, then the LH surge (usually over 36 to 48 hours) triggers release of the egg within about 16 to 32 hours [4]. In the luteal phase the corpus luteum secretes mainly progesterone, which peaks about 6 to 8 days after ovulation; this phase is the most constant, averaging 14 days, and progesterone raises basal body temperature by about 0.5 °C for its duration [4]. Menses follows the rapid fall in progesterone and estrogen when pregnancy does not occur [4]. In app data from 612,613 ovulatory cycles, mean cycle length was 29.3 days, mean follicular phase 16.9 days (95% range 10 to 30) and mean luteal phase 12.4 days (95% range 7 to 17); cycle length fell by about 0.18 days per year between ages 25 and 45 [5]. FIGO 2018 defines normal adult cycles as 24 to 38 days, at most 8 days of bleeding, and a shortest-to-longest variation of at most 7 to 9 days [1, 2]: 9 days or less at ages 18 to 25 and 42 to 45, 7 days or less at ages 26 to 41 [3]. The 2023 PCOS guideline treats cycles under 21 or over 35 days, or fewer than 8 cycles a year, as irregular once a person is more than 3 years past her first period, and any single cycle over 90 days as irregular after the first year [19].
 
-**What Bloom can do with this**
+**What HerLife can do with this**
 - Use four display phases: menstrual (logged bleeding days), follicular (end of bleeding to estimated ovulation), ovulatory window, luteal (after ovulation to next bleed). Label every phase boundary "estimated".
 - Anchor the luteal phase, not the follicular phase: predict the next period as estimated ovulation plus the user's own luteal length (default 12 to 14 days until personal data exists) [4, 5].
 - Regularity check over the last 6 or more logged cycles: `max(cycle_len) - min(cycle_len) > 9` for ages 18 to 25 or 42 to 45, `> 7` for ages 26 to 41 → "more variable than the typical range" [1, 3].
 - Out-of-range flag: any cycle `< 21` or `> 35` days [19], or `< 24` or `> 38` days [1, 2], shown as a gentle note, never an alarm.
 - Copy: "Your cycle length moves around more in the follicular phase. The time after ovulation tends to stay steadier."
 
-**What Bloom must not claim**
+**What HerLife must not claim**
 - That a cycle outside these ranges is abnormal or a disorder. These are clinical reference ranges, not a verdict.
 - That a calendar-estimated phase is the user's true hormonal phase.
 
@@ -25,14 +25,14 @@ Bloom is a lifestyle-record app, not a medical device. Everything below is writt
 
 **Plain answer.** Three signals track the cycle at population level. Skin temperature: in a 22-woman Oura ring pilot, nightly finger skin temperature was about 0.30 °C higher in the luteal than the follicular phase, and the best algorithm detected ovulation with 83.3% sensitivity within a window of 3 days before to 2 days after urine-test-confirmed ovulation; menstruation was detected with 71.9% to 86.5% sensitivity for windows of ±2 to ±4 days [7]. In Apple's prospective cohort (260 participants, 889 cycles), a wrist-temperature algorithm gave a retrospective ovulation estimate for 80.8% of completed cycles that had at least a 0.2 °C temperature signal, with a mean absolute error of 1.22 days and 89.0% of estimates within ±2 days; for ongoing cycles the figures were 80.5% coverage, 1.59 days error and 80.0% within ±2 days [8]. The authors warn that the algorithm can produce an estimate in a cycle where no ovulation occurred, so it should not be used in isolation [8]. Apple's feature needs about two cycles of nightly wear (at least 4 hours a night on 5 nights) and is not for contraception [9]. Resting heart rate and HRV: in WHOOP data from about 11,590 people and 45,000 cycles, population resting heart rate was lowest around cycle day 5 and highest around day 26, while HRV (RMSSD) peaked near day 5 and was lowest near day 27; this fluctuation was smaller in older participants and in those using hormonal birth control [10]. So: wearables can estimate ovulation after the fact with roughly 1 to 2 days of error in cycles with a clear temperature shift. Real-time prospective prediction is less accurate, and no study above validates phase detection in people on hormonal contraception.
 
-**What Bloom can do with this**
+**What HerLife can do with this**
 - Mark ovulation **retrospectively** only, after a sustained rise in nightly temperature versus the user's own follicular baseline. Require at least 0.2 °C sustained over several nights [8]; if no shift appears, show "no clear temperature shift this cycle" rather than guessing.
 - Require two logged cycles of nightly wear before showing any temperature-based estimate [9].
 - Show resting HR and HRV as "your body's rhythm across the cycle", expecting HR to be higher and HRV lower before the period [10].
 - If the user logs hormonal contraception, turn off temperature-based ovulation estimates and say why [10].
 - Copy: "Your temperature rose about 3 nights ago. That often happens after ovulation. This is an estimate, not a test."
 
-**What Bloom must not claim**
+**What HerLife must not claim**
 - That it predicts or confirms ovulation, or identifies fertile days for avoiding or achieving pregnancy [8, 9].
 - Any accuracy figure higher than the studies above, or any accuracy at all for HR or HRV-only phase detection.
 
@@ -42,7 +42,7 @@ Bloom is a lifestyle-record app, not a medical device. Everything below is writt
 
 **Plain answer.** Women aged 19 to 50 need 18 mg of iron a day, compared with 8 mg from age 51, and 27 mg in pregnancy [24]. Calcium needs rise from 1,000 mg a day at 19 to 50 to 1,200 mg a day at 51 to 70 [25]. All adults are advised to get 150 to 300 minutes of moderate aerobic activity a week plus muscle-strengthening work for all major muscle groups on 2 or more days [26]. ACOG and ASRM advise that women over 35 who have not conceived after 6 months of trying get an expedited evaluation, because fertility declines with age [27]. Cycles shorten slowly across the mid-reproductive years [5]. Natural menopause usually arrives between 45 and 55 [13]. After menopause, bone density falls and women's lower cardiovascular risk relative to men gradually disappears [13]; the AHA reports that the menopause transition itself is linked with rising LDL cholesterol, more central fat and loss of lean muscle [28].
 
-| Age band | What changes | Lifestyle priorities Bloom can surface |
+| Age band | What changes | Lifestyle priorities HerLife can surface |
 |---|---|---|
 | 18 to 25 | Cycle variation up to 9 days is still within FIGO range [3] | Iron intake (18 mg/day) [24]; calcium 1,000 mg/day [25]; activity and strength habits [26]; adequate fueling if training hard [18] |
 | 26 to 34 | Tighter typical regularity (7 days or less) [3] | Same iron and calcium targets [24, 25]; strength 2+ days a week [26]; neutral fertility-timing information if the user opts in [27] |
@@ -50,10 +50,10 @@ Bloom is a lifestyle-record app, not a medical device. Everything below is writt
 | 45 to 55 | Menopause transition and menopause typically happen here [11, 13] | Calcium rises to 1,200 mg/day from 51 [25]; iron need drops to 8 mg/day from 51 [24]; strength training and heart-health habits [26, 28] |
 | 55+ | Postmenopause; bone and cardiovascular risk become central [13, 28] | Calcium 1,200 mg/day [25]; muscle-strengthening and aerobic activity [26]; any bleeding is a red flag [22] |
 
-**What Bloom can do with this**
+**What HerLife can do with this**
 - Store age band as a typed field and select nutrition and activity cards from the table. Show the 6-month fertility question only if the user has opted into a "trying to conceive" goal.
 
-**What Bloom must not claim**
+**What HerLife must not claim**
 - Personalized supplement doses, or that hitting these targets prevents osteoporosis, heart disease or infertility.
 - Any statement on fertility odds at a specific age (we could not verify age-specific figures from a primary source, so they are cut).
 
@@ -63,16 +63,16 @@ Bloom is a lifestyle-record app, not a medical device. Everything below is writt
 
 **Plain answer.** STRAW+10 stages reproductive aging by bleeding pattern, with age deliberately excluded as a criterion [11]. Early menopausal transition (stage -2) is a persistent difference of 7 days or more in the length of consecutive cycles, where persistent means it recurs within 10 cycles of the first variable cycle [11]. Late transition (stage -1) is an interval of amenorrhea of 60 days or longer, typically lasts 1 to 3 years, and vasomotor symptoms are likely [11]. Menopause is the final menstrual period, recognized after 12 consecutive months without one [11, 13]; vasomotor symptoms are most likely in early postmenopause [11]. WHO lists hot flushes, night sweats, irregular periods, insomnia, mood changes and vaginal dryness as common symptoms [13]. In the US SWAN cohort the median age at the final menstrual period was 52.5 years [12]; WHO puts most natural menopause at 45 to 55 [13]. Menopause before 45 is early menopause and before 40 is premature [14]; ESHRE's 2024 guideline diagnoses premature ovarian insufficiency in a woman under 40 with at least 4 months of absent or infrequent periods and an FSH above 25 IU/L [15]. On wearables: we found no peer-reviewed validation that consumer wearables detect hot flashes. Older sternal skin conductance monitors agreed with self-reported flashes only 24% of the time in one pilot [16]. Detecting the transition from bleeding logs is feasible because STRAW+10 uses bleeding criteria [11]; wearable temperature is not validated for this.
 
-**What Bloom can do with this**
+**What HerLife can do with this**
 - For users 45 and over, run the STRAW+10 bleeding checks on logged data:
   - **Early-transition pattern**: two consecutive cycles differ by 7 or more days, and this happens again within the next 10 cycles [11].
   - **Late-transition pattern**: a gap of 60 or more days since the last bleed [11].
-  - **12-month mark**: 365 or more days with no logged bleed, which Bloom records as "12 months without a period" [11, 13].
+  - **12-month mark**: 365 or more days with no logged bleed, which HerLife records as "12 months without a period" [11, 13].
 - Let users log hot flashes and night sweats manually, and correlate them with sleep. Do not auto-detect them [16].
 - Copy (45+): "Your cycles have varied by a week or more a few times recently. This is a common pattern in the years before menopause. It could be worth asking a clinician about."
 
-**What Bloom must not claim**
-- That the user "is in perimenopause" or "has reached menopause". Bloom reports the pattern; a clinician interprets it.
+**What HerLife must not claim**
+- That the user "is in perimenopause" or "has reached menopause". HerLife reports the pattern; a clinician interprets it.
 - That a wearable detected a hot flash.
 - Any menopause messaging for users under 40 (see section 6). Early or premature menopause and POI are diagnosed by a clinician with blood tests [15].
 
@@ -82,7 +82,7 @@ Bloom is a lifestyle-record app, not a medical device. Everything below is writt
 
 **Plain answer.** Many things disrupt cycles. The NHS lists pregnancy, stress, sudden weight loss, being overweight, excessive exercise, hormonal contraception (combined pill, injection, hormonal IUS), breastfeeding, PCOS, thyroid disease and natural variation [20]. The Endocrine Society defines functional hypothalamic amenorrhea as a diagnosis made only after excluding other causes; it suggests evaluation when cycles persistently exceed 45 days or periods are absent for 3 months or more, screening for psychological stressors, and checking TSH, free T4 and prolactin among the first labs [17]. Its treatment centers on correcting energy imbalance (often requiring weight gain) and psychological support, and it advises against using the pill solely to restart periods [17]. The IOC's 2023 consensus treats low energy availability in athletes as a spectrum that becomes harmful (REDs) when it is too severe or lasts too long [18]. A 2024 systematic review of 41 studies found most reported a link between adult psychological stress and menstrual dysfunction, mainly irregular periods and abnormal flow, but no consistent link with abnormal cycle length [23]. Red flags: the NHS advises seeing a doctor after three missed periods in a row [20]; heavy bleeding means changing a pad or tampon every 1 to 2 hours, bleeding over 7 days, or clots larger than about 2.5 cm [21]; bleeding between periods or after sex [21]; and any bleeding after menopause, even once [22].
 
-**What Bloom can do with this**
+**What HerLife can do with this**
 - **Context flags** (product heuristic; no source sets wearable thresholds for these): compare the 4 weeks before a long or missed cycle against the user's own 90-day baseline.
   - Sleep: average nightly sleep down by an hour or more.
   - Stress load: elevated resting HR and suppressed HRV versus baseline for 7+ days, or high self-reported stress.
@@ -92,7 +92,7 @@ Bloom is a lifestyle-record app, not a medical device. Everything below is writt
 - **Prompt-care cards** (sourced): no bleed for 90+ days when not pregnant, postpartum, breastfeeding or on a method that stops bleeding [17, 20]; heavy-bleeding self-report matching [21]; bleeding between periods or after sex [21]; any bleed logged after the 12-month mark [22].
 - Copy: "Your last cycle was longer than usual, and your sleep was shorter than your normal in the weeks before. Stress and sleep can both affect cycles. If this continues, it is worth raising with a clinician."
 
-**What Bloom must not claim**
+**What HerLife must not claim**
 - That stress, sleep, training or diet caused a missed or late period. The evidence is associative [23], and causes must be excluded clinically [17].
 - That the user has FHA, REDs, PCOS, thyroid disease or high prolactin.
 - That eating more or training less will restore periods, or that the pill will [17].
@@ -108,7 +108,7 @@ Evaluate rows top to bottom; the first matching row wins, except that **red-flag
 | R1 | Any age; logged bleed after 12+ months with no bleed [22] | "Bleeding after a year without periods should be checked." | "I had bleeding after 12 months without a period. Can we look into it?" |
 | R2 | Any age; heavy-bleeding self-report per [21], or bleeding between periods or after sex [21] | "Heavy or unexpected bleeding is worth getting checked soon." | "My bleeding has been heavier or at unexpected times. What could be causing it?" |
 | R3 | Not pregnant, postpartum, breastfeeding, or on a bleeding-suppressing method; 90+ days with no bleed [17, 20] | "It has been 3 months without a period. That is worth checking in about." | "I have not had a period in 3 months. What should we check?" |
-| C1 | Pregnant, postpartum or breastfeeding [20] | "Cycle changes are expected right now. Bloom has paused cycle-irregularity notes." | (none unless R1 to R3) |
+| C1 | Pregnant, postpartum or breastfeeding [20] | "Cycle changes are expected right now. HerLife has paused cycle-irregularity notes." | (none unless R1 to R3) |
 | C2 | Hormonal contraception logged [10, 20] | "Your bleeding pattern reflects your method. Temperature-based estimates are off." | "Is my current bleeding pattern expected on this method?" (only if pattern changes) |
 | A1 | Under 40; cycles outside 21 to 35 days [19] or variability over FIGO limit [1, 3]; context flag present | "Your cycle has been less regular, and [sleep/stress/training] has been different than your usual. These can go together." | "My cycles have become irregular and my [sleep/stress/training] changed. Could that be related, and should anything be checked?" |
 | A2 | Under 40; same cycle criteria; no context flag | "Your cycles have varied more than the typical range lately." | "My cycles have been irregular for a few months. What could explain that?" |
@@ -122,7 +122,7 @@ Evaluate rows top to bottom; the first matching row wins, except that **red-flag
 - Under 40, the strings "menopause", "perimenopause" and "transition" must never appear in output. Add a unit test asserting this for every A-row and red-flag row with age < 40.
 - 40 to 44 may mention hormones only as a question, never menopause in the message (early menopause before 45 is a clinical diagnosis [14, 15]).
 - No output names a condition (PCOS, FHA, REDs, thyroid, POI) in the message field.
-- Users under 18, or within 3 years of their first period, need the adolescent cutoffs (under 21 or over 45 days [19]); if Bloom is 18+ only, still respect "years since first period" when known.
+- Users under 18, or within 3 years of their first period, need the adolescent cutoffs (under 21 or over 45 days [19]); if HerLife is 18+ only, still respect "years since first period" when known.
 
 ---
 

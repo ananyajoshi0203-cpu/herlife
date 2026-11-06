@@ -1,4 +1,4 @@
-# Bloom API
+# HerLife API
 
 FastAPI service in `backend/api/`. SQLite at `data/bloom_api.db`. Reads and writes only canonical models.
 
@@ -72,4 +72,4 @@ When no Oura sync exists, the plan's `ease_off` reasons come from the latest che
 - `GET /plan/today` builds the plan from rules, then asks Claude to rewrite its four lines for her season and age band. Without Claude it returns the rule plan with `used_ai: false`.
 - Claude calls use structured outputs (`client.beta.messages.parse` with a pydantic `output_format`) and the server-side refusal fallback (`fallbacks: "default"`). Any missing key, API error, refusal, or invalid output falls back to rules.
 - Sync with no stored Oura token runs in mock mode against `data/raw/`; it never uses a process-wide `OURA_TOKEN`, so one ring cannot leak into every user's record.
-- Bloom is not a medical device. The plan is lifestyle suggestions and the record is a record, not a diagnosis.
+- HerLife is not a medical device. The plan is lifestyle suggestions and the record is a record, not a diagnosis.

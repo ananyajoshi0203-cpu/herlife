@@ -1,7 +1,7 @@
 """Morph raw Oura v2 payloads into canonical records.
 
 Oura does not sync periods, so this adapter produces no cycle rows. The cycle is
-built from Bloom's own period log in `backend.canonical.cycle`, which reads the
+built from HerLife's own period log in `backend.canonical.cycle`, which reads the
 temperature deviation adapted here only to confirm ovulation.
 """
 

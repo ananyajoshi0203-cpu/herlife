@@ -1,4 +1,4 @@
-"""Bloom Oura MCP server: the web app's real Oura connector.
+"""HerLife Oura MCP server: the web app's real Oura connector.
 
 The published artifact cannot reach api.ouraring.com (its sandbox blocks outside
 requests), so it calls this local server through the Claude app instead. With
@@ -44,7 +44,7 @@ server = MCPServer("bloom_oura")
 
 @server.tool(annotations=ToolAnnotations(read_only_hint=True))
 def oura_status() -> OuraStatus:
-    """Whether Bloom is reading a real Oura account (live) or the demo persona (demo)."""
+    """Whether HerLife is reading a real Oura account (live) or the demo persona (demo)."""
     if OuraConnector().is_live:
         return OuraStatus(mode="live", message="Reading your Oura account.")
     return OuraStatus(mode="demo", message="No Oura token on this computer, showing the demo persona.")

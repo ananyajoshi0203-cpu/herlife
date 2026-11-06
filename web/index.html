@@ -1,4 +1,4 @@
-<title>Bloom Lifestyle Record</title>
+<title>HerLife</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -371,13 +371,13 @@ const PERSONAS = {
   priya: { dayType: "shift", profile: { name: "Priya", email: "priya@example.com", age: "29", gym: "none", diet: ["Halal"], conditions: ["Thyroid"], lifeStage: "cycling" }, goals: ["stress", "energy"], cd: 8, len: 30, blurb: "Night-shift nurse, no wearable or calendar", noWearable: true, noCalendar: true },
 };
 const CONDITION_TUNING = {
-  Migraines: { lever: "Steady sleep and hydration", recs: ["Keep bed and wake times within 30 minutes, weekends too", "Log every headache. Bloom checks whether they cluster before your period."], ease: (cd, len) => cd >= len - 4 && "Migraine window: the days before your period are your highest risk" },
+  Migraines: { lever: "Steady sleep and hydration", recs: ["Keep bed and wake times within 30 minutes, weekends too", "Log every headache. HerLife checks whether they cluster before your period."], ease: (cd, len) => cd >= len - 4 && "Migraine window: the days before your period are your highest risk" },
   Endometriosis: { lever: "Pain-aware movement", recs: ["Heat and gentle movement on pain days", "Anti-inflammatory meals: oily fish, leafy greens, olive oil", "Rate pain 0 to 10 in your log so your doctor sees the pattern"], ease: (cd) => cd <= 3 && "Endometriosis pain days: gentle movement only" },
   Anemia: { lever: "Iron in, energy up", recs: ["Pair iron foods with vitamin C, and keep coffee away from iron-rich meals", "Log heavy flow days and fatigue for your doctor"], ease: (cd) => cd <= 2 && "Heavy flow and low iron: expect lower energy" },
-  PCOS: { lever: "Blood sugar and muscle", recs: ["10 minute walk after meals", "Strength training 2 to 3 times a week", "Longer or irregular cycles are common with PCOS, so Bloom predicts from your own history"] },
+  PCOS: { lever: "Blood sugar and muscle", recs: ["10 minute walk after meals", "Strength training 2 to 3 times a week", "Longer or irregular cycles are common with PCOS, so HerLife predicts from your own history"] },
   PMDD: { lever: "Protect the late luteal week", recs: ["Plan lighter commitments for the 7 days before your period", "Mood check-ins twice a day that week, so patterns are clear for your doctor"], ease: (cd, len) => cd >= len - 7 && "PMDD week: lighter plan, more recovery" },
   Thyroid: { lever: "Rhythm and energy tracking", recs: ["Same wake time every day", "Track energy, feeling cold, and weight changes to share with your doctor"] },
-  Perimenopause: { lever: "Sleep, strength, and heat", recs: ["Strength training for bone and muscle", "Log night sweats. Bloom shows how they change your sleep.", "Cool, dark bedroom and a steady wake time"] },
+  Perimenopause: { lever: "Sleep, strength, and heat", recs: ["Strength training for bone and muscle", "Log night sweats. HerLife shows how they change your sleep.", "Cool, dark bedroom and a steady wake time"] },
 };
 const tunings = () => conditions().filter((c) => CONDITION_TUNING[c]).map((c) => [c, CONDITION_TUNING[c]]);
 const SEASONS = {
@@ -654,10 +654,10 @@ async function bookOnCalendar(slot, minutes, title) {
   catch (e) { console.warn("[bloom] calendar book", e?.code); return false; }
 }
 
-/* Real Oura, through Bloom's local MCP server (owner, Claude desktop app). Everyone else keeps the demo persona. */
+/* Real Oura, through HerLife's local MCP server (owner, Claude desktop app). Everyone else keeps the demo persona. */
 const OURA_SERVER = "host:bloom_oura";
 const OURA_FIX = {
-  server_not_connected: "Open Bloom in the Claude desktop app with the Bloom Oura server running to use your ring.",
+  server_not_connected: "Open HerLife in the Claude desktop app with the HerLife Oura server running to use your ring.",
   not_in_manifest: "Oura access is turned off for this page. Turn it on in the page's permissions.",
   cancelled: "Opening Oura sign in.",
   oura_not_configured: "Connected to Oura demo data. Real sign in turns on once Oura approves the app.",
@@ -811,8 +811,8 @@ function renderOnboarding() {
   const views = {
     welcome: () => `
       <div class="hero-art rise"><canvas id="petals"></canvas></div>
-      <div class="stack rise"><span class="eyebrow">Bloom</span><h1>Walk into your next appointment with your whole story.</h1></div>
-      <p class="muted rise">Doctors see you for 15 minutes. Bloom keeps the record of everything in between: sleep, food, movement, mood, and your cycle. Then it helps you build habits that fit your body this week.</p>
+      <div class="stack rise"><span class="eyebrow">HerLife</span><h1>Walk into your next appointment with your whole story.</h1></div>
+      <p class="muted rise">Doctors see you for 15 minutes. HerLife keeps the record of everything in between: sleep, food, movement, mood, and your cycle. Then it helps you build habits that fit your body this week.</p>
       <div class="stack rise">
         <button class="btn block" data-action="start-signup">Create my account</button>
         <button class="btn ghost block" data-go="login">Sign in to a demo profile</button>
@@ -843,7 +843,7 @@ function renderOnboarding() {
       <div class="field rise"><label>Where are you in life right now?</label>
         <div class="chips">${LIFE_STAGES.map(([v, l]) => `<button class="chip ${p.lifeStage === v ? "on" : ""}" data-stage="${v}">${l}</button>`).join("")}</div></div>
       ${cycleLens() ? `<div class="grid2 rise"><div class="field"><label for="f-lp">Last period started</label><input class="input" type="date" id="f-lp" data-bind="lastPeriod" value="${esc(p.lastPeriod)}" max="${TODAY}"></div>
-        <div class="field"><label for="f-len">Usual cycle (days)</label><input class="input" id="f-len" data-bind="cycleLen" value="${esc(p.cycleLen)}" inputmode="numeric"></div></div>` : `<p class="muted rise" style="font-size:13px">Got it. Bloom will focus on sleep, food, movement, stress, and mood, and skip cycle tips.</p>`}
+        <div class="field"><label for="f-len">Usual cycle (days)</label><input class="input" id="f-len" data-bind="cycleLen" value="${esc(p.cycleLen)}" inputmode="numeric"></div></div>` : `<p class="muted rise" style="font-size:13px">Got it. HerLife will focus on sleep, food, movement, stress, and mood, and skip cycle tips.</p>`}
       <div class="field rise"><label>What do most of your days look like?</label>
         <div class="chips">${Object.entries(DAY_TYPES).map(([k, t]) => `<button class="chip ${p.dayType === k ? "on" : ""}" data-daytype="${k}">${t.label}</button>`).join("")}</div></div>
       <div class="field rise"><label>Food preferences or restrictions</label>
@@ -867,18 +867,18 @@ function renderOnboarding() {
       </div>
       <button class="btn block rise" data-go="connect">I agree, continue</button>`,
     connect: () => `${progress()}
-      <div class="stack rise"><h1>Connect your signals</h1><p class="muted">Passive data means less logging. Skip either one and Ritmo runs on your check-ins and voice notes instead.</p></div>
+      <div class="stack rise"><h1>Connect your signals</h1><p class="muted">Passive data means less logging. Skip either one and HerLife runs on your check-ins and voice notes instead.</p></div>
       ${connectCard("oura", "O", "Oura Ring", "Sleep, HRV, readiness, temperature, activity", "90 nights synced")}
       ${calendarConnectCard()}
       <div class="card flat rise" style="padding:12px"><span class="eyebrow">What loads</span>
-        <p style="font-size:13px">${state.connected.oura ? "Oura: 90 nights of sleep, HRV, readiness, temperature" : "No ring: a 10 second morning check-in"} · ${state.connected.calendar ? `${dayType().label} calendar, ${dayType().events.length} events today` : "No calendar: Ritmo plans around your own bookings"}</p></div>
+        <p style="font-size:13px">${state.connected.oura ? "Oura: 90 nights of sleep, HRV, readiness, temperature" : "No ring: a 10 second morning check-in"} · ${state.connected.calendar ? `${dayType().label} calendar, ${dayType().events.length} events today` : "No calendar: HerLife plans around your own bookings"}</p></div>
       <button class="btn block rise" data-go="goals">${state.connected.oura || state.connected.calendar ? "Continue" : "Skip for now"}</button>`,
     goals: () => `${progress()}
       <div class="stack rise"><h1>Pick two goals</h1><p class="muted">Your whole life, not just your cycle. Claude will turn them into three small habits you can actually keep.</p></div>
       <div class="grid2 rise">${GOALS.map((g) => `<button class="goal ${state.goals.includes(g.id) ? "on" : ""}" data-goal="${g.id}"><b>${g.title}</b><small>${g.sub}</small></button>`).join("")}</div>
       <button class="btn block rise" data-action="make-habits" ${state.goals.length === 2 ? "" : "disabled"}>${state.goals.length === 2 ? "Build my habits" : `Choose ${2 - state.goals.length} more`}</button>`,
     habits: () => `${progress()}
-      ${ui.thinking ? `<div class="thinking"><div class="orb"></div><h2>Reading your goals and your data</h2><p class="muted">Claude is picking three habits that fit ${esc(p.name || "you")}.</p><button class="link" data-action="skip-ai">Use Bloom's picks instead</button></div>` : `
+      ${ui.thinking ? `<div class="thinking"><div class="orb"></div><h2>Reading your goals and your data</h2><p class="muted">Claude is picking three habits that fit ${esc(p.name || "you")}.</p><button class="link" data-action="skip-ai">Use HerLife's picks instead</button></div>` : `
       <div class="stack rise"><span class="ai-badge">${icon.spark} ${state.habitsSource === "claude" ? "Picked by Claude" : "Picked for you"}</span><h1>Your three habits</h1><p class="muted">Small enough to do on a hard day. We'll track your consistency every week.</p></div>
       ${state.habits.map((h, i) => `<div class="card rise"><div class="row"><span class="pill accent mono">${i + 1}</span><h3>${esc(h.title)}</h3></div><p><b>When:</b> ${esc(h.cue)}</p><p class="muted">${esc(h.why)}</p></div>`).join("")}
       <button class="btn block rise" data-action="finish">Start my day</button>
@@ -910,7 +910,7 @@ function renderApp(ctx) {
   const tabList = [["today", "Today"], ["habits", "Habits"], ["log", "Log"], ...(cycleLens() ? [["cycle", "Cycle"]] : []), ["record", "Record"]];
   const phase = phaseOf(ctx.cd);
   return `
-    <div class="topbar"><div class="brand">${brandMark}Bloom</div>
+    <div class="topbar"><div class="brand">${brandMark}HerLife</div>
       <div class="row">${!cycleLens() ? `<span class="pill accent mono">Ready ${ctx.row.ready ?? "--"}</span>` : periodStarts().length ? `<span class="pill accent"><span class="dot"></span>${PHASES[phase].label} · day ${ctx.cd}</span>` : `<button class="pill accent" data-tab="cycle">Log your period</button>`}<button class="pill" data-action="switch" title="Sign in as someone else">Switch</button></div></div>
     <div class="scroll"><div class="screen">${tabs[state.tab](ctx)}</div></div>
     <nav class="tabbar" style="grid-template-columns:repeat(${tabList.length},1fr)">${tabList.map(([k, l]) => `<button class="${state.tab === k ? "on" : ""}" data-tab="${k}">${icon[k]}${l}</button>`).join("")}</nav>
@@ -1184,7 +1184,7 @@ function renderChanged(impacts, changed) {
   const n = state.habits.length, plural = n === 1 ? "habit" : "habits";
   const top = changed.pooled.filter((e) => e.notable).slice(0, 2).map((e) => OUTCOMES[e.key].say(magnitude(e.key, e.delta), e.delta > 0));
   const headline = top.length ? `On days you did your ${n} ${plural}: ${top.join(" and ")}.`
-    : changed.pooled.length ? `Nothing has moved past Bloom's threshold yet on days you did your ${plural}.` : "Need a few more days to measure.";
+    : changed.pooled.length ? `Nothing has moved past HerLife's threshold yet on days you did your ${plural}.` : "Need a few more days to measure.";
   const since = changed.first && fmtDay(changed.first, { month: "short", day: "numeric" });
   const lines = impacts.map((i) => {
     const e = i.effects.find((x) => x.measured);
@@ -1204,7 +1204,7 @@ function renderImpact(imp) {
     <small class="muted">Goal: ${esc(imp.goal)} · measured ${lag ? "the night after" : "the same day"}</small>`;
   if (!primary) {
     const e = imp.effects[0] || { nOn: 0, nOff: 0 };
-    return `<div class="impact">${head}<p class="muted" style="font-size:13px">Need a few more days to measure. So far ${e.nOn} done and ${e.nOff} not done; Bloom needs ${MIN_DAYS} of each.</p></div>`;
+    return `<div class="impact">${head}<p class="muted" style="font-size:13px">Need a few more days to measure. So far ${e.nOn} done and ${e.nOff} not done; HerLife needs ${MIN_DAYS} of each.</p></div>`;
   }
   const lo = Math.min(primary.onAvg, primary.offAvg) * 0.8, hi = Math.max(primary.onAvg, primary.offAvg);
   const h = (v) => Math.max(8, Math.round(100 * (v - lo) / ((hi - lo) || 1)));
@@ -1321,8 +1321,8 @@ function renderToday(ctx) {
     <div class="card rise"><div class="row between"><h2>Your day</h2><span class="eyebrow">${ui.calendarLive ? "Live from Google Calendar" : state.connected.calendar ? `${CAL_PROVIDERS.find(([k]) => k === state.calendarProvider)?.[1] || "Calendar"} · demo` : "Not connected"}</span></div>
       ${state.connected.calendar ? `<div class="busyweek">${dayType().week.map((h, i) => `<div><i style="height:${Math.max(4, h / 12 * 100)}%;background:var(${h >= 7 ? "--warn" : "--accent"})"></i><span>${"MTWTFSS"[i]}</span></div>`).join("")}</div>
         <p class="muted" style="font-size:12px">${dayType().label} · ${dayType().week.reduce((a, b) => a + b, 0)} busy hours this week</p>` : ""}
-      ${state.connected.calendar ? (window.claude?.hosted && !ui.calendarLive ? `<button class="link" data-action="calendar-connect">Connect Google Calendar for your real day</button>` : "") : `<p class="muted" style="font-size:13px">Connect a calendar and Bloom will find free time for workouts and warn you about heavy days. Until then, booked sessions show here.</p>${window.claude?.hosted ? `<button class="link" data-action="calendar-connect">Connect Google Calendar</button>` : ""}`}
-      <div class="timeline">${items.map((e, i) => `<div class="tl ${e.kind}"><span class="t">${e.start}</span><span class="rail"><i></i>${i < items.length - 1 ? "<s></s>" : ""}</span><div class="what"><b>${esc(e.title)}</b><small>${e.start} to ${e.end}${e.kind === "plan" ? " · added by Bloom" : ""}</small></div></div>`).join("")}</div>
+      ${state.connected.calendar ? (window.claude?.hosted && !ui.calendarLive ? `<button class="link" data-action="calendar-connect">Connect Google Calendar for your real day</button>` : "") : `<p class="muted" style="font-size:13px">Connect a calendar and HerLife will find free time for workouts and warn you about heavy days. Until then, booked sessions show here.</p>${window.claude?.hosted ? `<button class="link" data-action="calendar-connect">Connect Google Calendar</button>` : ""}`}
+      <div class="timeline">${items.map((e, i) => `<div class="tl ${e.kind}"><span class="t">${e.start}</span><span class="rail"><i></i>${i < items.length - 1 ? "<s></s>" : ""}</span><div class="what"><b>${esc(e.title)}</b><small>${e.start} to ${e.end}${e.kind === "plan" ? " · added by HerLife" : ""}</small></div></div>`).join("")}</div>
     </div>
 
     ${cycleLens() ? `<div class="card flat rise scrub"><div class="row between"><label class="eyebrow" for="scrub">Demo: preview any day of her cycle</label><span class="pill accent mono" id="scrub-label">Day ${cd}: ${PHASES[phase].label}</span></div>
@@ -1380,8 +1380,8 @@ function renderCycle(ctx) {
   }).join("");
   const today = state.logs.filter((l) => l.day === TODAY && l.category === "symptoms").map((l) => l.text.toLowerCase());
   return `
-    ${estimatedCycle() ? `<div class="card flat rise"><span class="eyebrow">Estimated</span><h3>Phases predicted from your temperature</h3><p class="muted" style="font-size:13px">You haven't logged a period, so Bloom used Oura's temperature pattern to estimate your last ${startsFromTemperature(SEED).length} cycle starts. Log a period below to make it exact.</p></div>` : ""}
-    ${periodStarts().length ? "" : `<div class="card ease rise"><h2>No period logged yet</h2><p>Log your last period start below and Bloom will predict your phases. On the pill or in perimenopause? Bloom still tracks sleep, food, mood, and symptoms; phase tips just stay off.</p></div>`}
+    ${estimatedCycle() ? `<div class="card flat rise"><span class="eyebrow">Estimated</span><h3>Phases predicted from your temperature</h3><p class="muted" style="font-size:13px">You haven't logged a period, so HerLife used Oura's temperature pattern to estimate your last ${startsFromTemperature(SEED).length} cycle starts. Log a period below to make it exact.</p></div>` : ""}
+    ${periodStarts().length ? "" : `<div class="card ease rise"><h2>No period logged yet</h2><p>Log your last period start below and HerLife will predict your phases. On the pill or in perimenopause? HerLife still tracks sleep, food, mood, and symptoms; phase tips just stay off.</p></div>`}
     <div class="stack rise"><span class="eyebrow">Cycle${ctx.preview ? " · previewing day " + cd : ""}</span><h1>${info.label} phase</h1><p class="muted">${esc(info.body)}</p></div>
     <div class="cycle-ring rise"><svg viewBox="0 0 300 300" role="img" aria-label="Cycle day ${cd} of ${CYCLE_LEN}">${segs}
       <circle cx="${marker[0].toFixed(1)}" cy="${marker[1].toFixed(1)}" r="9" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/></svg>
@@ -1405,7 +1405,7 @@ function renderCycle(ctx) {
     </div>
     ${hasWearable() ? `<div class="card rise"><div class="row between"><h2>Temperature trail</h2><span class="eyebrow">Oura confirms</span></div>
       ${tempChart()}
-      <p class="muted" style="font-size:13px">Your temperature rises after ovulation and drops right before your period. Bloom uses that shift to confirm ovulation and flag a cycle that looks different from your log.</p></div>` : ""}
+      <p class="muted" style="font-size:13px">Your temperature rises after ovulation and drops right before your period. HerLife uses that shift to confirm ovulation and flag a cycle that looks different from your log.</p></div>` : ""}
     <div class="card rise"><h2>How do you feel today?</h2>
       <div class="chips">${["Cramps", "Headache", "Bloating", "Tender breasts", "Acne", "Cravings", "Low mood", "Spotting", "Heavy flow"].map((s) => `<button class="chip ${today.includes(s.toLowerCase()) ? "on" : ""}" data-symptom="${s}">${s}</button>`).join("")}</div></div>`;
 }
@@ -1515,7 +1515,7 @@ function renderRecord() {
         <span style="background:none"></span>${Array.from({ length: CYCLE_LEN }, (_, i) => `<span style="background:none;font-size:8px;text-align:center" class="muted mono">${(i + 1) % 7 === 1 ? i + 1 : ""}</span>`).join("")}
       </div></div>` : ""}
       ${state.summary ? `<h3>For your doctor</h3><div class="narrative">${state.summary.split(/\n+/).map((t) => `<p>${esc(t)}</p>`).join("")}</div>` : ""}
-      <p class="muted" style="font-size:11px">${ui.cloud ? "Saved to your private Bloom record, visible only to you. " : ""}Self-reported and wearable data. A lifestyle record to support a conversation with a clinician, not a diagnosis.</p>
+      <p class="muted" style="font-size:11px">${ui.cloud ? "Saved to your private HerLife record, visible only to you. " : ""}Self-reported and wearable data. A lifestyle record to support a conversation with a clinician, not a diagnosis.</p>
     </div>
     <button class="btn block rise" data-action="summary" ${ui.thinking ? "disabled" : ""}>${icon.spark} ${ui.thinking ? "Writing..." : state.summary ? "Rewrite doctor summary" : "Write my doctor summary"}</button>
     <button class="btn ghost block rise" data-action="copy">${icon.share} Copy to share with my doctor</button>`;
@@ -1528,7 +1528,7 @@ function signalCard() {
     <div class="gapbars">${sig.gaps.map((g) => `<div><i style="height:${Math.min(100, g * 1.4)}%;background:var(${g > 35 || g < 21 ? "--warn" : "--ph-fol"})"></i><span class="mono">${g}d</span></div>`).join("")}</div>
     <p style="font-size:14px">${esc(sig.body)}</p>
     ${sig.ask ? `<div class="card flat" style="padding:12px"><span class="eyebrow">Question to bring</span><p>"${esc(sig.ask)}"</p></div>` : ""}
-    <p class="muted" style="font-size:11px">A pattern from your own log, not a diagnosis. Sources in Bloom's research notes.</p></div>`;
+    <p class="muted" style="font-size:11px">A pattern from your own log, not a diagnosis. Sources in HerLife's research notes.</p></div>`;
 }
 function renderMood() {
   return `<div class="sheet-back" data-action="mood-close"><div class="sheet" data-stop>
@@ -1632,7 +1632,7 @@ American English, warm and practical, no em dashes, lifestyle guidance only.
 Return JSON only: {"headline":"one sentence about today's energy","smallWin":"one tiny action, max 10 words","workout":{"name":"max 6 words","minutes":number,"steps":["3 short steps"]},"recipe":{"name":"max 7 words","minutes":number,"why":"one sentence tied to her day","ingredients":["5 items"],"steps":["3 steps"]}}`;
   const ai = await askClaude(prompt, "default");
   ui.planning = false;
-  if (!ai?.recipe || !ai?.workout) { render(); toast("Claude is unavailable here, so this plan comes from Bloom's phase library"); return; }
+  if (!ai?.recipe || !ai?.workout) { render(); toast("Claude is unavailable here, so this plan comes from HerLife's phase library"); return; }
   const fix = (v) => Array.isArray(v) ? v.map(clean) : clean(v);
   state.aiPlan = { cd: ctx.cd, ease, source: "claude", headline: clean(ai.headline), smallWin: clean(ai.smallWin),
     workout: { name: clean(ai.workout.name), minutes: Number(ai.workout.minutes) || 30, steps: fix(ai.workout.steps || []) },
@@ -1749,7 +1749,7 @@ document.addEventListener("click", (e) => {
     ui.syncing = d.connect; render(); let pct = 0;
     /* Simulated for the demo; set ui.ouraReal = true to try the live connector instead. */
     const real = d.connect !== "oura" ? Promise.resolve(null) : ui.ouraReal ? syncOura() : Promise.resolve({ mode: "demo", note: `Oura connected. Synced ${SEED.length} nights of sleep, HRV, and temperature.` });
-    const ouraSteps = ["Opening Oura", "Authorizing Ritmo", "Syncing 90 nights", "Reading HRV and temperature"];
+    const ouraSteps = ["Opening Oura", "Authorizing HerLife", "Syncing 90 nights", "Reading HRV and temperature"];
     const iv = setInterval(() => { pct += 4; const bar = document.getElementById("sync-" + d.connect); if (bar) bar.style.width = Math.min(100, pct) + "%";
       if (d.connect === "oura") { const step = ouraSteps[Math.min(3, Math.floor(pct / 26))]; const label = document.getElementById("sync-step-oura"); if (label) label.textContent = step; }
       if (pct >= 100) { clearInterval(iv); real.then((r) => { ui.syncing = null; state.connected[d.connect] = true; if (r) state.connected.ouraMode = r.mode; applyDataSource(); set({}); toast(r ? r.note : "Calendar connected"); }); } }, 70);
@@ -1802,9 +1802,9 @@ document.addEventListener("click", (e) => {
     case "ai-plan": aiPlan(); break;
     case "book":
       state.booked.push({ start: d.slot, end: toTime(toMin(d.slot) + Number(d.min)), title: d.title }); save();
-      bookOnCalendar(d.slot, Number(d.min), d.title).then((live) => toast(live ? `Added to your Google Calendar at ${d.slot}` : `Booked ${d.slot} in Bloom`));
+      bookOnCalendar(d.slot, Number(d.min), d.title).then((live) => toast(live ? `Added to your Google Calendar at ${d.slot}` : `Booked ${d.slot} in HerLife`));
       break;
-    case "calendar-connect": window.claude?.use?.("calendar").then((cal) => cal ? cal.connect() : toast("Calendar sign in works on the Bloom web app.")); break;
+    case "calendar-connect": window.claude?.use?.("calendar").then((cal) => cal ? cal.connect() : toast("Calendar sign in works on the HerLife web app.")); break;
     case "back-today": set({ previewCd: null }); break;
     case "save-checkin": state.checkins = { ...(state.checkins || {}), [TODAY]: { ...ui.checkinDraft } }; ui.editCheckin = false; applyDataSource(); save(); render(); toast("Check-in saved to your record"); break;
     case "edit-checkin": ui.editCheckin = true; ui.checkinDraft = { ...state.checkins[TODAY] }; render(); break;
@@ -1820,7 +1820,7 @@ document.addEventListener("click", (e) => {
       ui.sorted = null; ui.draft = ""; save(); toast("Added to your record"); scheduleMood(4000); break;
     case "summary": writeSummary(); break;
     case "copy": {
-      const text = `${state.profile.name || "Maya"}: Bloom lifestyle record\n\n${insights().map((i) => "- " + i).join("\n")}\n\n${state.summary || ""}`;
+      const text = `${state.profile.name || "Maya"}: HerLife lifestyle record\n\n${insights().map((i) => "- " + i).join("\n")}\n\n${state.summary || ""}`;
       navigator.clipboard?.writeText(text).then(() => toast("Copied. Paste it into your patient portal message."), () => toast("Copy is blocked here. Select the summary text instead."));
       break;
     }

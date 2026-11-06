@@ -1,5 +1,5 @@
 /**
- * HealthKit seam. Apple Health is the reason Bloom goes native: the web app can only
+ * HealthKit seam. Apple Health is the reason HerLife goes native: the web app can only
  * read Oura through OAuth, while on iPhone most women already have sleep, steps, heart
  * rate, and often cycle data sitting in HealthKit.
  *
@@ -41,7 +41,7 @@ export interface HealthSource {
  * 2. Map samples with a new backend adapter (backend/canonical/apple_health_adapter.py,
  *    see the add-wearable skill) and a `POST /users/{id}/health` endpoint, rather than
  *    reshaping data on the phone.
- * 3. Read `menstrualFlow` only to prefill the period log; Bloom's own log stays the source
+ * 3. Read `menstrualFlow` only to prefill the period log; HerLife's own log stays the source
  *    of cycle day and phase.
  */
 export const healthKit: HealthSource = {

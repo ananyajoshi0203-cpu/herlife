@@ -113,7 +113,7 @@ function Summary({ record }: { record: DoctorRecord }): ReactNode {
 function asText(record: DoctorRecord): string {
   const { patient, lifestyle } = record;
   return [
-    `Bloom lifestyle record for ${patient.name}, ${patient.age}`,
+    `HerLife lifestyle record for ${patient.name}, ${patient.age}`,
     `Last ${lifestyle.window_days} days: sleep ${hoursMinutes(lifestyle.sleep_min)}, HRV ${rounded(lifestyle.hrv_ms, " ms")}, steps ${rounded(lifestyle.steps)}, resting heart rate ${rounded(lifestyle.resting_hr_bpm, " bpm")}.`,
     ...record.habits.map((habit) => `Habit: ${habit.title}`),
     record.note,

@@ -67,7 +67,7 @@ export default function Log(): ReactNode {
         <Card>
           <View style={[styles.row, { justifyContent: "space-between" }]}>
             <Title>Added to your record</Title>
-            <Eyebrow>{usedAi ? "Sorted by Claude" : "Sorted by Bloom"}</Eyebrow>
+            <Eyebrow>{usedAi ? "Sorted by Claude" : "Sorted by HerLife"}</Eyebrow>
           </View>
           {entries.map((entry) => {
             const category = CATEGORIES[entry.category];

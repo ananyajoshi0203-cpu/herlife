@@ -76,7 +76,7 @@ HIGH_SELF_STRESS = 4
 # each week over the last month count as a rising stress load.
 RISING_STRESS_SLOPE_MIN_PER_WEEK = 2.0
 RECORD_NOTE = (
-    "A lifestyle record kept by the patient in Bloom and her wearable. "
+    "A lifestyle record kept by the patient in HerLife and her wearable. "
     "It is a record to support the conversation, not a diagnosis."
 )
 

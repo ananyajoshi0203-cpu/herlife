@@ -112,7 +112,7 @@ export function ErrorNote({ error }: { error: string | null }): ReactNode {
 }
 
 export const friendlyError = (cause: unknown): string =>
-  `We couldn't reach Bloom just now. Check your connection and try again.${__DEV__ ? ` (${String(cause)})` : ""}`;
+  `We couldn't reach HerLife just now. Check your connection and try again.${__DEV__ ? ` (${String(cause)})` : ""}`;
 
 export const styles = StyleSheet.create({
   screen: { padding: 18, paddingBottom: 32, gap: 16 },

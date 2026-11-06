@@ -31,7 +31,7 @@ class Flow(StrEnum):
 
 
 class PeriodLog(BaseModel):
-    """One period as logged in Bloom's own tracker; wearables do not sync periods."""
+    """One period as logged in HerLife's own tracker; wearables do not sync periods."""
 
     start_day: date
     end_day: date | None = None
