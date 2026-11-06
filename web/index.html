@@ -1383,7 +1383,8 @@ function candidateDeck() {
     ${kept.map((h, i) => `<div class="card rise"><div class="row"><span class="pill accent mono">${i + 1}</span><h3>${esc(h.title)}</h3></div><p class="muted" style="font-size:13px">${esc(h.cue)}</p></div>`).join("")}
     ${kept.length ? `<button class="btn block rise" data-action="finish">Start my day</button>` : ""}
     ${!done || kept.length ? "" : `<p class="muted">You skipped them all. Ask for a fresh set.</p>`}
-    <button class="link rise" data-action="make-habits">Suggest different habits</button>`;
+    <button class="link rise" data-action="make-habits">Suggest different habits</button>
+    ${state.previousHabits?.length ? `<button class="link rise" data-action="keep-habits">Keep my current habits</button>` : ""}`;
 }
 function swipeDeck() {
   const pending = state.habits.filter((h) => !state.checks[`${h.id}|${TODAY}`] && !state.skips?.[`${h.id}|${TODAY}`]);
@@ -1754,7 +1755,7 @@ function renderHabits() {
         <div class="month">${Array.from({ length: 28 }, (_, i) => { const d = addDays(TODAY, i - 27); return `<i class="${state.checks[`${h.id}|${d}`] ? "on" : ""} ${d === TODAY ? "today" : ""}" title="${fmtDay(d)}"></i>`; }).join("")}</div>
         ${renderImpact(impacts[i])}
       </div>`; }).join("")}
-    <button class="btn ghost block rise" data-action="new-habits">${icon.spark} Ask Claude for fresh habits</button>`;
+    <button class="btn ghost block rise" data-action="new-habits" title="Opens a swipe deck of new suggestions; your current habits stay until you pick">${icon.spark} Ask Claude for fresh habits</button>`;
 }
 function weekDays() { return Array.from({ length: 7 }, (_, i) => addDays(TODAY, i - 6)); }
 function habitWeek(h) { return weekDays().map((d) => !!state.checks[`${h.id}|${d}`]); }
@@ -2311,7 +2312,8 @@ document.addEventListener("click", (e) => {
       seedPeriods();
       makeHabits(); break;
     case "make-habits": makeHabits(); break;
-    case "new-habits": makeHabits().then(() => set({ step: "app", tab: "habits" })); break;
+    case "new-habits": state.previousHabits = state.habits; state.previousChecks = state.checks; makeHabits(); break;
+    case "keep-habits": set({ habits: state.previousHabits || [], checks: state.previousChecks || {}, previousHabits: null, previousChecks: null, step: "app", tab: "habits" }); break;
     case "skip-ai": skipAi = true; break;
     case "start-signup": state = { ...defaultState(), step: "account" }; applyDataSource(); save(); render(); break;
     case "create-account": {
@@ -2329,7 +2331,8 @@ document.addEventListener("click", (e) => {
     }
     case "finish": {
       applyDataSource(); seedPeriods();
-      if (state.habitHistoryDemo) state.checks = seedHabitHistory(state.habits);
+      if (state.previousChecks) { state.checks = { ...state.previousChecks }; state.previousHabits = null; state.previousChecks = null; }
+      else if (state.habitHistoryDemo) state.checks = seedHabitHistory(state.habits);
       const pr = PERSONAS[state.persona];
       set({ step: "app", tab: pr?.checkinDemo ? "habits" : "today" }); scheduleMood(25000);
       if (pr?.checkinDemo) { toast("One week in. Here is Dana's check-in."); (state.lifeGoals || []).forEach(interpretGoal); }
