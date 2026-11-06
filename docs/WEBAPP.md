@@ -36,5 +36,5 @@ open http://localhost:8080
    `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET`/`GOOGLE_REDIRECT_URI=https://<app>.vercel.app/google/callback`.
 4. Deploy. `api/index.py` exposes the FastAPI app; `vercel.json` routes every path to it. Tables are created on first request.
 
-The server refuses to start on Vercel without `DATABASE_URL`, because Vercel's filesystem does not persist SQLite.
+Without `DATABASE_URL` on Vercel the app falls back to SQLite in /tmp, which resets on cold starts; connect Neon so records persist.
 `Dockerfile` + `render.yaml` remain for any container host.

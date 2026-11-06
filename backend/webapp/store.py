@@ -16,7 +16,9 @@ def database_url() -> str:
         # Neon and Vercel hand out postgres:// URLs; SQLAlchemy needs the psycopg driver named.
         return url.replace("postgres://", "postgresql+psycopg://", 1).replace("postgresql://", "postgresql+psycopg://", 1)
     if os.environ.get("VERCEL"):
-        raise RuntimeError("Set DATABASE_URL on Vercel: its filesystem is read-only and SQLite would not persist.")
+        # Vercel only allows writes to /tmp, which resets on cold starts. Good enough for a first
+        # deploy; connect Neon Postgres (DATABASE_URL) so records persist.
+        return "sqlite:////tmp/herlife.db"
     return f"sqlite:///{Path(__file__).resolve().parents[2] / 'data' / 'bloom_web.db'}"
 
 
