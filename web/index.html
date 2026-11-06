@@ -552,13 +552,19 @@ function applyDataSource() {
   SEED = annotateCycle(rows.length ? rows : [{ day: TODAY, sleepMin: null, sleep: null, ready: null, stress: null, recovery: null, self: true }]);
   if (SEED[SEED.length - 1].day !== TODAY) SEED.push({ day: TODAY, self: true, pending: true });
 }
-/* No logged periods yet: estimate starts from the temperature drop that follows a warm luteal run. */
+/* No logged periods yet: estimate starts from the temperature drop that follows a warm luteal run.
+   Warm is relative to her own median so small perimenopausal shifts still register, and a start
+   needs two cool nights in a row so one noisy night inside a warm run is not read as a period. */
 function startsFromTemperature(rows) {
-  const starts = []; let warm = 0;
+  const temps = rows.map((r) => r.temp).filter(Number.isFinite).sort((a, b) => a - b);
+  if (temps.length < 20) return [];
+  const warmAt = temps[Math.floor(temps.length / 2)] + 0.12;
+  const starts = []; let warm = 0, coolDay = null;
   for (const r of rows) {
     if (!Number.isFinite(r.temp)) continue;
-    if (r.temp >= 0.18) { warm++; continue; }
-    if (warm >= 8) starts.push(r.day);
+    if (r.temp >= warmAt) { warm++; coolDay = null; continue; }
+    if (warm >= 8 && coolDay) { starts.push(coolDay); warm = 0; coolDay = null; continue; }
+    if (warm >= 8) { coolDay = r.day; continue; }
     warm = 0;
   }
   return starts;

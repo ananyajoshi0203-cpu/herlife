@@ -22,6 +22,10 @@ END = date(2026, 11, 6)
 SEEDS = range(10)
 LUTEAL_LENGTH = 14
 FOLLICULAR_TEMP_C = -0.08
+# Mirrors startsFromTemperature in web/index.html, the app's estimate when no period is logged.
+ESTIMATE_WARM_C = 0.18
+ESTIMATE_MIN_WARM_NIGHTS = 8
+START_TOLERANCE = timedelta(days=1)
 MIN_LUTEAL_NIGHTS_SEEN = 5
 
 
@@ -143,6 +147,68 @@ def period_logs(nights: Sequence[PlantedNight], persona: CyclePersona, rng: rand
     return logs[: persona.max_logged_periods]
 
 
+def starts_from_temperature(readiness: Sequence[Readiness]) -> list[PeriodLog]:
+    """A period starts on the first cool night after a run of warm (luteal) nights."""
+    starts: list[PeriodLog] = []
+    warm_nights = 0
+    for row in sorted(readiness, key=lambda reading: reading.day):
+        if row.temperature_deviation_c is None:
+            continue
+        if row.temperature_deviation_c >= ESTIMATE_WARM_C:
+            warm_nights += 1
+            continue
+        if warm_nights >= ESTIMATE_MIN_WARM_NIGHTS:
+            starts.append(PeriodLog(start_day=row.day, flow=Flow.MEDIUM))
+        warm_nights = 0
+    return starts
+
+
+@dataclass(frozen=True)
+class EstimateScore:
+    persona: CyclePersona
+    coverage: float
+    phase_accuracy: float | None
+    start_recall: float | None
+    false_starts: int
+
+    @property
+    def passed(self) -> bool:
+        if not self.persona.ovulates:
+            return self.false_starts == 0
+        return (
+            (self.phase_accuracy or 0) >= self.persona.min_phase_accuracy
+            and (self.start_recall if self.start_recall is not None else 1.0) >= 0.66
+            and self.false_starts == 0
+        )
+
+
+def score_estimate(persona: CyclePersona, seed: int) -> EstimateScore:
+    """No period logged: starts estimated from Oura temperature, then phased by build_cycle."""
+    rng = random.Random(seed)
+    nights = plant(persona, rng)
+    truth = {night.day: night for night in nights}
+    readiness = readiness_rows(nights, persona, rng)
+    estimated = starts_from_temperature(readiness)
+    cycle = build_cycle(estimated, readiness)
+
+    true_starts = [night.day for night in nights if night.cycle_day == 1]
+    # A start needs 8 warm nights on record before it, so one in the first ~3 weeks can't be found.
+    findable = [day for day in true_starts if (day - nights[0].day).days > ESTIMATE_MIN_WARM_NIGHTS + LUTEAL_LENGTH // 2]
+
+    def near(day: date, candidates: Sequence[date]) -> bool:
+        return any(abs(day - other) <= START_TOLERANCE for other in candidates)
+
+    estimated_days = [log.start_day for log in estimated]
+    correct = sum(row.phase == true_phase(truth[row.day].cycle_day, truth[row.day].cycle_length) for row in cycle)
+    return EstimateScore(
+        persona=persona,
+        coverage=len(cycle) / len(nights),
+        phase_accuracy=correct / len(cycle) if cycle else None,
+        start_recall=sum(near(day, estimated_days) for day in findable) / len(findable) if findable else None,
+        false_starts=sum(not near(day, true_starts) for day in estimated_days),
+    )
+
+
 def score(persona: CyclePersona, seed: int) -> PersonaScore:
     rng = random.Random(seed)
     nights = plant(persona, rng)
@@ -205,6 +271,19 @@ def main() -> int:
         )
         for crash in {result.crashed for result in scores if result.crashed}:
             print(f"    CRASH {crash}")
+
+    body_personas = [persona for persona in PERSONAS if persona.max_logged_periods is None and not persona.skipped_log_rate and not persona.log_delay]
+    print("\nno period logged, Oura only (estimate; reported, not gated)")
+    print(f"{'persona':<22} {'pass':>5} {'coverage':>8} {'phase acc':>9} {'start recall':>12} {'false starts':>12}")
+    for persona in body_personas:
+        estimates = [score_estimate(persona, seed) for seed in SEEDS]
+        print(
+            f"{persona.name:<22} {sum(result.passed for result in estimates):>2}/{len(estimates):<2} "
+            f"{percent([result.coverage for result in estimates]):>8} "
+            f"{percent([result.phase_accuracy for result in estimates]):>9} "
+            f"{percent([result.start_recall for result in estimates]):>12} "
+            f"{sum(result.false_starts for result in estimates):>12}"
+        )
     return 1 if any_failed else 0
 
 
