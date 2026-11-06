@@ -23,7 +23,7 @@ SEEDS = range(10)
 LUTEAL_LENGTH = 14
 FOLLICULAR_TEMP_C = -0.08
 # Mirrors startsFromTemperature in web/index.html, the app's estimate when no period is logged.
-ESTIMATE_WARM_ABOVE_MEDIAN_C = 0.12
+ESTIMATE_MIN_SPREAD_C = 0.15
 ESTIMATE_MIN_NIGHTS = 20
 ESTIMATE_MIN_WARM_NIGHTS = 8
 START_TOLERANCE = timedelta(days=1)
@@ -149,14 +149,21 @@ def period_logs(nights: Sequence[PlantedNight], persona: CyclePersona, rng: rand
 
 
 def starts_from_temperature(readiness: Sequence[Readiness]) -> list[PeriodLog]:
-    """After 8+ nights warmer than her own median, a period starts on the first of two cool nights in a row."""
+    """After 8+ warm nights, a period starts on the first of two cool nights in a row.
+
+    Warm means above the midpoint of her own cool and warm levels (25th and 75th
+    percentile); too little spread between them means no shift to find.
+    """
     ordered = sorted(
         (row for row in readiness if row.temperature_deviation_c is not None), key=lambda reading: reading.day
     )
     temperatures = sorted(row.temperature_deviation_c for row in ordered if row.temperature_deviation_c is not None)
     if len(temperatures) < ESTIMATE_MIN_NIGHTS:
         return []
-    warm_at = temperatures[len(temperatures) // 2] + ESTIMATE_WARM_ABOVE_MEDIAN_C
+    cool_level, warm_level = temperatures[len(temperatures) // 4], temperatures[3 * len(temperatures) // 4]
+    if warm_level - cool_level < ESTIMATE_MIN_SPREAD_C:
+        return []
+    warm_at = (cool_level + warm_level) / 2
 
     starts: list[PeriodLog] = []
     warm_nights = 0
