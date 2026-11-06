@@ -220,6 +220,8 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
 .info:hover { opacity: 1; color: var(--accent); }
 .with-info { display: flex; align-items: center; }
 .phase-chip { border: 0; cursor: pointer; }
+.source { font-size: 11px; text-decoration: none; color: var(--accent); max-width: 100%; white-space: normal; text-align: left; }
+a.source:hover { text-decoration: underline; }
 .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(56px, 1fr)); gap: 6px; }
 .pillar { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 600; color: var(--muted); }
 .ring-wrap.sm { width: 56px; height: 56px; }
@@ -509,6 +511,21 @@ const SEASONS = {
     { title: "Ask about vitamin D as days shorten", body: "Less sun means less vitamin D made in the skin. Food sources and a blood test are worth a conversation.", src: "NIH Office of Dietary Supplements, Vitamin D", habit: null },
   ] },
 };
+const SOURCE_URLS = {
+  "CDC, Seasonal Flu Vaccines": "https://www.cdc.gov/flu/vaccines/keyfacts.html",
+  "Prather et al., SLEEP, 2015": "https://doi.org/10.5665/sleep.4968",
+  "NIMH, Seasonal Affective Disorder": "https://www.nimh.nih.gov/health/publications/seasonal-affective-disorder",
+  "NIH Office of Dietary Supplements, Vitamin D": "https://ods.od.nih.gov/factsheets/VitaminD-Consumer/",
+  "AAAAI, Seasonal Allergies": "https://www.aaaai.org/",
+  "HHS Physical Activity Guidelines, 2nd ed.": "https://health.gov/our-work/nutrition-physical-activity/physical-activity-guidelines",
+  "CDC, Heat and Your Health": "https://www.cdc.gov/heat-health/",
+  "Okamoto-Mizuno and Mizuno, J Physiol Anthropol, 2012": "https://doi.org/10.1186/1880-6805-31-14",
+  "Walker and van der Helm, 2009": "https://doi.org/10.1037/a0016570",
+  "Sleep Foundation": "https://www.sleepfoundation.org/how-sleep-works/stages-of-sleep",
+};
+const sourceLink = (src) => SOURCE_URLS[src]
+  ? `<a class="pill mono source" href="${SOURCE_URLS[src]}" target="_blank" rel="noopener noreferrer">Source: ${esc(src)} ↗</a>`
+  : `<span class="pill mono source">Source: ${esc(src)}</span>`;
 const seasonNow = () => { const m = new Date(TODAY + "T12:00:00").getMonth(); return Object.entries(SEASONS).find(([, v]) => v.months.includes(m)); };
 const DIETS = ["Vegetarian", "Vegan", "Gluten free", "Dairy free", "Halal", "Nut allergy", "Low FODMAP"];
 const CONDITIONS = ["PCOS", "Endometriosis", "Thyroid", "Migraines", "PMDD", "Anemia", "Perimenopause", "None"];
@@ -1261,7 +1278,7 @@ function sleepCard(row) {
     <details class="more"><summary>What this means today</summary>
       <div class="insight"><i style="background:var(--ph-lut)"></i><p style="font-size:14px"><b>Mood:</b> ${f.mood}</p></div>
       <div class="insight" style="margin-top:8px"><i style="background:var(--ph-fol)"></i><p style="font-size:14px"><b>Energy:</b> ${f.body}</p></div>
-      <p class="muted" style="font-size:11px;margin-top:8px">A prediction from your sleep, not a rule. Sources: Walker and van der Helm, 2009; Sleep Foundation.</p></details></div>`;
+      <p class="muted" style="font-size:11px;margin-top:8px">A prediction from your sleep, not a rule. Sources: <a href="https://doi.org/10.1037/a0016570" target="_blank" rel="noopener noreferrer">Walker and van der Helm, 2009</a>; <a href="https://www.sleepfoundation.org/how-sleep-works/stages-of-sleep" target="_blank" rel="noopener noreferrer">Sleep Foundation</a>.</p></details></div>`;
 }
 function energyOf(row, day) {
   const mood = state.moods.filter((m) => m.day === day).pop();
@@ -1325,7 +1342,7 @@ function seasonCard() {
   const [key, season] = found;
   return `<div class="card rise"><div class="row between"><span class="eyebrow">This season</span><span class="pill">${key}</span></div><h2>${season.label}</h2>
     ${season.recs.map((r, i) => `<div class="insight"><i style="background:var(--ph-fol)"></i><div class="stack" style="gap:4px"><b>${esc(r.title)}</b><p class="muted" style="font-size:13px">${esc(r.body)}</p>
-      <div class="row" style="flex-wrap:wrap"><span class="pill mono" style="font-size:11px">Source: ${esc(r.src)}</span>${r.habit ? (state.habits.some((h) => h.title === r.habit.title) ? `<span class="pill accent">In your habits</span>` : `<button class="btn small soft" data-season-habit="${i}">Add as habit</button>`) : ""}</div></div></div>`).join("")}
+      <div class="row" style="flex-wrap:wrap">${sourceLink(r.src)}${r.habit ? (state.habits.some((h) => h.title === r.habit.title) ? `<span class="pill accent">In your habits</span>` : `<button class="btn small soft" data-season-habit="${i}">Add as habit</button>`) : ""}</div></div></div>`).join("")}
   </div>`;
 }
 function pillars(ctx) {
