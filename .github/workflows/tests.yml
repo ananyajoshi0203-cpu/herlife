@@ -1,0 +1,35 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install
+        run: |
+          python -m venv .venv
+          .venv/bin/pip install -r requirements.txt
+      - name: API and web server tests
+        run: .venv/bin/python -m pytest -q tests
+      - name: Web app tests
+        run: node --test tests/web/app.test.mjs
+      - name: Cycle evals
+        run: .venv/bin/python -m evals.cycle_personas
+      - name: Claude evals
+        if: ${{ env.ANTHROPIC_API_KEY != '' }}
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: .venv/bin/python -m evals.claude_evals
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}

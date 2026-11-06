@@ -3,7 +3,8 @@
 <p align="center"><b>Health that fits into her life.</b><br>
 An AI health coordinator for busy women: it plans small, realistic health actions around her calendar, adapts to her body and cycle, learns what works for her, and turns it all into a record her doctor can use.</p>
 
-<p align="center"><a href="https://herlife-six.vercel.app"><b>Try the live app: herlife-six.vercel.app</b></a></p>
+<p align="center"><a href="https://herlife-six.vercel.app"><b>Try the live app: herlife-six.vercel.app</b></a><br>
+<a href="https://github.com/ananyajoshi0203-cpu/herlife/actions/workflows/tests.yml"><img src="https://github.com/ananyajoshi0203-cpu/herlife/actions/workflows/tests.yml/badge.svg" alt="tests"></a></p>
 
 ---
 
@@ -50,7 +51,7 @@ Small actions done daily compound into better sleep, steadier energy, and fewer 
 
 ## Try it (3 minute demo)
 
-Open **https://herlife-six.vercel.app**, then **Sign in to a demo profile**:
+Open **https://herlife-six.vercel.app**. It opens straight into **Priya's** Today screen. Tap **Switch** to sign in as anyone else, or open a profile directly with `?profile=maya` (or `dana`, `hana`, `ines`, `sofia`, `ava`, `lena`):
 
 | Persona | Shows |
 |---|---|
@@ -99,11 +100,19 @@ Deploying: see [docs/WEBAPP.md](docs/WEBAPP.md) (Vercel plus Neon Postgres; ever
 
 ## Tests and evals
 
+Run everything from the repo root after setup (`python3 -m venv .venv && .venv/bin/pip install -r requirements.txt`). Every command below passes; GitHub Actions runs them on each push.
+
+| Command | What it checks | Result |
+|---|---|---|
+| `.venv/bin/python -m pytest -q tests` | Production API (cycle signal, habit impact, seasons, age bands, check-ins) and the hosted web server (page, per-person records, delete, AI and connector fallbacks, health) | 85 passed |
+| `node --test tests/web/app.test.mjs` | Every demo persona renders every onboarding step and tab with zero errors; phase boundaries; temperature cycle estimate; never menopause under 40; stress load; adaptive next move | 7 passed |
+| `.venv/bin/python -m evals.cycle_personas` | Cycle prediction across 11 body types x 10 seeds, logged periods and temperature only | exits 0 |
+| `.venv/bin/python -m evals.claude_evals` | AI features against the real models: log sorting, habit suggestions, goal to signal mapping, doctor summary; no diagnosis, no em dashes, no cycle talk on the pill, never menopause under 40 (needs `ANTHROPIC_API_KEY`) | 51/51 checks |
+
+All four in one go:
+
 ```bash
-.venv/bin/python -m pytest -q tests          # 85 API and web server tests
-node --test tests/web/app.test.mjs           # every persona renders every screen; core logic
-.venv/bin/python -m evals.cycle_personas     # cycle prediction across 11 body types
-.venv/bin/python -m evals.claude_evals       # Claude features scored against product rules
+.venv/bin/python -m pytest -q tests && node --test tests/web/app.test.mjs && .venv/bin/python -m evals.cycle_personas && .venv/bin/python -m evals.claude_evals
 ```
 
 Details in [docs/TESTING.md](docs/TESTING.md).
