@@ -1,0 +1,8 @@
+.venv
+mobile
+evals
+tests
+data
+.claude
+*.db
+__pycache__

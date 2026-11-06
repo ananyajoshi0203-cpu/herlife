@@ -9,7 +9,18 @@ from pathlib import Path
 from sqlalchemy import DateTime, String, Text, create_engine, select
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column
 
-DB_URL = os.environ.get("BLOOM_WEB_DB", f"sqlite:///{Path(__file__).resolve().parents[2] / 'data' / 'bloom_web.db'}")
+def database_url() -> str:
+    """Postgres in production (DATABASE_URL from Neon or Vercel Postgres), SQLite on a laptop."""
+    url = os.environ.get("DATABASE_URL") or os.environ.get("BLOOM_WEB_DB")
+    if url:
+        # Neon and Vercel hand out postgres:// URLs; SQLAlchemy needs the psycopg driver named.
+        return url.replace("postgres://", "postgresql+psycopg://", 1).replace("postgresql://", "postgresql+psycopg://", 1)
+    if os.environ.get("VERCEL"):
+        raise RuntimeError("Set DATABASE_URL on Vercel: its filesystem is read-only and SQLite would not persist.")
+    return f"sqlite:///{Path(__file__).resolve().parents[2] / 'data' / 'bloom_web.db'}"
+
+
+DB_URL = database_url()
 
 
 class Base(DeclarativeBase):
@@ -31,7 +42,7 @@ class OuraToken(Base):
     expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
-engine = create_engine(DB_URL)
+engine = create_engine(DB_URL, pool_pre_ping=True)
 Base.metadata.create_all(engine)
 
 

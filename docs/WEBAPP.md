@@ -28,5 +28,13 @@ open http://localhost:8080
 | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | Google Calendar | Google Cloud console, OAuth web client, scope `calendar.events`, redirect `http://localhost:8080/google/callback` |
 | `GOOGLE_REDIRECT_URI` | Calendar | `https://<host>/google/callback` when deployed |
 
-## Deploy
-`Dockerfile` + `render.yaml` (Render Blueprint, persistent disk at `/data` for SQLite). Any Docker host works.
+## Deploy to Vercel
+1. Database: create a Postgres database (Vercel Storage → Neon, or neon.tech). Copy its connection string.
+2. vercel.com → Add New Project → import `ananyajoshi0203-cpu/herlife`. Framework preset: Other. No build command.
+3. Environment variables: `DATABASE_URL` (required on Vercel), `ANTHROPIC_API_KEY`, `BLOOM_SECURE_COOKIES=1`.
+   Later, for real sign in: `OURA_CLIENT_ID`/`OURA_CLIENT_SECRET`/`OURA_REDIRECT_URI=https://<app>.vercel.app/oura/callback`,
+   `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET`/`GOOGLE_REDIRECT_URI=https://<app>.vercel.app/google/callback`.
+4. Deploy. `api/index.py` exposes the FastAPI app; `vercel.json` routes every path to it. Tables are created on first request.
+
+The server refuses to start on Vercel without `DATABASE_URL`, because Vercel's filesystem does not persist SQLite.
+`Dockerfile` + `render.yaml` remain for any container host.
