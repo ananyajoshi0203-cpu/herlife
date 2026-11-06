@@ -201,6 +201,11 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
 .mv small { font-size: 10.5px; color: var(--muted); }
 .mv.good b { color: var(--good); } .mv.bad b { color: var(--warn); }
 .busyweek i { width: 100%; border-radius: 999px; display: block; min-height: 6px; animation: barUp .7s var(--ease) both; transform-origin: bottom; }
+.persona-note { gap: 4px; border-left: 4px solid var(--accent); }
+.cyc-line { position: relative; height: 26px; margin: 8px 6px 2px; border-top: 2px dashed var(--line); }
+.cyc-dot { position: absolute; top: -8px; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%; background: var(--ph-men); }
+.cyc-dot.next { background: transparent; border: 3px solid var(--ph-men); animation: breathe 2.4s ease-in-out infinite; }
+.cyc-today { position: absolute; top: -12px; width: 2px; height: 22px; background: var(--ink); }
 .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(56px, 1fr)); gap: 6px; }
 .pillar { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 600; color: var(--muted); }
 .ring-wrap.sm { width: 56px; height: 56px; }
@@ -810,6 +815,7 @@ function easeReasons(ctx) {
   const { row, cd } = ctx, base = baseline(), reasons = [];
   if (cycleLens() && cd <= 2) reasons.push(`Day ${cd} of your period, when energy is lowest`);
   if (cycleLens() && cd >= CYCLE_LEN - 4) reasons.push("Late luteal: progesterone is dropping, PMS window");
+  if (cycleLens() && state.profile.flow === "heavy" && cd <= 3) reasons.push("Heavy flow day: iron-rich food, water, and rest");
   for (const [, t] of tunings()) { const why = cycleLens() && t.ease?.(cd, CYCLE_LEN); if (why) reasons.push(why); }
   if (row.stress > row.recovery + 45) reasons.push(`${Math.round(row.stress)} high-stress minutes yesterday`);
   if (Number.isFinite(row.ready) && row.ready < 72) reasons.push(`Readiness is ${row.ready}, below your usual ${Math.round(base.ready)}`);
@@ -891,7 +897,34 @@ function render() {
 }
 
 /* ---------- onboarding ---------- */
-const ONBOARD = ["account", "about", "privacy", "connect", "goals", "habits"];
+const ONBOARD = ["account", "about", "cycle", "privacy", "connect", "goals", "habits"];
+const BACKFILLS = [
+  { id: "keep", title: "Keep my logged history", sub: "Use the periods already in my record" },
+  { id: "regular", title: "From today's answers, regular", sub: "Same length every cycle" },
+  { id: "irregular", title: "My cycles are irregular", sub: "Lengths vary by a week or more" },
+  { id: "heavy", title: "Heavy, longer periods", sub: "Regular timing, heavier flow, more symptom days" },
+];
+function cyclePlan() {
+  const p = state.profile, len = Math.max(20, Math.min(45, Number(p.cycleLen) || 28));
+  const mode = state.backfillMode || (state.periods.length ? "keep" : "regular");
+  const last = p.lastPeriod || addDays(TODAY, -11);
+  let starts;
+  if (mode === "keep" && state.periods.length) starts = [...state.periods].sort();
+  else if (mode === "irregular") { const gaps = [len + 9, len - 5, len + 13]; starts = [last]; gaps.forEach((g) => starts.unshift(addDays(starts[0], -g))); }
+  else starts = [3, 2, 1, 0].map((k) => addDays(last, -k * len));
+  const lastStart = starts[starts.length - 1];
+  const cd = (Math.round((new Date(TODAY) - new Date(lastStart)) / 864e5) % len) + 1;
+  const next = addDays(TODAY, len - cd + 1);
+  const t0 = new Date(starts[0]).getTime(), span = new Date(next).getTime() - t0;
+  return { mode, len, starts, cd, next, pos: (d) => Math.round(100 * (new Date(d).getTime() - t0) / span) };
+}
+function personaBanner() {
+  const pr = PERSONAS[state.persona]; if (!pr) return "";
+  const t = DAY_TYPES[pr.dayType]?.label;
+  return `<div class="card flat rise persona-note"><span class="eyebrow">You're signed in as ${esc(pr.profile.name)}, ${esc(pr.profile.age)}</span>
+    <p style="font-size:14px"><b>${esc(pr.blurb)}.</b> ${t ? esc(t) + "." : ""} ${pr.profile.conditions.length ? "Manages " + esc(pr.profile.conditions.join(" and ")) + "." : ""} ${pr.noWearable ? "No ring." : "Wears an Oura ring."} ${pr.noCalendar ? "No calendar." : "Uses a calendar."}</p>
+    <small class="muted">Her answers are filled in. Change anything; HerLife adapts. Oura and calendar are simulated from her profile.</small></div>`;
+}
 function progress() {
   const i = ONBOARD.indexOf(state.step);
   return `<div class="progress" aria-label="Step ${i + 1} of ${ONBOARD.length}">${ONBOARD.map((_, j) => `<span class="${j <= i ? "on" : ""}"></span>`).join("")}</div>`;
@@ -932,15 +965,27 @@ function renderOnboarding() {
         <div class="seg">${[["gym", "Gym access"], ["home", "At home"], ["none", "Just walking"]].map(([v, l]) => `<button class="${p.gym === v ? "on" : ""}" data-gym="${v}">${l}</button>`).join("")}</div></div>
       <div class="field rise"><label>Where are you in life right now?</label>
         <div class="chips">${LIFE_STAGES.map(([v, l]) => `<button class="chip ${p.lifeStage === v ? "on" : ""}" data-stage="${v}">${l}</button>`).join("")}</div></div>
-      ${cycleLens() ? `<div class="grid2 rise"><div class="field"><label for="f-lp">Last period started</label><input class="input" type="date" id="f-lp" data-bind="lastPeriod" value="${esc(p.lastPeriod)}" max="${TODAY}"></div>
-        <div class="field"><label for="f-len">Usual cycle (days)</label><input class="input" id="f-len" data-bind="cycleLen" value="${esc(p.cycleLen)}" inputmode="numeric"></div></div>` : `<p class="muted rise" style="font-size:13px">Got it. HerLife will focus on sleep, food, movement, stress, and mood, and skip cycle tips.</p>`}
+      ${cycleLens() ? `<p class="muted rise" style="font-size:13px">Next you will map your cycle.</p>` : `<p class="muted rise" style="font-size:13px">Got it. HerLife will focus on sleep, food, movement, stress, and mood, and skip cycle tips.</p>`}
       <div class="field rise"><label>What do most of your days look like?</label>
         <div class="chips">${Object.entries(DAY_TYPES).map(([k, t]) => `<button class="chip ${p.dayType === k ? "on" : ""}" data-daytype="${k}">${t.label}</button>`).join("")}</div></div>
       <div class="field rise"><label>Food preferences or restrictions</label>
         <div class="chips">${DIETS.map((d) => `<button class="chip ${p.diet.includes(d) ? "on" : ""}" data-toggle="diet" data-val="${d}">${d}</button>`).join("")}</div></div>
       <div class="field rise"><label>Conditions you're managing</label>
         <div class="chips">${CONDITIONS.map((d) => `<button class="chip ${p.conditions.includes(d) ? "on" : ""}" data-toggle="conditions" data-val="${d}">${d}</button>`).join("")}</div></div>
-      <button class="btn block rise" data-go="privacy">Continue</button>`,
+      <button class="btn block rise" data-go="cycle">Continue</button>`,
+    cycle: () => { const plan = cyclePlan(); return `${progress()}
+      <div class="stack rise"><span class="eyebrow">Your cycle</span><h1>Let's map your rhythm</h1><p class="muted">HerLife predicts what's next and fills in your history so your record starts full.</p></div>
+      <div class="grid2 rise"><div class="field"><label for="f-lp">Last period started</label><input class="input" type="date" id="f-lp" data-bind="lastPeriod" value="${esc(p.lastPeriod)}" max="${TODAY}"></div>
+        <div class="field"><label for="f-len">Usual cycle (days)</label><input class="input" id="f-len" data-bind="cycleLen" value="${esc(p.cycleLen)}" inputmode="numeric"></div></div>
+      <div class="field rise"><label>Your flow</label><div class="seg">${["light", "medium", "heavy"].map((f) => `<button class="${(p.flow || "medium") === f ? "on" : ""}" data-flow="${f}">${f[0].toUpperCase() + f.slice(1)}</button>`).join("")}</div></div>
+      <div class="field rise"><label>How should we fill in your past cycles?</label>
+        <div class="stack" style="gap:8px">${BACKFILLS.filter((b) => b.id !== "keep" || state.periods.length).map((b) => `<button class="goal ${plan.mode === b.id ? "on" : ""}" data-backfill="${b.id}"><b>${b.title}</b><small>${b.sub}</small></button>`).join("")}</div></div>
+      <div class="card rise"><span class="eyebrow">Prediction</span>
+        <div class="row between"><div><small class="muted">Next period</small><h2>${fmtDay(plan.next, { month: "short", day: "numeric" })}</h2></div><div><small class="muted">Today</small><h2>Day ${plan.cd}</h2></div><div><small class="muted">Phase</small><h2 style="font-size:17px">${PHASES[phaseOf(plan.cd, plan.len)].label}</h2></div></div>
+        <div class="cyc-line">${plan.starts.map((d) => `<span class="cyc-dot" style="left:${plan.pos(d)}%" title="${fmtDay(d)}"></span>`).join("")}<span class="cyc-dot next" style="left:${plan.pos(plan.next)}%" title="Predicted"></span><span class="cyc-today" style="left:${plan.pos(TODAY)}%"></span></div>
+        <div class="row between muted" style="font-size:11px"><span>${fmtDay(plan.starts[0], { month: "short", day: "numeric" })}</span><span>Today</span><span>Predicted</span></div>
+        <small class="muted">${plan.starts.length} past periods filled in ${plan.mode === "keep" ? "from your log" : "from your answers"}. Log a real period anytime and HerLife corrects course.</small></div>
+      <button class="btn block rise" data-action="cycle-done">Continue</button>`; },
     privacy: () => `${progress()}
       <div class="stack rise"><span class="eyebrow">Your health privacy</span><h1>Your body. Your data. Your call.</h1></div>
       <div class="card rise">
@@ -969,12 +1014,10 @@ function renderOnboarding() {
       <button class="btn block rise" data-action="make-habits" ${state.goals.length === 2 ? "" : "disabled"}>${state.goals.length === 2 ? "Build my habits" : `Choose ${2 - state.goals.length} more`}</button>`,
     habits: () => `${progress()}
       ${ui.thinking ? `<div class="thinking"><div class="orb"></div><h2>Reading your goals and your data</h2><p class="muted">Claude is picking three habits that fit ${esc(p.name || "you")}.</p><button class="link" data-action="skip-ai">Use HerLife's picks instead</button></div>` : `
-      <div class="stack rise"><span class="ai-badge">${icon.spark} ${state.habitsSource === "claude" ? "Picked by Claude" : "Picked for you"}</span><h1>Your three habits</h1><p class="muted">Small enough to do on a hard day. We'll track your consistency every week.</p></div>
-      ${state.habits.map((h, i) => `<div class="card rise"><div class="row"><span class="pill accent mono">${i + 1}</span><h3>${esc(h.title)}</h3></div><p><b>When:</b> ${esc(h.cue)}</p><p class="muted">${esc(h.why)}</p></div>`).join("")}
-      <button class="btn block rise" data-action="finish">Start my day</button>
-      <button class="link rise" data-action="make-habits">Suggest different habits</button>`}`,
+      ${candidateDeck()}      <button class="link rise" data-action="make-habits">Suggest different habits</button>`}`,
   };
-  return `<div class="scroll"><div class="screen">${views[state.step]()}</div></div>`;
+  const banner = ["welcome", "login", "account"].includes(state.step) ? "" : personaBanner();
+  return `<div class="scroll"><div class="screen">${banner}${views[state.step]()}</div></div>`;
 }
 function calendarConnectCard() {
   const on = state.connected.calendar, syncing = ui.syncing === "calendar";
@@ -1258,6 +1301,20 @@ function streak(h) {
   }
   return n;
 }
+function candidateDeck() {
+  const cands = state.habitCandidates || [], kept = state.habits, decided = new Set([...kept.map((h) => h.id), ...(state.habitSkips || [])]);
+  const left = cands.filter((h) => !decided.has(h.id));
+  const done = kept.length >= 3 || !left.length;
+  return `<div class="stack rise"><span class="ai-badge">${icon.spark} ${state.habitsSource === "claude" ? "Suggested by Claude for your goals" : "Suggested for your goals"}</span><h1>${done ? "Your habits" : `Swipe to pick ${3 - kept.length} more`}</h1><p class="muted">Right to keep, left to skip.</p></div>
+    ${done ? "" : `<div class="deck rise" tabindex="0" aria-label="Habit picker. Right arrow keeps, left arrow skips.">${left.slice(0, 3).reverse().map((h, i, arr) => { const depth = arr.length - 1 - i; return `<div class="swipe-card" data-swipe="cand:${h.id}" style="--depth:${depth}">
+      <span class="eyebrow">${esc(leverFor(h).goal)} · ${esc(leverFor(h).lever)}</span><h2>${esc(h.title)}</h2><p class="muted">${esc(h.cue)}</p><p style="font-size:13px">${esc(h.why)}</p>
+      <div class="stamp yes">Keep</div><div class="stamp no">Skip</div></div>`; }).join("")}</div>
+      <div class="row rise" style="justify-content:center;gap:14px"><button class="btn ghost" data-swipe-btn="left">Skip</button><button class="btn" data-swipe-btn="right">${icon.check} Keep</button></div>`}
+    ${kept.map((h, i) => `<div class="card rise"><div class="row"><span class="pill accent mono">${i + 1}</span><h3>${esc(h.title)}</h3></div><p class="muted" style="font-size:13px">${esc(h.cue)}</p></div>`).join("")}
+    ${kept.length ? `<button class="btn block rise" data-action="finish">Start my day</button>` : ""}
+    ${!done || kept.length ? "" : `<p class="muted">You skipped them all. Ask for a fresh set.</p>`}
+    <button class="link rise" data-action="make-habits">Suggest different habits</button>`;
+}
 function swipeDeck() {
   const pending = state.habits.filter((h) => !state.checks[`${h.id}|${TODAY}`] && !state.skips?.[`${h.id}|${TODAY}`]);
   if (!pending.length) return `<div class="card rise deck-done"><div class="win"><div class="star">${icon.check}</div><div><h3>You're checked in for today</h3><p class="muted" style="font-size:13px">Swipe again tomorrow morning.</p></div></div></div>`;
@@ -1270,6 +1327,13 @@ function swipeDeck() {
   <p class="muted rise" style="text-align:center;font-size:12px;margin-top:-6px">Swipe right for done, left for not today</p>`;
 }
 function resolveSwipe(id, dir) {
+  if (id.startsWith("cand:")) {
+    const cid = id.slice(5), h = (state.habitCandidates || []).find((x) => x.id === cid);
+    const card = document.querySelector(`[data-swipe="${id}"]`);
+    if (card) { card.style.transition = "transform .35s ease-in, opacity .35s"; card.style.transform = `translateX(${dir === "right" ? 140 : -140}%) rotate(${dir === "right" ? 18 : -18}deg)`; card.style.opacity = "0"; }
+    if (dir === "right" && h && state.habits.length < 3) { state.habits.push(h); if (card) confetti(card); } else state.habitSkips = [...(state.habitSkips || []), cid];
+    save(); setTimeout(render, 320); return;
+  }
   if (dir === "right") state.checks[`${id}|${TODAY}`] = true;
   else { state.skips = state.skips || {}; state.skips[`${id}|${TODAY}`] = true; }
   save();
@@ -1980,7 +2044,7 @@ async function makeHabits() {
   ui.thinking = true; set({ step: "habits" });
   const ctx = dayContext(), p = state.profile;
   const goals = state.goals.map((g) => GOALS.find((x) => x.id === g).title);
-  const prompt = `You are a women's health coach. Suggest exactly 3 small daily habits for this person.
+  const prompt = `You are a women's health coach. Suggest exactly 6 small daily habits for this person, varied across sleep, movement, food, and stress, so she can swipe to pick 3.
 Profile: age ${p.age || "unknown"}, workouts: ${p.gym}, food: ${p.diet.join(", ") || "no restrictions"}, conditions: ${conditions().join(", ") || "none"}.
 Goals: ${goals.join(" and ")}. Life stage: ${p.lifeStage}. Her days: ${dayType().label} (${dayType().week.reduce((a, b) => a + b, 0)} busy hours a week). Age band ${ageBand().label}, priorities: ${ageBand().focus.join(", ")}. Season: ${seasonNow()?.[1].label}. ${cycleLens() ? `Currently cycle day ${ctx.cd} of ${CYCLE_LEN} (${phaseOf(ctx.cd)} phase).` : "Do not mention menstrual cycle phases."} Oura: avg sleep ${hm(baseline().sleepMin)}, HRV ${Math.round(baseline().hrv)} ms.
 Rules: each habit doable in under 10 minutes, specific, tied to her goals and lifestyle data first. American English. No em dashes. Lifestyle suggestions only, never medical advice.
@@ -1988,12 +2052,13 @@ Return JSON only: {"habits":[{"title":"max 6 words","cue":"when or where it happ
   skipAi = false;
   const ai = await Promise.race([askClaude(prompt, "quick"), new Promise((resolve) => { const iv = setInterval(() => { if (skipAi) { clearInterval(iv); resolve(null); } }, 200); setTimeout(() => clearInterval(iv), 30000); })]);
   let habits, source;
-  if (ai?.habits?.length >= 3) { habits = ai.habits.slice(0, 3).map((h) => ({ title: clean(h.title), cue: clean(h.cue), why: clean(h.why) })); source = "claude"; }
-  else { const [a, b] = state.goals.filter((g) => FALLBACK_HABITS[g]).length === 2 ? state.goals : ["sleep", "energy"]; habits = [FALLBACK_HABITS[a][0], FALLBACK_HABITS[b][0], FALLBACK_HABITS[a][1]]; source = "library"; }
+  if (ai?.habits?.length >= 4) { habits = ai.habits.slice(0, 6).map((h) => ({ title: clean(h.title), cue: clean(h.cue), why: clean(h.why) })); source = "claude"; }
+  else { const [a, b] = state.goals.filter((g) => FALLBACK_HABITS[g]).length === 2 ? state.goals : ["sleep", "energy"]; habits = [FALLBACK_HABITS[a][0], FALLBACK_HABITS[b][0], FALLBACK_HABITS[a][1], FALLBACK_HABITS[b][1], ...(seasonNow()?.[1].recs.filter((r) => r.habit).map((r) => r.habit) || []), { title: "Water before coffee", cue: "As soon as you get up", why: "Mild dehydration feels like fatigue." }].slice(0, 6); source = "library"; }
   habits = habits.map((h, i) => ({ ...h, id: `h${Date.now().toString(36)}${i}` }));
   ui.thinking = false;
   const demo = state.connected.ouraMode !== "live";
-  set({ habits, habitsSource: source, checks: demo ? seedHabitHistory(habits) : {}, habitHistoryDemo: demo });
+  state.habitHistoryDemo = demo;
+  set({ habitCandidates: habits, habits: [], habitSkips: [], habitsSource: source, checks: {} });
 }
 async function aiPlan() {
   const ctx = dayContext(), ease = easeReasons(ctx).length > 0, phase = phaseOf(ctx.cd), p = state.profile;
@@ -2089,7 +2154,7 @@ document.addEventListener("click", (e) => {
   const t = e.target.closest("button, [data-action], [data-stop]"); if (!t) return;
   if (t.hasAttribute("data-stop") && !t.matches("button")) return;
   const d = t.dataset;
-  if (d.go) { set({ step: d.go }); return; }
+  if (d.go) { set({ step: d.go === "cycle" && !cycleLens() ? "privacy" : d.go }); return; }
   if (d.tab) { set({ tab: d.tab }); return; }
   if (d.gym) { state.profile.gym = d.gym; set({}); return; }
   if (d.persona) {
@@ -2102,9 +2167,15 @@ document.addEventListener("click", (e) => {
     state.lifeGoals = (pr.lifeGoals || []).map((t) => newLifeGoal(t, addDays(TODAY, -7)));
     state.weights = state.lifeGoals.some((g) => g.outcomes.includes("weight")) ? demoWeights(addDays(TODAY, -7)) : null;
     state.weekly = {};
-    makeHabits().then(() => { if (pr.checkinDemo) { set({ step: "app", tab: "habits" }); toast("One week in. Here is Dana's check-in."); state.lifeGoals.forEach(interpretGoal); } });
+    state.profile.lastPeriod = state.periods.length ? [...state.periods].sort().pop() : "";
+    state.profile.flow = (pr.profile.conditions || []).some((c) => /Endometriosis|Anemia/.test(c)) ? "heavy" : "medium";
+    state.backfillMode = state.periods.length ? "keep" : "regular";
+    state.habits = []; state.habitCandidates = [];
+    set({ step: "about" }); toast(`Signed in as ${pr.profile.name}. Her answers are filled in.`);
     return;
   }
+  if (d.flow) { state.profile.flow = d.flow; set({}); return; }
+  if (d.backfill) { state.backfillMode = d.backfill; set({}); return; }
   if (d.daytype) { state.profile.dayType = d.daytype; if (state.connected.calendar) toast(`Calendar switched to ${DAY_TYPES[d.daytype].label.toLowerCase()} demo`); set({}); return; }
   if (d.stage) { state.profile.lifeStage = d.stage; set({}); return; }
   if (d.toggle) { const list = state.profile[d.toggle]; const i = list.indexOf(d.val); i >= 0 ? list.splice(i, 1) : list.push(d.val); set({}); return; }
@@ -2175,7 +2246,21 @@ document.addEventListener("click", (e) => {
       Object.assign(state, { persona: null, periods: [], checkins: {}, habits: [], checks: {}, logs: [], moods: [], booked: [], connected: { oura: false, calendar: false }, calendarProvider: null });
       set({ step: "about" }); toast(`Welcome, ${p.name.trim()}`); break;
     }
-    case "finish": applyDataSource(); seedPeriods(); set({ step: "app", tab: "today" }); scheduleMood(25000); break;
+    case "cycle-done": {
+      const plan = cyclePlan();
+      state.periods = plan.starts; state.profile.lastPeriod = plan.starts[plan.starts.length - 1];
+      if (plan.mode === "heavy") state.profile.flow = "heavy";
+      if (plan.mode === "irregular" && state.profile.lifeStage === "cycling") state.profile.lifeStage = "irregular";
+      set({ step: "privacy" }); toast(`Next period predicted ${fmtDay(plan.next, { month: "short", day: "numeric" })}`); break;
+    }
+    case "finish": {
+      applyDataSource(); seedPeriods();
+      if (state.habitHistoryDemo) state.checks = seedHabitHistory(state.habits);
+      const pr = PERSONAS[state.persona];
+      set({ step: "app", tab: pr?.checkinDemo ? "habits" : "today" }); scheduleMood(25000);
+      if (pr?.checkinDemo) { toast("One week in. Here is Dana's check-in."); (state.lifeGoals || []).forEach(interpretGoal); }
+      break;
+    }
     case "switch": ui.moodOpen = false; set({ step: "login" }); break;
     case "reset": try { localStorage.removeItem(STORE_KEY); } catch (err) {} remoteDoc?.delete?.().catch(() => {}); state = defaultState(); ui = { ...ui, sorted: null, draft: "", moodOpen: false }; render(); break;
     case "ai-plan": aiPlan(); break;
