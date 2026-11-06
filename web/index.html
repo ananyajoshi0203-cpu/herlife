@@ -870,7 +870,8 @@ const toMin = (t) => { const [h, m] = t.split(":").map(Number); return h * 60 + 
 const toTime = (m) => `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
 function freeSlot(duration) {
   const busy = [...(state.connected.calendar ? CALENDAR : []), ...state.booked].map((e) => [toMin(e.start), toMin(e.end)]).sort((a, b) => a[0] - b[0]);
-  let cursor = toMin("07:00");
+  const now = new Date(), nowMin = now.getHours() * 60 + now.getMinutes();
+  let cursor = Math.max(toMin("07:00"), Math.ceil((nowMin + 10) / 15) * 15);
   for (const [s, e] of busy) { if (s - cursor >= duration + 10) return toTime(cursor + 5); cursor = Math.max(cursor, e); }
   return toTime(Math.max(cursor + 5, toMin("17:00")));
 }
@@ -1840,13 +1841,13 @@ function renderToday(ctx) {
   const plan = state.aiPlan && state.aiPlan.cd === cd && state.aiPlan.ease === ease ? state.aiPlan : fallbackPlan(ctx, ease);
   const slot = freeSlot(plan.workout.minutes);
   const name = state.profile.name || "there";
-  const hour = 8;
+  const hour = new Date().getHours();
   const items = [...(state.connected.calendar ? CALENDAR : []).map((e) => ({ ...e, kind: "cal" })), ...state.booked.map((e) => ({ ...e, kind: "plan" }))].sort((a, b) => toMin(a.start) - toMin(b.start));
   const booked = state.booked.some((b) => b.title === plan.workout.name);
   const weekPct = state.habits.length ? Math.round(100 * state.habits.flatMap(habitWeek).filter(Boolean).length / (state.habits.length * 7)) : 0;
   return `
     <div class="stack rise"><span class="eyebrow">${ctx.preview ? "Previewing cycle day " + cd : fmtDay(TODAY, { weekday: "long", month: "long", day: "numeric" })}</span>
-      <h1>${hour < 12 ? "Good morning" : "Hi"}, ${esc(name)}.</h1><p class="muted lede">${esc(cycleLens() ? info.energy : plan.headline)}</p></div>
+      <h1>${hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening"}, ${esc(name)}.</h1><p class="muted lede">${esc(cycleLens() ? info.energy : plan.headline)}</p></div>
 
     ${upNextCard()}
     <div class="card rise">
