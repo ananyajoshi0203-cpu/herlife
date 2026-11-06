@@ -69,7 +69,7 @@ Open **https://herlife-six.vercel.app**. The first page offers two ways in:
 | **Lena, 48**, working, perimenopause | Menopause transition signal and a question for her doctor |
 | **Priya, 29**, night-shift nurse, no wearable, no calendar | Everything from a morning check-in and voice notes |
 
-Shortcut for presenters: `https://herlife-six.vercel.app/?profile=dana` (or `maya`, `priya`, `hana`, `ines`, `sofia`, `ava`, `lena`) skips onboarding and opens that profile's app directly.
+Shortcut for presenters: `https://herlife-six.vercel.app/?profile=maya` (or `dana`, `priya`, `hana`, `ines`, `sofia`, `ava`, `lena`) skips onboarding and opens that profile's app directly.
 
 A browser that has used HerLife before reopens where it left off; tap **Switch** to get back to the first page. Oura and calendar connections are simulated in this build; real sign in is implemented and turns on once the providers approve the app.
 

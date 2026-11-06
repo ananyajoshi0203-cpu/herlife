@@ -2565,6 +2565,9 @@ function scheduleMood(ms) {
 }
 const requestedProfile = new URLSearchParams(location.search).get("profile");
 if (requestedProfile && PERSONAS[requestedProfile]) { quickStart(requestedProfile); history.replaceState(null, "", location.pathname); }
+/* A demo persona left open last time should not hijack the next visit: show the first page.
+   Real accounts made with Create my account keep resuming where she left off. */
+else if (state.persona && state.step === "app") state.step = "welcome";
 if (state.step === "app") seedPeriods();
 applyDataSource();
 render();
