@@ -1494,7 +1494,7 @@ Return JSON only: {"label":"goal restated in max 5 words","signals":["..."],"out
 }
 function demoWeights(since) {
   const rng = mulberry(hashStr(state.profile.name + "w")), out = {}; let w = 171.8;
-  for (let i = 42; i >= 0; i--) { const day = addDays(TODAY, -i); w += day >= since ? -0.22 + (rng() - 0.5) * 0.5 : (rng() - 0.5) * 0.4; out[day] = Math.round(w * 10) / 10; }
+  for (let i = 42; i >= 0; i--) { const day = addDays(TODAY, -i); w += day >= since ? -0.3 + (rng() - 0.5) * 0.3 : (rng() - 0.5) * 0.25; out[day] = Math.round(w * 10) / 10; }
   return out;
 }
 function signalOn(key, day, rows) {
@@ -1574,7 +1574,7 @@ function weeklyCheckin() {
         <div class="moved">${prog.moved.map((m) => { const sig = SIGNALS[m.key]; if (m.now === null) return `<div class="mv"><span>${sig.label}</span><b class="muted">Not enough data</b></div>`;
           if (m.key === "predictErr") return `<div class="mv good"><span>${sig.label}</span><b>${sig.fmt(m.now)}</b><small>next period forecast</small></div>`;
           const arrow = m.delta > 0 ? "▲" : m.delta < 0 ? "▼" : "•";
-          return `<div class="mv ${m.notable ? (m.good ? "good" : "bad") : ""}"><span>${sig.label}</span><b>${arrow} ${sig.key === "weight" ? Math.abs(m.delta).toFixed(1) : sig.fmt(Math.abs(m.delta)).replace(/^±/, "")}</b><small>${sig.fmt(m.before)} → ${sig.fmt(m.now)}</small></div>`; }).join("")}</div>
+          return `<div class="mv ${m.notable ? (m.good ? "good" : "bad") : ""}"><span>${sig.label}</span><b>${arrow} ${m.key === "weight" ? Math.abs(m.delta).toFixed(1) + " lb" : String(sig.fmt(Math.abs(m.delta))).replace(/^±/, "")}</b><small>${sig.fmt(m.before)} → ${sig.fmt(m.now)}</small></div>`; }).join("")}</div>
       </div>`; }).join("")}
     <form class="stack" data-goalform><label class="eyebrow" for="goal-text">Add a goal in your own words</label>
       <div class="row"><input class="input" id="goal-text" placeholder="I want to stop crashing at 3 pm" autocomplete="off"><button class="btn small" type="submit">Add</button></div>
