@@ -233,6 +233,9 @@ a.source:hover { text-decoration: underline; }
 .upnext-time b { font-family: var(--f-data); font-size: 18px; }
 .upnext-time small { font-size: 11px; color: var(--accent); font-weight: 700; }
 .upnext-what { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.nextmove { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; padding: 12px; border-radius: 14px; background: var(--surface); border-left: 4px solid var(--move); }
+.nextmove b { font-family: var(--f-display); font-size: 16px; display: block; }
+.learned { display: flex; flex-direction: column; gap: 8px; padding-top: 6px; border-top: 1px dashed var(--line); }
 .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(56px, 1fr)); gap: 6px; }
 .pillar { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 600; color: var(--muted); }
 .ring-wrap.sm { width: 56px; height: 56px; }
@@ -985,6 +988,8 @@ const INFO = {
   energy: ["How energy is calculated", "A HerLife score out of 100: the average of your readiness, your physical recovery from deep sleep, and the energy of your mood check-in. Without a ring we use your morning check-in energy, sleep hours, and stress. Above 75 is a strong day; below 55 is a lighter one."],
   stressload: ["How stress load is calculated", "A score out of 100 where 50 is your own average. With a ring, it compares today's minutes in a high-stress state (heart rate and HRV while awake) with your last 30 days. Without a ring, HerLife estimates it from your check-in stress, how full your calendar is, and short sleep. Over 70 is high for you; under 40 is calm."],
   impact: ["How habit impact is measured", "We compare your outcomes on days you did the habit with days you did not, since you started it. Sleep and HRV are read from the following night. A change counts only past a threshold (10 min sleep, 3 ms HRV, 800 steps, 3 readiness points). It shows a pattern, not proof of cause."],
+  nextmove: ["How HerLife decides what's next", "Every week HerLife looks at how consistent you were since setting the goal and whether its outcomes moved. Under 40% consistent: make the weakest habit smaller. Showing up but outcomes flat: swap to a habit that pulls a different lever. 70% plus and moving: level up with one more habit. Misses clustered on busy days, a weekday, or the week before your period: move the habit to a better time. Otherwise, hold steady."],
+  learned: ["What HerLife has learned", "Patterns from your last 4 weeks: which weekdays you follow through, how calendar load and your cycle change your consistency, and which habits actually move your sleep, HRV, or energy. These feed Claude's next suggestions, so your plan gets more personal every week."],
   record: ["Your record", "The story your doctor rarely gets: 90 days of sleep, stress, movement, mood, and cycle in one place, ready to share at your appointment."],
 };
 const infoBtn = (key) => INFO[key] ? `<button class="info" type="button" data-info="${key}" aria-label="What is ${esc(INFO[key][0])}?">i</button>` : "";
@@ -1738,9 +1743,78 @@ function mountain(prog, since) {
     <text x="0" y="${H + 14}" font-size="9" fill="var(--muted)">${fmtDay(prog.days[0].day, { month: "short", day: "numeric" })}</text><text x="${W - 26}" y="${H + 14}" font-size="9" fill="var(--muted)">Today</text></svg>
     <div class="row muted" style="font-size:11px;gap:12px;flex-wrap:wrap"><span><span class="dot" style="color:var(--good)"></span> 70%+ of days</span><span><span class="dot" style="color:var(--ph-ovu)"></span> 40 to 70%</span><span><span class="dot" style="color:var(--warn)"></span> under 40%</span></div>`;
 }
+/* ---------- Contextual learning: what her own history says works, and what to do next ---------- */
+const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+function cdOn(day) {
+  const last = [...periodStarts()].filter((d) => d <= day).sort().pop();
+  return last ? (Math.round((new Date(day) - new Date(last)) / 864e5) % CYCLE_LEN) + 1 : null;
+}
+function learnings() {
+  const days = Array.from({ length: 28 }, (_, i) => addDays(TODAY, -i - 1));
+  const rateOf = (ds) => { if (!ds.length || !state.habits.length) return null; return avg(ds.map((d) => state.habits.filter((h) => state.checks[`${h.id}|${d}`]).length / state.habits.length)); };
+  const out = { weekday: null, busy: null, phase: null, overall: rateOf(days) };
+  const byDay = WEEKDAYS.map((_, w) => rateOf(days.filter((d) => new Date(d + "T12:00:00").getDay() === w)));
+  const valid = byDay.map((r, w) => [r, w]).filter(([r]) => r !== null);
+  if (valid.length >= 5) { const best = valid.reduce((a, b) => (b[0] > a[0] ? b : a)), worst = valid.reduce((a, b) => (b[0] < a[0] ? b : a));
+    if (best[0] - worst[0] >= 0.25) out.weekday = { best: WEEKDAYS[best[1]], worst: WEEKDAYS[worst[1]], bestRate: best[0], worstRate: worst[0] }; }
+  if (state.connected.calendar) {
+    const heavy = (d) => dayType().week[(new Date(d + "T12:00:00").getDay() + 6) % 7] >= 6;
+    const h = rateOf(days.filter(heavy)), l = rateOf(days.filter((d) => !heavy(d)));
+    if (h !== null && l !== null && l - h >= 0.15) out.busy = { heavy: h, light: l };
+  }
+  if (cycleLens()) {
+    const late = (d) => { const c = cdOn(d); return c !== null && c >= CYCLE_LEN - 6; };
+    const a = rateOf(days.filter(late)), b = rateOf(days.filter((d) => !late(d)));
+    if (a !== null && b !== null && b - a >= 0.15) out.phase = { late: a, rest: b };
+  }
+  return out;
+}
+const pct = (x) => Math.round(x * 100) + "%";
+function learnedLines() {
+  const L = learnings(), lines = [];
+  if (L.weekday) lines.push(`You follow through most on ${L.weekday.best}s (${pct(L.weekday.bestRate)}) and least on ${L.weekday.worst}s (${pct(L.weekday.worstRate)}).`);
+  if (L.busy) lines.push(`On heavy calendar days you complete ${pct(L.busy.heavy)} of habits, versus ${pct(L.busy.light)} on lighter days.`);
+  if (L.phase) lines.push(`In the week before your period you complete ${pct(L.phase.late)}, versus ${pct(L.phase.rest)} the rest of the month.`);
+  const impacts = state.habits.map((h) => habitImpact(h, rowsByDay())).filter((i) => i?.effects?.some((e) => e.measured && e.notable && e.good));
+  impacts.slice(0, 2).forEach((i) => { const e = i.effects.find((x) => x.measured && x.notable && x.good); lines.push(`"${i.habit?.title || i.title}" is working: ${OUTCOMES[e.key].say(Math.round(Math.abs(e.delta)), e.delta > 0)} on days you do it.`); });
+  return lines;
+}
+function nextMove(goal, prog, used = new Set()) {
+  const L = learnings(), rate = prog.total ? prog.consistent / prog.total : 0;
+  const weakest = prog.habits.filter((h) => !used.has(h.id)).map((h) => ({ h, r: avg(Array.from({ length: 14 }, (_, i) => state.checks[`${h.id}|${addDays(TODAY, -i - 1)}`] ? 1 : 0)) })).sort((a, b) => a.r - b.r)[0];
+  const timing = L.busy ? "on heavy calendar days" : L.weekday ? `on ${L.weekday.worst}s` : L.phase ? "in the week before your period" : null;
+  if (prog.total < 5) return { kind: "wait", title: "Keep collecting", body: `${prog.total} days in. HerLife needs about a week before it changes anything.`, action: null };
+  if (rate < 0.4 && weakest) return { kind: "easier", title: "Make it easier", body: `You did "${weakest.h.title}" on ${pct(weakest.r)} of the last 14 days. A two-minute version keeps the streak alive${timing ? `, especially ${timing}` : ""}.`, action: { label: "Shrink it", data: `data-adapt="easier" data-habit="${weakest.h.id}"` } };
+  if (rate >= 0.7 && prog.flag === "on") return { kind: "levelup", title: "Level up", body: `${pct(rate)} consistent and your outcomes are moving. You are ready for one more habit toward ${goal.label.toLowerCase()}.`, action: { label: "Add a next step", data: `data-adapt="levelup" data-goal="${goal.id}"` } };
+  if (rate >= 0.6 && (prog.flag === "steady" || prog.flag === "off")) return { kind: "swap", title: "Swap the lever", body: `You are showing up (${pct(rate)}) but ${goal.label.toLowerCase()} is not moving yet. Try a habit that pulls a different lever.`, action: { label: "See other habits", data: `data-action="new-habits"` } };
+  if (timing && weakest) {
+    const evening = (habitTime(weakest.h) ?? 0) >= 18 * 60;
+    return evening
+      ? { kind: "retime", title: "Add a nudge where you slip", body: `Your misses cluster ${timing}. A reminder 30 minutes before "${weakest.h.title}" on those days keeps it on track.`, action: { label: "Add reminder", data: `data-adapt="remind" data-habit="${weakest.h.id}"` }, habit: weakest.h.id }
+      : { kind: "retime", title: "Move it to a better time", body: `Your misses cluster ${timing}. Anchor "${weakest.h.title}" to the morning so a busy afternoon cannot take it.`, action: { label: "Move to morning", data: `data-adapt="retime" data-habit="${weakest.h.id}"` }, habit: weakest.h.id };
+  }
+  return { kind: "hold", title: "Hold steady", body: `${pct(rate)} consistent. Same plan next week; small wins compound.`, action: null };
+}
+const MOVE_TOKENS = { easier: "--ph-ovu", levelup: "--good", swap: "--ph-lut", retime: "--ph-fol", hold: "--muted", wait: "--muted" };
+function applyAdaptation(kind, d) {
+  const habit = state.habits.find((h) => h.id === d.habit);
+  let note = "";
+  if (kind === "easier" && habit) { const old = habit.title; habit.title = /^Mini:/.test(old) ? old : `Mini: ${old}`; habit.why = "A two-minute version while you rebuild consistency. Doing a little beats skipping."; note = `Shrunk "${old}" to a two-minute version`; }
+  if (kind === "remind" && habit) { habit.reminder = true; habit.cue = `${habit.cue} · reminder 30 min before`; note = `Added a reminder before "${habit.title}"`; }
+  if (kind === "retime" && habit) { habit.cue = `Morning, before 10 am (moved from: ${habit.cue})`; note = `Moved "${habit.title}" to the morning`; }
+  if (kind === "levelup") {
+    const goal = (state.lifeGoals || []).find((g) => g.id === d.goal);
+    const t = templateFor(goal?.text || ""), pool = Object.values(FALLBACK_HABITS).flat().filter((h) => !state.habits.some((x) => x.title === h.title));
+    const pick = pool.find((h) => LEVERS.some((l) => l.match.test(`${h.title} ${h.cue}`) && l.outcomes.some((o) => t.signals.includes(o) || t.outcomes.includes(o)))) || pool[0];
+    if (pick) { state.habits.push({ ...pick, id: "h" + Date.now().toString(36) }); note = `Added "${pick.title}" as your next step`; }
+  }
+  if (note) state.learned = [{ day: TODAY, text: note }, ...(state.learned || [])].slice(0, 12);
+  save(); render(); if (note) toast(note);
+}
 const FLAGS = { on: ["On track", "--good"], mixed: ["Mixed", "--ph-ovu"], off: ["Needs attention", "--warn"], steady: ["Holding steady", "--muted"] };
 function weeklyCheckin() {
   ensureLifeGoals();
+  ui.usedMoves = new Set();
   const rows = rowsByDay(), week = addDays(TODAY, -6), done = state.weekly?.[TODAY];
   const goals = state.lifeGoals || [];
   const weightGoal = goals.some((g) => g.outcomes.includes("weight") || g.signals.includes("weight"));
@@ -1757,7 +1831,11 @@ function weeklyCheckin() {
           if (m.key === "predictErr") return `<div class="mv good"><span>${sig.label}</span><b>${sig.fmt(m.now)}</b><small>next period forecast</small></div>`;
           const arrow = m.delta > 0 ? "▲" : m.delta < 0 ? "▼" : "•";
           return `<div class="mv ${m.notable ? (m.good ? "good" : "bad") : ""}"><span>${sig.label}${sig.hint ? ` · ${sig.hint}` : ""}</span><b>${arrow} ${m.key === "weight" ? Math.abs(m.delta).toFixed(1) + " lb" : String(sig.fmt(Math.abs(m.delta))).replace(/^±/, "")}</b><small>${sig.fmt(m.before)} → ${sig.fmt(m.now)}</small></div>`; }).join("")}</div>
+        ${(() => { const mv = nextMove(g, prog, ui.usedMoves); if (mv.habit) ui.usedMoves.add(mv.habit); return `<div class="nextmove" style="--move:var(${MOVE_TOKENS[mv.kind]})"><div><span class="eyebrow">What's next ${infoBtn("nextmove")}</span><b>${mv.title}</b><p style="font-size:13px">${esc(mv.body)}</p></div>${mv.action ? `<button class="btn small" ${mv.action.data}>${mv.action.label}</button>` : ""}</div>`; })()}
       </div>`; }).join("")}
+    ${(() => { const lines = learnedLines(), log = state.learned || []; if (!lines.length && !log.length) return ""; return `<div class="learned"><span class="eyebrow">What HerLife has learned about you ${infoBtn("learned")}</span>
+      ${lines.map((t) => `<div class="insight"><i style="background:var(--ph-lut)"></i><p style="font-size:13px">${esc(t)}</p></div>`).join("")}
+      ${log.slice(0, 3).map((x) => `<div class="insight"><i style="background:var(--good)"></i><p style="font-size:13px">${fmtDay(x.day, { month: "short", day: "numeric" })}: ${esc(x.text)}</p></div>`).join("")}</div>`; })()}
     <form class="stack" data-goalform><label class="eyebrow" for="goal-text">Add a goal in your own words</label>
       <div class="row"><input class="input" id="goal-text" placeholder="I want to stop crashing at 3 pm" autocomplete="off"><button class="btn small" type="submit">Add</button></div>
       <div class="chips">${GOAL_SUGGESTIONS.filter((t) => !goals.some((g) => g.text === t)).map((t) => `<button type="button" class="chip" data-goal-suggest="${esc(t)}">${t}</button>`).join("")}</div></form>
@@ -2196,7 +2274,7 @@ async function makeHabits() {
   const goals = state.goals.map((g) => GOALS.find((x) => x.id === g).title);
   const prompt = `You are a women's health coach. Suggest exactly 6 small daily habits for this person, varied across sleep, movement, food, and stress, so she can swipe to pick 3.
 Profile: age ${p.age || "unknown"}, workouts: ${p.gym}, food: ${p.diet.join(", ") || "no restrictions"}, conditions: ${conditions().join(", ") || "none"}.
-Goals: ${goals.join(" and ")}. Life stage: ${p.lifeStage}. Her days: ${dayType().label} (${dayType().week.reduce((a, b) => a + b, 0)} busy hours a week). Age band ${ageBand().label}, priorities: ${ageBand().focus.join(", ")}. Season: ${seasonNow()?.[1].label}. ${cycleLens() ? `Currently cycle day ${ctx.cd} of ${CYCLE_LEN} (${phaseOf(ctx.cd)} phase).` : "Do not mention menstrual cycle phases."} Oura: avg sleep ${hm(baseline().sleepMin)}, HRV ${Math.round(baseline().hrv)} ms.
+Goals: ${goals.join(" and ")}. What we have learned about her: ${learnedLines().join(" ") || "nothing yet"}. Life stage: ${p.lifeStage}. Her days: ${dayType().label} (${dayType().week.reduce((a, b) => a + b, 0)} busy hours a week). Age band ${ageBand().label}, priorities: ${ageBand().focus.join(", ")}. Season: ${seasonNow()?.[1].label}. ${cycleLens() ? `Currently cycle day ${ctx.cd} of ${CYCLE_LEN} (${phaseOf(ctx.cd)} phase).` : "Do not mention menstrual cycle phases."} Oura: avg sleep ${hm(baseline().sleepMin)}, HRV ${Math.round(baseline().hrv)} ms.
 Rules: each habit doable in under 10 minutes, specific, tied to her goals and lifestyle data first. American English. No em dashes. Lifestyle suggestions only, never medical advice.
 Return JSON only: {"habits":[{"title":"max 6 words","cue":"when or where it happens, max 8 words","why":"one sentence, max 20 words, mention her data"}]}`;
   skipAi = false;
@@ -2368,6 +2446,7 @@ document.addEventListener("click", (e) => {
     const habit = { ...rec.habit, id: "s" + Date.now().toString(36) };
     state.habits.push(habit); save(); render(); toast(`Added "${habit.title}" to your habits`); return;
   }
+  if (d.adapt) { applyAdaptation(d.adapt, d); return; }
   if (d.goalSuggest) { addLifeGoal(d.goalSuggest); return; }
   if (d.weekFeel) { ui.weekFeel = Number(d.weekFeel); render(); return; }
   if (d.info) { ui.infoOpen = d.info; render(); return; }
