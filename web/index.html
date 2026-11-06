@@ -130,6 +130,19 @@ p { margin: 0; }
 .week i { width: 100%; height: 8px; border-radius: 4px; background: var(--line); display: block; }
 .week i.on { background: var(--accent); }
 .week i.today { outline: 1.5px solid var(--accent); outline-offset: 1px; }
+.impact { border-top: 1px dashed var(--line); padding-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.delta { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 99px; font-family: var(--f-data); font-size: 12px; font-weight: 500; background: var(--surface-2); color: var(--muted); white-space: nowrap; }
+.delta svg { width: 12px; height: 12px; flex: none; }
+.delta.good { background: color-mix(in oklab, var(--good) 14%, var(--surface)); color: var(--good); }
+.delta.bad { background: color-mix(in oklab, var(--warn) 14%, var(--surface)); color: var(--warn); }
+.fresh .delta { animation: rise .55s cubic-bezier(.2,.8,.2,1) both; }
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; height: 76px; max-width: 200px; }
+.vs div { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px; height: 100%; font-size: 11px; color: var(--muted); min-width: 0; }
+.vs b { font-family: var(--f-data); font-size: 11.5px; color: var(--ink); font-weight: 500; }
+.vs i { width: 100%; border-radius: 6px 6px 2px 2px; display: block; background: var(--accent); animation: barUp .6s cubic-bezier(.2,.8,.2,1) both; transform-origin: bottom; }
+.vs div + div i { background: var(--line); animation-delay: .08s; }
+.changed-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13.5px; }
+.changed-row span:first-child { min-width: 0; overflow-wrap: anywhere; }
 
 /* Today */
 .ready { display: grid; grid-template-columns: 116px 1fr; gap: 14px; align-items: center; }
@@ -740,6 +753,8 @@ const icon = {
   move: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="14" cy="4" r="2"/><path d="M9 21l3-6 3 3v3M6 12l3-4 5 1 2 4 3 1"/></svg>',
   leaf: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 19C5 9 11 4 20 4c0 9-5 15-15 15zM5 19l8-8"/></svg>',
   star: '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>',
+  up: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>',
+  down: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>',
 };
 const brandMark = '<svg class="brand-mark" viewBox="0 0 32 32"><g fill="var(--accent)"><ellipse cx="16" cy="9" rx="5" ry="8" opacity=".9"/><ellipse cx="16" cy="23" rx="5" ry="8" opacity=".5"/><ellipse cx="9" cy="16" rx="8" ry="5" opacity=".7"/><ellipse cx="23" cy="16" rx="8" ry="5" opacity=".6"/></g><circle cx="16" cy="16" r="3" fill="var(--surface)"/></svg>';
 
@@ -1026,7 +1041,155 @@ document.addEventListener("keydown", (e) => {
   if (!e.target.closest?.(".deck") || !["ArrowLeft", "ArrowRight"].includes(e.key)) return;
   const top = document.querySelector('.swipe-card[style*="--depth:0"]'); if (top) resolveSwipe(top.dataset.swipe, e.key === "ArrowRight" ? "right" : "left");
 });
+/* ---------- habit impact ---------- */
+/* Wearable rows are dated by the morning they close, so a habit done on day D shows up in the sleep row dated D + 1 (lag 1). */
+const OUTCOMES = {
+  sleepMin: { label: "sleep", unit: "min", per: "a night", lag: 1, better: 1, notable: 10, say: (m, up) => `${m} min ${up ? "more" : "less"} sleep` },
+  hrv: { label: "HRV", unit: "ms", per: "", lag: 1, better: 1, notable: 3, say: (m, up) => `${m} ms ${up ? "higher" : "lower"} HRV` },
+  steps: { label: "steps", unit: "", per: "a day", lag: 0, better: 1, notable: 800, say: (m, up) => `${m} ${up ? "more" : "fewer"} steps` },
+  ready: { label: "readiness", unit: "", per: "", lag: 1, better: 1, notable: 3, say: (m, up) => `readiness ${m} points ${up ? "higher" : "lower"}` },
+  stress: { label: "stress", unit: "min", per: "a day", lag: 0, better: -1, notable: 15, say: (m, up) => `${m} ${up ? "more" : "fewer"} stress minutes` },
+  deep: { label: "deep sleep", unit: "min", per: "a night", lag: 1, better: 1, notable: 5, say: (m, up) => `${m} min ${up ? "more" : "less"} deep sleep` },
+  rem: { label: "REM sleep", unit: "min", per: "a night", lag: 1, better: 1, notable: 5, say: (m, up) => `${m} min ${up ? "more" : "less"} REM sleep` },
+  rhr: { label: "resting HR", unit: "bpm", per: "", lag: 1, better: -1, notable: 1, say: (m, up) => `resting HR ${m} bpm ${up ? "higher" : "lower"}` },
+};
+/* Order matters: the first match wins, so specific phrases sit above the generic ones they contain. */
+const LEVERS = [
+  { match: /breath|body scan|meditat/i, goals: ["stress", "burnout"], lever: "Stress recovery", outcomes: ["hrv", "stress"] },
+  { match: /stretch.*(bed|night|evening)|wind.?down stretch/i, goals: ["pms", "sleep"], lever: "Evening wind-down", outcomes: ["hrv", "sleepMin"] },
+  { match: /screen|phone|lights out|in bed|bed by|bedtime|wind.?down/i, goals: ["sleep"], lever: "Earlier bedtime", outcomes: ["sleepMin", "deep"] },
+  { match: /daylight|sunlight|\blight\b|\bsun\b/i, goals: ["sleep", "energy"], lever: "Morning daylight", outcomes: ["sleepMin", "ready"] },
+  { match: /magnesium|pumpkin|dark chocolate/i, goals: ["pms", "sleep"], lever: "Magnesium", outcomes: ["sleepMin", "hrv"] },
+  { match: /hard stop|desk|\bbreaks?\b|boundar|log off/i, goals: ["burnout", "stress"], lever: "Recovery breaks", outcomes: ["stress", "hrv"] },
+  { match: /walk|steps|cardio|\brun\b|bike/i, goals: ["move", "heart", "pcos"], lever: "Daily steps", outcomes: ["steps", "ready"] },
+  { match: /strength|lift|squat|workout|session/i, goals: ["strength", "move"], lever: "Training", outcomes: ["ready", "hrv"] },
+  { match: /protein|breakfast/i, goals: ["energy", "strength"], lever: "Protein", outcomes: ["ready", "hrv"] },
+  { match: /water|hydrat|refill/i, goals: ["energy"], lever: "Hydration", outcomes: ["ready", "rhr"] },
+  { match: /stretch|mobility|yoga/i, goals: ["move", "pms"], lever: "Daily movement", outcomes: ["steps", "ready"] },
+  { match: /fiber|veg|plant|salt|folate|plate|meal|bites|food|snack/i, goals: ["nutrition", "gut", "pcos", "heart", "fertility"], lever: "Food quality", outcomes: ["ready", "hrv"] },
+];
+const ROUTINE_LEVER = { goals: [], lever: "Daily routine", outcomes: ["ready", "sleepMin"] };
+const MIN_DAYS = 5;
+const daysBetween = (a, b) => Math.round((new Date(b) - new Date(a)) / 864e5);
+const rowsByDay = () => new Map(SEED.map((r) => [r.day, r]));
+const demoHistory = () => state.habitHistoryDemo ?? state.connected.ouraMode !== "live";
+
+function leverFor(h) {
+  const link = LEVERS.find((l) => l.match.test(`${h.title} ${h.cue}`)) || ROUTINE_LEVER;
+  const goal = link.goals.find((g) => state.goals.includes(g)) || link.goals[0] || state.goals[0];
+  return { lever: link.lever, outcomes: link.outcomes, goal: GOALS.find((g) => g.id === goal)?.title || "Your goals" };
+}
+function outcomeAfter(rows, key, actionDay) {
+  const v = rows.get(addDays(actionDay, OUTCOMES[key].lag))?.[key];
+  return Number.isFinite(v) ? v : null;
+}
+function effectOf(key, delta) {
+  const o = OUTCOMES[key];
+  return { key, delta, notable: Math.abs(delta) >= o.notable, good: delta * o.better > 0 };
+}
+const magnitude = (key, delta) => (key === "steps" ? Math.round(Math.abs(delta) / 10) * 10 : Math.round(Math.abs(delta))).toLocaleString();
+function fmtDelta(key, delta) {
+  const o = OUTCOMES[key], mag = magnitude(key, delta);
+  const sign = mag === "0" ? "" : delta > 0 ? "+" : "−";
+  return `${sign}${mag}${o.unit ? " " + o.unit : ""} ${o.label}`;
+}
+function fmtOutcome(key, v) {
+  if (key === "sleepMin") return hm(Math.round(v));
+  if (key === "steps") return Math.round(v).toLocaleString();
+  const unit = OUTCOMES[key].unit;
+  return `${Math.round(v)}${unit ? " " + unit : ""}`;
+}
+/* Done versus not-done compares action days from her first check through yesterday; today is still in progress. */
+function habitImpact(h, rows) {
+  const link = leverFor(h), pre = h.id + "|";
+  const done = new Set(Object.keys(state.checks).filter((k) => k.startsWith(pre) && state.checks[k]).map((k) => k.slice(pre.length)));
+  const first = [...done].sort()[0] || null;
+  const actionDays = first ? Array.from({ length: Math.max(0, daysBetween(first, TODAY)) }, (_, i) => addDays(first, i)) : [];
+  const effects = link.outcomes.map((key) => {
+    const on = [], off = [];
+    for (const d of actionDays) { const v = outcomeAfter(rows, key, d); if (v != null) (done.has(d) ? on : off).push(v); }
+    const measured = on.length >= MIN_DAYS && off.length >= MIN_DAYS;
+    return { ...effectOf(key, measured ? avg(on) - avg(off) : 0), measured, onAvg: avg(on), offAvg: avg(off), nOn: on.length, nOff: off.length };
+  }).filter((e) => e.nOn + e.nOff > 0);
+  return { habit: h, ...link, first, effects, measured: effects.some((e) => e.measured) };
+}
+function trendSince(rows, key, first) {
+  if (daysBetween(first, TODAY) < 14) return null;
+  const windowAvg = (start) => {
+    const vals = Array.from({ length: 14 }, (_, i) => outcomeAfter(rows, key, addDays(start, i))).filter((v) => v != null);
+    return vals.length >= 7 ? avg(vals) : null;
+  };
+  const before = windowAvg(addDays(first, -14)), after = windowAvg(addDays(TODAY, -14));
+  return before == null || after == null ? null : { ...effectOf(key, after - before), before, after };
+}
+/* The headline averages each outcome's done-versus-not-done gap across the habits that measure it. */
+function habitsChanged(impacts, rows) {
+  const order = Object.keys(OUTCOMES), keys = [...new Set(impacts.flatMap((i) => i.outcomes))].sort((a, b) => order.indexOf(a) - order.indexOf(b));
+  const pooled = keys.map((k) => {
+    const gaps = impacts.flatMap((i) => i.effects.filter((e) => e.key === k && e.measured).map((e) => e.delta));
+    return gaps.length ? effectOf(k, avg(gaps)) : null;
+  }).filter(Boolean);
+  const first = impacts.map((i) => i.first).filter(Boolean).sort()[0] || null;
+  return { first, pooled, trends: first ? keys.map((k) => trendSince(rows, k, first)).filter(Boolean) : [] };
+}
+function deltaChip(e, i = 0) {
+  const tone = !e.notable ? "" : e.good ? "good" : "bad", arrow = Math.round(e.delta) === 0 ? "" : e.delta > 0 ? icon.up : icon.down;
+  return `<span class="delta ${tone}" style="animation-delay:${0.12 + i * 0.06}s">${arrow}${esc(fmtDelta(e.key, e.delta))}</span>`;
+}
+function trendPhrase(t) {
+  const o = OUTCOMES[t.key], verb = t.key === "steps" ? "are" : "is";
+  if (!t.notable) return `${o.label} held steady`;
+  return `${o.label} ${verb} ${t.delta > 0 ? "up" : "down"} ${magnitude(t.key, t.delta)}${o.unit ? " " + o.unit : ""}${o.per ? " " + o.per : ""}`;
+}
+function renderChanged(impacts, changed) {
+  const n = state.habits.length, plural = n === 1 ? "habit" : "habits";
+  const top = changed.pooled.filter((e) => e.notable).slice(0, 2).map((e) => OUTCOMES[e.key].say(magnitude(e.key, e.delta), e.delta > 0));
+  const headline = top.length ? `On days you did your ${n} ${plural}: ${top.join(" and ")}.`
+    : changed.pooled.length ? `Nothing has moved past Bloom's threshold yet on days you did your ${plural}.` : "Need a few more days to measure.";
+  const since = changed.first && fmtDay(changed.first, { month: "short", day: "numeric" });
+  const lines = impacts.map((i) => {
+    const e = i.effects.find((x) => x.measured);
+    return `<div class="changed-row"><span>${esc(i.habit.title)}</span>${e ? deltaChip(e) : `<span class="muted" style="font-size:12px">Measuring</span>`}</div>`;
+  }).join("");
+  return `<div class="card rise"><span class="eyebrow">What your habits changed</span><h2>${esc(headline)}</h2>
+    ${changed.pooled.length ? `<div class="chips">${changed.pooled.map(deltaChip).join("")}</div>` : ""}
+    <span class="eyebrow" style="margin-top:4px">By habit</span><div class="stack">${lines}</div>
+    ${changed.trends.length ? `<span class="eyebrow" style="margin-top:4px">Since you started on ${since}</span>
+    <p style="font-size:13.5px">${esc(changed.trends.slice(0, 2).map(trendPhrase).join(" and ").replace(/^./, (c) => c.toUpperCase()))}, last 14 days versus the 14 before.</p>
+    <div class="chips">${changed.trends.map(deltaChip).join("")}</div>` : ""}
+    <p class="muted" style="font-size:11px">Patterns from your own days, not proof: your cycle, stress, and season move these numbers too.${demoHistory() ? " Check-ins before today are demo history, shaped to match this sample data." : ""}</p></div>`;
+}
+function renderImpact(imp) {
+  const primary = imp.effects.find((e) => e.measured), lag = OUTCOMES[imp.outcomes[0]].lag;
+  const head = `<div class="row between" style="flex-wrap:wrap"><span class="eyebrow">Impact</span><span class="pill accent">Lever: ${esc(imp.lever.toLowerCase())}</span></div>
+    <small class="muted">Goal: ${esc(imp.goal)} · measured ${lag ? "the night after" : "the same day"}</small>`;
+  if (!primary) {
+    const e = imp.effects[0] || { nOn: 0, nOff: 0 };
+    return `<div class="impact">${head}<p class="muted" style="font-size:13px">Need a few more days to measure. So far ${e.nOn} done and ${e.nOff} not done; Bloom needs ${MIN_DAYS} of each.</p></div>`;
+  }
+  const lo = Math.min(primary.onAvg, primary.offAvg) * 0.8, hi = Math.max(primary.onAvg, primary.offAvg);
+  const h = (v) => Math.max(8, Math.round(100 * (v - lo) / ((hi - lo) || 1)));
+  const when = lag ? "Nights after" : "Days";
+  return `<div class="impact">${head}
+    <div class="chips">${imp.effects.filter((e) => e.measured).map(deltaChip).join("")}</div>
+    <div class="row" style="align-items:flex-end;gap:14px">
+      <div class="vs" aria-label="${esc(OUTCOMES[primary.key].label)}: ${fmtOutcome(primary.key, primary.onAvg)} on days you did it, ${fmtOutcome(primary.key, primary.offAvg)} on days you did not">
+        <div><b>${fmtOutcome(primary.key, primary.onAvg)}</b><i style="height:${h(primary.onAvg)}%"></i><span>Done</span></div>
+        <div><b>${fmtOutcome(primary.key, primary.offAvg)}</b><i style="height:${h(primary.offAvg)}%"></i><span>Not done</span></div></div>
+      <p class="muted" style="font-size:12px;flex:1">${when} you did it (${primary.nOn}) versus ${lag ? "nights" : "days"} you didn't (${primary.nOff}), average ${esc(OUTCOMES[primary.key].label)}.</p></div></div>`;
+}
+function habitInsight() {
+  if (!state.habits.length) return "";
+  const rows = rowsByDay();
+  const parts = state.habits.map((h) => {
+    const imp = habitImpact(h, rows), e = imp.effects.find((x) => x.measured);
+    return e ? `${h.title}, ${fmtDelta(e.key, e.delta)} ${OUTCOMES[e.key].lag ? "the night after" : "that day"}` : `${h.title}, not enough days yet`;
+  });
+  return `Habit check-ins${demoHistory() ? " (demo history)" : ""}, on days she did each one versus days she didn't: ${parts.join("; ")}. Associations only, not causes.`;
+}
+
 function renderHabits() {
+  const rows = rowsByDay(), impacts = state.habits.map((h) => habitImpact(h, rows)), changed = habitsChanged(impacts, rows);
   const weeks = [3, 2, 1, 0].map((w) => {
     const days = Array.from({ length: 7 }, (_, i) => addDays(TODAY, -(w * 7) - 6 + i));
     const done = state.habits.reduce((sum, h) => sum + days.filter((d) => state.checks[`${h.id}|${d}`]).length, 0);
@@ -1035,16 +1198,18 @@ function renderHabits() {
   const todayDone = state.habits.filter((h) => state.checks[`${h.id}|${TODAY}`]).length;
   return `
     <div class="stack rise"><span class="eyebrow">Habit tracker</span><h1>${todayDone} of ${state.habits.length} done today</h1><p class="muted">Consistency beats intensity. Here is every week, at a glance.</p></div>
+    ${state.habits.length ? renderChanged(impacts, changed) : ""}
     ${swipeDeck()}
     <div class="card rise"><h2>Weekly consistency</h2>
       <div class="weeks">${weeks.map((w) => `<div class="wk"><div class="bar"><i style="height:${Math.max(4, w.pct)}%"></i></div><b class="mono">${w.pct}%</b><span>${w.label}</span></div>`).join("")}</div>
       <p class="muted" style="font-size:13px">${weeks[3].pct >= weeks[2].pct ? `Up ${weeks[3].pct - weeks[2].pct} points on last week. Keep it going.` : `A softer week. That happens; one check today restarts the climb.`}</p></div>
-    ${state.habits.map((h) => { const done = !!state.checks[`${h.id}|${TODAY}`]; return `
+    ${state.habits.map((h, i) => { const done = !!state.checks[`${h.id}|${TODAY}`]; return `
       <div class="card rise"><div class="habit"><div><div class="habit-title">${esc(h.title)}</div><small class="muted">${esc(h.cue)}</small></div>
         <button class="check ${done ? "on" : ""}" data-check="${h.id}" aria-pressed="${done}" aria-label="Mark ${esc(h.title)} done today">${icon.check}</button></div>
         <p class="muted" style="font-size:13px">${esc(h.why)}</p>
         <div class="row between"><span class="pill accent mono">${streak(h)} day streak</span><span class="mono muted" style="font-size:12px">${Array.from({ length: 28 }, (_, i) => state.checks[`${h.id}|${addDays(TODAY, -i)}`]).filter(Boolean).length}/28 days</span></div>
         <div class="month">${Array.from({ length: 28 }, (_, i) => { const d = addDays(TODAY, i - 27); return `<i class="${state.checks[`${h.id}|${d}`] ? "on" : ""} ${d === TODAY ? "today" : ""}" title="${fmtDay(d)}"></i>`; }).join("")}</div>
+        ${renderImpact(impacts[i])}
       </div>`; }).join("")}
     <button class="btn ghost block rise" data-action="new-habits">${icon.spark} Ask Claude for fresh habits</button>`;
 }
@@ -1245,7 +1410,7 @@ function lifestyleInsights() {
   if (L.recent_slopes?.notable?.includes("hrv_ms")) out.push(`HRV is up over the last two weeks (about ${L.recent_slopes.hrv_ms.toFixed(1)} ms a week).`);
   return out;
 }
-function insights() { return [...lifestyleInsights(), ...(cycleLens() ? cycleInsights() : [])]; }
+function insights() { return [...lifestyleInsights(), habitInsight(), ...(cycleLens() ? cycleInsights() : [])].filter(Boolean); }
 function weeklyTrends() {
   if (!hasWearable()) return `<p class="muted">Weekly wearable trends appear once a ring or watch is connected.</p>`;
   const weeks = RECORD?.lifestyle?.weekly || [];
@@ -1293,7 +1458,7 @@ function renderRecord() {
         <p class="muted" style="font-size:13px">${p.conditions.filter((c) => c !== "None").length ? "Managing: " + esc(p.conditions.filter((c) => c !== "None").join(", ")) : "No conditions reported"}${p.diet.length ? " · " + esc(p.diet.join(", ")) : ""}</p></div>
         <span class="mono muted" style="font-size:11px;text-align:right">${fmtDay(addDays(TODAY, -89), { month: "short", day: "numeric" })} to<br>${fmtDay(TODAY, { month: "short", day: "numeric", year: "numeric" })}</span></div>
       <h3>Lifestyle patterns</h3>
-      ${lifestyleInsights().map((t) => `<div class="insight"><i></i><p>${esc(t)}</p></div>`).join("") || `<p class="muted">Not enough data yet. Patterns appear after about two weeks.</p>`}
+      ${[...lifestyleInsights(), habitInsight()].filter(Boolean).map((t) => `<div class="insight"><i></i><p>${esc(t)}</p></div>`).join("") || `<p class="muted">Not enough data yet. Patterns appear after about two weeks.</p>`}
       ${cycleSignal() && cycleSignal().level !== "steady" ? `<h3>Cycle changes</h3><div class="insight"><i style="background:var(--warn)"></i><p>${esc(cycleSignal().title)}. ${esc(cycleSignal().body)}</p></div>` : ""}
       <h3>Week by week</h3>
       ${weeklyTrends()}
@@ -1379,11 +1544,21 @@ function confetti(el) {
     app.appendChild(p); setTimeout(() => p.remove(), 900);
   }
 }
+/* Demo only: random check-ins would make the impact view pure noise, so demo days lean toward
+   the ones whose outcome beat her median. Seeded by title so the demo reads the same every run. */
 function seedHabitHistory(habits) {
-  const checks = {};
+  const rows = rowsByDay(), checks = {};
+  const days = Array.from({ length: 27 }, (_, i) => addDays(TODAY, -(i + 1)));
   for (const h of habits) {
-    const rng = mulberry(hashStr(h.id));
-    for (let i = 1; i < 28; i++) if (rng() < 0.68) checks[`${h.id}|${addDays(TODAY, -i)}`] = true;
+    const key = leverFor(h).outcomes[0], { better } = OUTCOMES[key];
+    const known = days.map((d) => outcomeAfter(rows, key, d)).filter((v) => v != null).sort((a, b) => a - b);
+    const median = known[Math.floor(known.length / 2)];
+    const rng = mulberry(hashStr(h.title));
+    for (const d of days) {
+      const v = outcomeAfter(rows, key, d);
+      const odds = v == null ? 0.68 : (v - median) * better > 0 ? 0.84 : 0.48;
+      if (rng() < odds) checks[`${h.id}|${d}`] = true;
+    }
   }
   return checks;
 }
@@ -1403,7 +1578,8 @@ Return JSON only: {"habits":[{"title":"max 6 words","cue":"when or where it happ
   else { const [a, b] = state.goals.filter((g) => FALLBACK_HABITS[g]).length === 2 ? state.goals : ["sleep", "energy"]; habits = [FALLBACK_HABITS[a][0], FALLBACK_HABITS[b][0], FALLBACK_HABITS[a][1]]; source = "library"; }
   habits = habits.map((h, i) => ({ ...h, id: `h${Date.now().toString(36)}${i}` }));
   ui.thinking = false;
-  set({ habits, habitsSource: source, checks: seedHabitHistory(habits) });
+  const demo = state.connected.ouraMode !== "live";
+  set({ habits, habitsSource: source, checks: demo ? seedHabitHistory(habits) : {}, habitHistoryDemo: demo });
 }
 async function aiPlan() {
   const ctx = dayContext(), ease = easeReasons(ctx).length > 0, phase = phaseOf(ctx.cd), p = state.profile;
